@@ -1,0 +1,11 @@
+/* center main column */
+html {
+    font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+main {
+    max-width:400px;
+    margin:0 auto;
+}
+.disable-edit-btn{
+    display: none;
+}
