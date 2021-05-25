@@ -4,10 +4,9 @@
         // Password validation
         // Validating user input password
         // ==================================
-        $('#password').keyup(function () {
+        $('#newPassword').blur(function () {
+
             var password = $(this).val();
-            $('#msg-4').attr('hidden',true);
-            $('#spinner-4').attr('hidden',false);
             $.ajax({
                 url:"/Ajax/checkPassword",
                 method:'POST',
@@ -17,16 +16,20 @@
                     //console.log(data);
                     if(data.n == 1){
                         //$('#btn-signup').attr('disabled',false);
-                        $('#password').removeClass('is-invalid').addClass('is-valid');
-                        $('#msg-4').removeClass('invalid-feedback').addClass('valid-feedback');
+                        // $('#password').removeClass('is-invalid').addClass('is-valid');
+                        // $('#msg-4').removeClass('invalid-feedback').addClass('valid-feedback');
+                        $('#pw_ok').attr('hidden',false);
+                        $('#pw_not_ok').attr('hidden',true);
                     }else{
                         //$('#btn-signup').attr('disabled',true);
-                        $('#password').removeClass('is-valid').addClass('is-invalid');
-                        $('#msg-4').removeClass('valid-feedback').addClass('invalid-feedback');
+                        // $('#password').removeClass('is-valid').addClass('is-invalid');
+                        // $('#msg-4').removeClass('valid-feedback').addClass('invalid-feedback');
+                        $('#pw_ok').attr('hidden',true);
+                        $('#pw_not_ok').attr('hidden',false);
+                        toastr.error(data.ht);
                     }
                     setTimeout(function(){
-                        $('#spinner-4').attr('hidden',true);
-                        $('#msg-4').text(data.ht).attr('hidden',false).show();
+
                     }, 500);
                 }
             });

@@ -82,7 +82,7 @@ abstract class Controller
     public function requireGuest(){
 
         if(!Auth::isGuest()){
-            $this->redirect('/Account/welcome');
+            $this->redirect('/Account/dashboard');
         }
     }
 

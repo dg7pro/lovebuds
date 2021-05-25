@@ -60,4 +60,13 @@ class VisitProfile extends Model
 
     }
 
+   /* public static function fetchAll($uid){
+        $sql = "SELECT * FROM visit_profile WHERE matri_id=?";
+        $pdo = Model::getDB();
+        $stmt=$pdo->prepare($sql);
+        $stmt->execute([$uid]);
+        return $stmt->rowCount();
+
+    }*/
+
 }

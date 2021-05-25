@@ -144,7 +144,7 @@ class Image extends Model
         $status = $stmt->execute([2,$userId,$imgId]);
 
         if($status){
-            Notification::save('photo_rejected',$userId);
+            //Notification::save('photo_rejected',$userId);
             self::setAvatarIndexOnProfilePicRejection($userId,$imgId);
         }
 
@@ -212,7 +212,7 @@ class Image extends Model
 
 
         $sql = "SELECT i.pp, u.gender FROM images as i
-                JOIN users as u ON u.id = i.user_id
+                LEFT JOIN users as u ON u.id = i.user_id
                 WHERE i.user_id=? AND i.img_id=?";
         $pdo= Model::getDB();
         $stmt=$pdo->prepare($sql);
@@ -229,7 +229,7 @@ class Image extends Model
     public static function imagesForAvatarUpdate(){
 
         $sql="SELECT i.*,u.gender FROM images as i
-        JOIN users as u ON u.id=i.user_id
+        LEFT JOIN users as u ON u.id=i.user_id
         WHERE i.ac=1 AND i.approved!=0";
         $pdo = Model::getDB();
         $stmt= $pdo->prepare($sql);

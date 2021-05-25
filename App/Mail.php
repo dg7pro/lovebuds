@@ -27,9 +27,9 @@ class Mail
      */
     public static function send($to, $subject, $text, $html)
     {
-        $mg = new Mailgun(Config::MAILGUN_API_KEY);
+        $mg = new Mailgun($_ENV['MAILGUN_API_KEY']);
         //$domain = 'sandbox68ab10c762b14b2fa70a0e4637ef0822.mailgun.org';
-        $domain = Config::MAILGUN_DOMAIN;
+        $domain = $_ENV['MAILGUN_DOMAIN'];
 
 
         $mg->sendMessage($domain, ['from'    => 'JustUnite <admin@jumatrimony.com>',

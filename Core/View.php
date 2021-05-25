@@ -113,7 +113,7 @@ class View
         $blade->share('displayName',Auth::displayName());
         $blade->share('flash_messages',Flash::getMessage());
 
-        if($user) {
+       /* if($user) {
             $blade->share('user_likes_array', $user->likesArr());
             $blade->share('user_shorts_array', $user->shortsArr());
             $blade->share('user_hides_array', $user->hidesArr());
@@ -122,7 +122,7 @@ class View
             $blade->share('user_likes_array', []);
             $blade->share('user_shorts_array', []);
             $blade->share('user_hides_array', []);
-        }
+        }*/
         return $blade;
     }
 

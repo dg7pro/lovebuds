@@ -1,50 +1,54 @@
 @extends('layouts.app')
 
-@section('title', 'Page Title')
+@section('title', 'Ju Matrimony - Forgot Password')
 
 @section('content')
-    <div class="container d-flex flex-column justify-content-between vh-100">
-        <div class="row justify-content-center mt-5">
-            <div class="col-xl-5 col-lg-6 col-md-10">
+    <!-- login section -->
+    <section class="main">
 
-                @include('layouts.partials.flash')
+        @include('layouts.partials.alert')
 
-                <div class="card">
-                    <div class="card-header bg-primary">
-                        <div class="app-brand">
-                            <a href="">
-                                <svg class="brand-icon" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid" width="30" height="33"
-                                     viewBox="0 0 30 33">
-                                    <g fill="none" fill-rule="evenodd">
-                                        <path class="logo-fill-blue" fill="#7DBCFF" d="M0 4v25l8 4V0zM22 4v25l8 4V0z" />
-                                        <path class="logo-fill-white" fill="#FFF" d="M11 4v25l8 4V0z" />
-                                    </g>
-                                </svg>
-                                <span class="brand-name">Just Unite</span>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="card-body p-5">
+        <h3 class="large text-coco">
+            Reset Password ?
+        </h3>
+        <p class="lead"><i class="fas fa-unlock-alt text-green"> </i> Enter new password</p>
 
-                        <h4 class="text-dark mb-5">Reset Password</h4>
-                        <form action="{{'/password/reset-password'}}" method="POST">
+        <form action="{{'/password/reset-password'}}" method="POST" class="form full-ht">
 
-                            <div class="row">
-                                <input type="hidden" name="token" value="{{ $token }}" />
+            <input type="hidden" name="token" value="{{ $token }}" />
 
-                                <div class="form-group col-md-12 ">
-                                    <input type="password" id="inputPassword" name="password" class="form-control input-lg" placeholder="New Password" required>
-                                </div>
-
-                                <div class="col-md-12">
-                                    <button type="submit" name="reset-password-submit" value="Reset Password" class="btn btn-lg btn-primary btn-block mb-4">Reset Password</button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
+            <div class="form-group">
+                <input type="password" id="password" name="password"  placeholder="New password" required>
             </div>
-        </div>
-    </div>
+
+            <div class="form-group">
+                <input type="password" id="cPassword" name="confirm_password" placeholder="Confirm password">
+            </div>
+
+            <input type="submit" name="reset-password-submit" value="Reset Password" class="btn btn-orange">
+        </form>
+
+    </section>
+    <!-- login ends -->
+
 @endsection
 
+@section('js')
+    <script>
+        var password = document.getElementById("password")
+            , confirm_password = document.getElementById("cPassword");
+
+        function validatePassword(){
+            if(password.value != confirm_password.value) {
+                confirm_password.setCustomValidity("Passwords Don't Match");
+            } else {
+                confirm_password.setCustomValidity('');
+            }
+        }
+
+        password.onchange = validatePassword;
+        confirm_password.onkeyup = validatePassword;
+    </script>
+
+
+@endsection

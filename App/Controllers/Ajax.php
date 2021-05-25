@@ -6,13 +6,19 @@ namespace App\Controllers;
 
 use App\Auth;
 use App\Lib\Helpers;
+use App\Models\AddressRequest;
 use App\Models\ConnectProfile;
 use App\Models\HideProfile;
 use App\Models\Image;
 use App\Models\LikeProfile;
+use App\Models\MoveProfile;
 use App\Models\Notification;
+use App\Models\Notify;
+use App\Models\PhotoRequest;
+use App\Models\RecordContact;
 use App\Models\ShortlistProfile;
 use App\Models\User;
+use App\Models\UserVariables;
 use App\Models\VisitProfile;
 use Core\Controller;
 use Core\Model;
@@ -168,11 +174,279 @@ class Ajax extends Controller
         echo json_encode($re);
     }
 
+    /**
+     * Resend Activation Email
+     */
+    public function resendActivationEmail(){
+
+        if(isset($_POST['em']) && $_POST['em']!=''){
+
+            if (filter_var($_POST['em'], FILTER_VALIDATE_EMAIL) === false) {
+                echo '<span class="text-danger">Invalid email, please enter proper email</span>';
+            }else{
+                $user = User::findByEmail($_POST['em']);
+                if($user){
+                    if($user->is_active){
+                        echo '<span class="text-success">Your account is already active</span>';
+                    }else{
+                        $flag = $user->processNewActivationCode();
+                        if($flag){
+                            $user->sendActivationEmail();
+                        }
+                        echo '<span class="text-success">Activation link send, please check your email</span>';
+                    }
+
+                }else{
+                    echo '<span class="text-danger">No User found with this email</span>';
+                }
+            }
+
+        }else{
+            echo '<span class="text-danger">Wrong Input</span>';;
+        }
+
+    }
+
 
     /* ***************************************
      *  Ajax User Activity Functions
      * ***************************************
      * */
+
+    public function marNotification(){
+
+        if(isset($_POST['aid'])){
+            $result = Notify::markAsRead($_POST['aid']);
+            if($result){
+               echo 'Marked as read, will be automatically deleted in 30days ';
+            }else{
+               echo 'Some thing went wrong';
+            }
+        }
+
+    }
+
+    public function unreadNotifications(){
+
+        if(isset($_POST['readrecord'])){
+
+            $data = '';
+            $results = Notify::fetchAll($_SESSION['user_id']);
+            $num = count($results);
+
+            if($num>0){
+                foreach($results as $notify) {
+                    $data .= '<div data-id="'.$notify->id.'" class="alert alert-info alert-dismissible fade show" role="alert">
+                        '. $notify->message .'
+                        <button type="button" class="close" data-dismiss="alert" onclick="marNotification('.$notify->id.')" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>';
+
+                }
+            }else{
+                $data .= '<div class="alert alert-light" role="alert">
+                              -- No new notification found --
+                            </div>';
+                //$data .= '<a class="btn btn-pink" href="/account/thrash" role="button">Trash Box</a>';
+            }
+            echo $data;
+        }
+    }
+
+    /**
+     * View contact address
+     */
+    public function viewAddressAction(){
+
+        if(isset($_SESSION['user_id']) && isset($_POST['receiver'])) {
+
+            $sender = $_SESSION['user_id'];
+            $receiver = $_POST['receiver'];
+
+            $address_request_array = Connection::addressRequestSend();
+
+            if(in_array($receiver,$address_request_array)){
+
+                $message='You have already sent connection to this profile';
+
+            }else{
+
+                if($sender != $receiver){
+                    $result = AddressRequest::create($sender,$receiver);
+                    $result = true;
+                    if($result){
+                        $message = 'Request Successfully sent';
+                        array_push($address_request_array,$receiver);
+                    }else{
+                        $message='You have already sent connection to this profile';
+                    }
+                }else{
+                    $message = "It is your profile";
+                }
+            }
+
+        }else{
+            $message = 'Please login to continue';
+        }
+        echo $message;
+
+    }
+
+    public function viewPhotoAction(){
+
+        if(isset($_SESSION['user_id']) && isset($_POST['receiver'])) {
+
+            $sender = $_SESSION['user_id'];
+            $receiver = $_POST['receiver'];
+
+            $photo_request_array = Connection::photoRequestSend();
+
+            if(in_array($receiver,$photo_request_array)){
+
+                $message='You have already sent photo request to this profile';
+
+            }else{
+
+                if($sender != $receiver){
+                    $result = PhotoRequest::create($sender,$receiver);
+                    $result = true;
+                    if($result){
+                        $message = 'Photo Request Successfully sent';
+                        array_push($photo_request_array,$receiver);
+                    }else{
+                        $message='You have already sent connection to this profile';
+                    }
+                }else{
+                    $message = "It is your profile";
+                }
+            }
+
+        }else{
+            $message = 'Please login to continue';
+        }
+        echo $message;
+
+    }
+
+    public function moveProfileAction(){
+
+        if(isset($_SESSION['user_id']) && isset($_POST['receiver'])) {
+
+            $sender = $_SESSION['user_id'];
+            $receiver = $_POST['receiver'];
+            $index = $_POST['i'];
+
+            if($index==1){
+                $downlist_array = Connection::currentDownlist();
+
+                if(in_array($receiver,$downlist_array)) {
+
+                    $message = 'You have already hide this profile';
+                    echo $message;
+                    exit();
+                }
+            }elseif($index==2){
+
+                $shortlist_array = Connection::currentShortlist();
+                if(in_array($receiver,$shortlist_array)) {
+
+                    $message = 'You have already shorted this profile';
+                    echo $message;
+                    exit();
+                }
+
+            }else{
+                $message = 'Something is not right';
+                echo $message;
+                exit();
+            }
+
+            if($sender != $receiver){
+                $result = MoveProfile::create($sender,$receiver,$index);
+                if($result){
+
+                    $message = ($index==1)?'Profile moved to hidden list':'Profile moved to shortlist';
+                    //array_push($_SESSION['user_likes'],$profile_id);
+                }else{
+                    $message= 'You have already moved this profile';
+                }
+            }else{
+                $message = "It is your profile";
+            }
+
+
+
+        }else{
+            $message = 'Please login to continue';
+        }
+        echo $message;
+    }
+
+    /*public function moveProfileAction(){
+
+        if(isset($_SESSION['user_id']) && isset($_POST['receiver'])) {
+
+            $sender = $_SESSION['user_id'];
+            $receiver = $_POST['receiver'];
+            $index = $_POST['i'];
+
+            $downlist_array = Connection::currentDownlist();
+
+            if(in_array($receiver,$downlist_array)) {
+
+                $message = 'You have already hide this profile';
+
+            }else{
+                if($sender != $receiver){
+
+                    $result = MoveProfile::create($sender,$receiver,$index);
+
+                    if($result){
+                        $message = 'Successfully moved Profile';
+                        //array_push($_SESSION['user_likes'],$profile_id);
+                    }else{
+                        $message= 'You have already moved this profile';
+                    }
+
+                }else{
+                    $message = "It is your profile";
+                }
+
+            }
+
+
+        }else{
+            $message = 'Please login to continue';
+        }
+        echo $message;
+    }*/
+
+
+    public function showContact(){
+
+        if(isset($_SESSION['user_id']) && isset($_POST['other_id'])){
+
+            $uid = $_SESSION['user_id'];
+            $oid = $_POST['other_id'];
+            $flag = '';
+
+            if($uid != $oid){
+                $rc = new RecordContact();
+                if($rc->create($uid,$oid)){
+                    $user = Auth::getUser();
+                    $flag = $user->incrementAc();
+                    $msg = ($flag)?'Success success':'Not Increment';
+                }else{
+                    $msg = 'Already in record';
+                }
+            }
+        }else{
+            $msg = 'Please Login';
+        }
+        echo $msg;
+
+    }
 
     /**
      * Like other user profile
@@ -693,6 +967,25 @@ class Ajax extends Controller
     }
 
     /**
+     * Update Partner Preferences
+     */
+    public function updatePartnerPreferenceAction(){
+
+        if(isset($_POST['pp'])){
+
+            $user = Auth::getUser();
+            $result = $user->updatePartnerPreference($_POST);
+            $msg = (!$result)?'Server busy! Please try after sometime':'Partner Preference updated successfully';
+            $msg = json_encode($msg);
+
+            $re = ['msg'=>$msg];
+            echo json_encode($re);
+
+        }
+
+    }
+
+    /**
      *
      */
     public function updateEduCareerInfoAction(){
@@ -829,6 +1122,49 @@ class Ajax extends Controller
         }
     }
 
+
+    public function minmaxAge(){
+
+        if(isset($_POST['min_age_val'])){
+
+            $min_age = $_POST['min_age_val'];
+            $num = $min_age;
+            // Generate HTML of city options list
+            if($num >= 18){
+                echo '<option value="">max-age</option>';
+                for ($x = $num; $x <= 72; $x++) {
+                    echo '<option value="'.$x.'">'.$x.'</option>';
+                }
+            }else{
+                echo '<option value="">min-age first</option>';
+            }
+        }
+    }
+
+    public function minmaxHt(){
+
+        if(isset($_POST['min_ht_val'])){
+
+            $heights = UserVariables::fetch('heights');
+            $htArray = json_decode(json_encode($heights), true);
+            $c = count($htArray);
+            $mc = $c-1; // max count (mc) in array since index start from 0;
+
+            $min_ht = $_POST['min_ht_val'];
+            $num = $min_ht;
+            // Generate HTML of city options list
+            if($num >= $htArray[0]['id']){
+                echo '<option value="">max-ht</option>';
+                for ($x = $num; $x < $htArray[$mc]['id']; $x++) {
+                    echo '<option value="'.$x.'">'.$htArray[$x]['feet'].'</option>';
+                }
+            }else{
+                echo '<option value="">min-ht first</option>';
+            }
+        }
+    }
+
+
     /* ***************************************
      *  Ajax Manage Photo Functions
      * ***************************************
@@ -893,6 +1229,40 @@ class Ajax extends Controller
 
         }
     }
+
+    public static function getAssociativeArrayResult($profiles){
+
+        $newProfilesInfo=array();
+        $newProfileKey=array();
+        $newKey = 0;
+
+        foreach($profiles as $profileKey => $profileValue){
+
+            if(!in_array($profileValue["id"],$newProfileKey)){
+                ++$newKey;
+                $newProfilesInfo[$newKey]["id"] = $profileValue["id"];
+                $newProfilesInfo[$newKey]["pid"] = $profileValue["pid"];
+                $newProfilesInfo[$newKey]["first_name"] = $profileValue["first_name"];
+                $newProfilesInfo[$newKey]["last_name"] = $profileValue["last_name"];
+                $newProfilesInfo[$newKey]["gender"] = $profileValue["gender"];
+                $newProfilesInfo[$newKey]["dob"] = $profileValue["dob"];
+                $newProfilesInfo[$newKey]["edu"] = $profileValue["edu"];
+                $newProfilesInfo[$newKey]["occ"] = $profileValue["occ"];
+                $newProfilesInfo[$newKey]["ht"] = $profileValue["ht"];
+                $newProfilesInfo[$newKey]["town"] = $profileValue["town"];
+                $newProfilesInfo[$newKey]["mov"] = $profileValue["mov"];
+            }
+            if($profileValue['filename']!=null){
+                $newProfilesInfo[$newKey]['pics'][$profileKey]["fn"] = $profileValue["filename"];
+                $newProfilesInfo[$newKey]['pics'][$profileKey]["pp"] = $profileValue["pp"];
+            }
+            $newProfileKey[]  = $profileValue["id"];
+        }
+
+        return $newProfilesInfo;
+
+    }
+
 
 
 

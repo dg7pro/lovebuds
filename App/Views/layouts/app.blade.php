@@ -1,114 +1,67 @@
-{{--Sleek Template--}}
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JU Matrimony Service</title>
 
-    <title>@yield('title')</title>
+    <!-- bootstrap css file -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
 
-    <!-- FAVICON -->
-    <link href="/images/favicon.ico" sizes="16x16" rel="icon">
+    <!-- font awesome icons -->
+    <link rel="stylesheet" href="/css/all.min.css">
 
-    <!-- FONTS and ICONS -->
-    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500|Poppins:400,500,600,700|Roboto:400,500"
-          rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/3.0.39/css/materialdesignicons.css" integrity="sha256-hpIKfjdsbMecd6qUvr+RWnU0WVt2gwW2TgGrf7jPkLc=" crossorigin="anonymous" />
-    {{--<link href="https://cdn.materialdesignicons.com/3.0.39/css/materialdesignicons.min.css" rel="stylesheet" />--}}
+    <!-- toastr css file -->
+    <link href="/css/toastr.min.css" rel="stylesheet"/>
 
-    @yield('page-css')
+    <!-- custom css file -->
+    <link rel="stylesheet" href="/css/style.css">
 
-    <!-- PLUGINS CSS STYLE -->
-    <link href="/assets/plugins/nprogress/nprogress.css" rel="stylesheet" />
-    <!-- No Extra plugin used -->
-    <link href="/assets/plugins/jvectormap/jquery-jvectormap-2.0.3.css" rel="stylesheet" />
-    <link href="/assets/plugins/daterangepicker/daterangepicker.css" rel="stylesheet" />
-    <link href="/assets/plugins/toastr/toastr.min.css" rel="stylesheet" />
-
-
-    <!-- SLEEK STYLE FILE -->
-    <link id="sleek-css" rel="stylesheet" href="/assets/css/sleek.css" />
-
-    @yield('app-css')
-
-    <script src="/assets/plugins/nprogress/nprogress.js"></script>
+    @yield('page_css')
 </head>
-<!--Start of Tawk.to Script-->
+<body>
 
-{{--<script type="text/javascript">
-    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-    (function(){
-        var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-        s1.async=true;
-        s1.src='https://embed.tawk.to/5e84e01c35bcbb0c9aacbcaa/default';
-        s1.charset='UTF-8';
-        s1.setAttribute('crossorigin','*');
-        s0.parentNode.insertBefore(s1,s0);
-    })();
-</script>--}}
+<!-- header -->
+@include('layouts.partials.header')
 
-<!--End of Tawk.to Script-->
-<body  class="header-fixed sidebar-fixed-offcanvas sidebar-collapse sidebar-dark header-light" id="body">
-{{--<body  class="header-fixed sidebar-fixed sidebar-minified sidebar-dark header-light" id="body">--}}
+<!-- body -->
+@yield('content')
+
+<!-- footer -->
+@include('layouts.partials.footer')
+
+<!-- jquery js file -->
+<script src="/js/jquery.4.5.1.js"></script>
+
+<!-- toastr js-->
+<script src="/js/toastr.min.js"></script>
+
 <script>
-    NProgress.configure({ showSpinner: false });
-    NProgress.start();
+    // Display an info toast with no title
+    toastr.options = {
+        "closeButton": true,
+        "debug": false,
+        "newestOnTop": false,
+        "progressBar": true,
+        "positionClass": "toast-top-right",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+    }
 </script>
-<div class="mobile-sticky-body-overlay"></div>
-<div id="toaster"></div>
-<div class="wrapper">
-    <!-- Referral Link -->
-@include('layouts.partials.referral')
 
-    <!-- Sidebar -->
-    @include('layouts.partials.sidebar')
-    <!-- Main -->
-    <div class="page-wrapper">
-        <!-- Header -->
-        @include('layouts.partials.navbar')
-        <!-- Content -->
-        <div class="content-wrapper">
-            @yield('content')
-            @yield('layouts.partials.right-sidebar-2')
-        </div>
-        <!-- Footer -->
-        @include('layouts.partials.footer')
-    </div>
-</div>
+<!-- bootstrap js file -->
+<script src="/js/bootstrap.min.js"></script>
 
-    <!-- JavaScript -->
-    <script src="/assets/plugins/jquery/jquery.min.js"></script>
-
-    <script src="/assets/plugins/slimscrollbar/jquery.slimscroll.min.js"></script>
-{{--    <script src="/assets/plugins/jekyll-search.min.js"></script>--}}
-
-    <!--Page Specific JavaScript -->
-    @yield('page-script')
-    <script src="/assets/plugins/charts/Chart.min.js"></script>
-    <script src="/assets/plugins/jvectormap/jquery-jvectormap-2.0.3.min.js"></script>
-    <script src="/assets/plugins/jvectormap/jquery-jvectormap-world-mill.js"></script>
-    <script src="/assets/plugins/daterangepicker/moment.min.js"></script>
-    <script src="/assets/plugins/daterangepicker/daterangepicker.js"></script>
-    <script src="/assets/plugins/toastr/toastr.min.js"></script>
-
-
-
-    <script src="/assets/js/sleek.bundle.js"></script>
-    {{--    <script src="/assets/js/sleek.js"></script>--}}
-
-    <!-- Optional JavaScript -->
-    @yield('app-script')
-
-    @include('request.load_notification')
-
-{{--    @include('scripts.close_flash_message')--}}
-{{--    @include('scripts.load_notification')--}}
-
-    {{--@if(isset($_SESSION['logged-in']))
-        @include('scripts.load_connected_profiles')
-    @endif--}}
+@yield('js')
 
 </body>
 </html>

@@ -56,7 +56,7 @@ class UserConnections extends Model
 
         $authId = Auth::getUser()->id;
 
-        $sql = "SELECT matri_id FROM visit_profile WHERE profile_id=? ORDER BY created_at desc LIMIT 3";
+        $sql = "SELECT sender FROM visit_profile WHERE receiver=? ORDER BY created_at desc LIMIT 3";
         $pdo = Model::getDB();
 
         $stmt=$pdo->prepare($sql);

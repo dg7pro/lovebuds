@@ -25,6 +25,12 @@ class Password extends \Core\Controller
         View::renderBlade('password/forgot');
     }
 
+    public function successAction()
+    {
+        //View::renderTemplate('Password/forgot.html');
+        View::renderBlade('password/reset-success');
+    }
+
     /**
      * Send the password reset link to the supplied email
      *

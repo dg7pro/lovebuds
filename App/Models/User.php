@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Controllers\Connection;
 use App\Flash;
 use App\Lib\Helpers;
 use App\Mail;
@@ -65,13 +66,8 @@ class User extends \Core\Model
             $hashed_token = $token->getHash();             // Saved in users table
             $this->activation_token = $token->getValue();  // To be send in email
 
-            $referred_id =null;
-            if($this->referred_by!=''){
-                $referred_id = self::getReferredByUserId($this->referred_by);
-            }
-
-            $sql = 'INSERT INTO users (mobile, email, password_hash, for_id, gender, pid, avatar, activation_hash, referred_by)
-                    VALUES (:mobile, :email, :password_hash, :cFor, :gender, :pid, :avatar, :activation_hash, :referred_by)';
+            $sql = 'INSERT INTO users (mobile, email, password_hash, for_id, gender, pid, avatar, activation_hash)
+                    VALUES (:mobile, :email, :password_hash, :cFor, :gender, :pid, :avatar, :activation_hash)';
 
             $db = static::getDB();
             $stmt = $db->prepare($sql);
@@ -84,7 +80,6 @@ class User extends \Core\Model
             $stmt->bindValue(':pid', $pid, PDO::PARAM_STR);
             $stmt->bindValue(':avatar', $avatar, PDO::PARAM_STR);
             $stmt->bindValue(':activation_hash', $hashed_token, PDO::PARAM_STR);
-            $stmt->bindValue(':referred_by', $referred_id, PDO::PARAM_INT);
 
             return $stmt->execute();
 
@@ -187,7 +182,7 @@ class User extends \Core\Model
     public static function authenticate($email, $password){
 
         $user = static::findByEmail($email);
-        if($user&& $user->is_active){
+        if($user){
             if(password_verify($password,$user->password_hash)){
                 return $user;
             }
@@ -301,7 +296,69 @@ class User extends \Core\Model
      */
     public static function findByID($id){
 
-        $sql = "SELECT * FROM users WHERE id= :id";
+        //$sql = "SELECT * FROM users WHERE id= :id";
+
+        $sql = "SELECT users.*,
+            heights.feet as ht, 
+            religions.name as religion,
+            languages.text as lang,
+            maritals.status as mstatus,
+            educations.name as edu,
+            degrees.name as deg,
+            universities.name as university,
+            occupations.name as occ,
+            sectors.name as sector,
+            incomes.level as income,
+            fathers.status as faa,
+            mothers.status as maa,
+            fam_affluence.status as fama,
+            fam_values.name as famv,
+            fam_types.name as famt,
+            fam_incomes.level as fami,
+            diets.type as diet,
+            smokes.status as smoke,
+            drinks.status as drink,
+            bodies.type as body,
+            complexions.type as complexion,
+            blood_groups.type as bg,
+            thalassemia.status as thal,
+            challenged.status as chal,
+            citizenship.status as res,
+            signs.text as sun,
+            rashis.text as rashi,
+            nakshatras.text as nak,
+            mangliks.status as manglik
+            FROM users
+            LEFT JOIN heights ON heights.id = users.height_id
+            LEFT JOIN religions ON religions.id = users.religion_id
+            LEFT JOIN languages ON languages.value = users.community_id
+            LEFT JOIN maritals ON maritals.id = users.marital_id    
+            LEFT JOIN educations ON educations.id = users.education_id
+            LEFT JOIN degrees ON degrees.id = users.degree_id
+            LEFT JOIN universities ON universities.id = users.university_id
+            LEFT JOIN occupations ON occupations.id = users.occupation_id
+            LEFT JOIN sectors ON sectors.id = users.sector_id
+            LEFT JOIN incomes ON incomes.id = users.income_id
+            LEFT JOIN fathers ON fathers.id = users.father_id
+            LEFT JOIN mothers ON mothers.id = users.mother_id
+            LEFT JOIN fam_affluence ON fam_affluence.id = users.famAffluence_id
+            LEFT JOIN fam_values ON fam_values.id = users.famValue_id
+            LEFT JOIN fam_types ON fam_types.id = users.famType_id
+            LEFT JOIN fam_incomes ON fam_incomes.id = users.famIncome_id
+            LEFT JOIN diets ON diets.id = users.diet_id
+            LEFT JOIN smokes ON smokes.id = users.smoke_id
+            LEFT JOIN drinks ON drinks.id = users.drink_id
+            LEFT JOIN bodies ON bodies.id = users.body_id
+            LEFT JOIN complexions ON complexions.id = users.complexion_id
+            LEFT JOIN blood_groups ON blood_groups.id = users.bGroup_id
+            LEFT JOIN thalassemia On thalassemia.id = users.thalassemia_id
+            LEFT JOIN challenged ON challenged.id = users.challenged_id
+            LEFT JOIN citizenship ON citizenship.id = users.citizenship_id
+            LEFT JOIN signs ON signs.id = users.sun_id
+            LEFT JOIN rashis ON rashis.id = users.moon_id
+            LEFT JOIN nakshatras ON nakshatras.id = users.nakshatra_id
+            LEFT JOIN mangliks ON mangliks.id = users.manglik_id
+            WHERE users.id= :id";
         $db = static::getDB();
 
         $stmt=$db->prepare($sql);
@@ -394,13 +451,32 @@ class User extends \Core\Model
      * ***************************************
      * */
 
+    public function moveProfile($sender,$receiver){
+
+        // json encode
+        //$like_array = json_encode($like_array);
+
+        // prepare query
+        $query = "UPDATE users SET like_array=? WHERE id=?";
+        $pdo = Model::getDB();
+        $stmt=$pdo->prepare($query);
+
+        // save to database
+        $status =  $stmt->execute([$like_array,$this->id]);
+
+        if($status){
+            Notification::save('profile_liked',$profile_id);
+        }
+
+    }
+
 
     /**
      * @param $like_array
      * @param $profile_id
      * @return void
      */
-    public function likeProfile($like_array,$profile_id){
+    /*public function likeProfile($like_array,$profile_id){
 
         // json encode
         $like_array = json_encode($like_array);
@@ -417,13 +493,13 @@ class User extends \Core\Model
             Notification::save('profile_liked',$profile_id);
         }
 
-    }
+    }*/
 
     /**
      * @param $short_array
      * @return bool
      */
-    public function shortProfile($short_array){
+    /*public function shortProfile($short_array){
 
         // json encode
         $short_array = json_encode($short_array);
@@ -436,13 +512,13 @@ class User extends \Core\Model
         // save to database
         return $stmt->execute([$short_array,$this->id]);
 
-    }
+    }*/
 
     /**
      * @param $hide_array
      * @return bool
      */
-    public function hideProfile($hide_array){
+    /*public function hideProfile($hide_array){
 
         // json encode
         $hide_array = json_encode($hide_array);
@@ -455,7 +531,7 @@ class User extends \Core\Model
         // save to database
         return $stmt->execute([$hide_array,$this->id]);
 
-    }
+    }*/
 
     /**
      * @param $time
@@ -848,6 +924,353 @@ class User extends \Core\Model
      * **********************************
      * */
 
+    public static function recentVisitor($uid){
+
+        $sql = "SELECT
+    
+            users.id,
+            users.pid,
+            users.first_name,
+            users.last_name,
+            users.gender,
+            users.dob,
+            
+            images.user_id as iuid,
+            images.filename,
+            images.pp,
+            
+            heights.ft as ht, 
+            religions.name as religen,
+            languages.text as lang,
+            countries.name as country,
+            incomes.level as income,
+            maritals.status as mstatus,
+            mangliks.status as manglik,
+            districts.text as town,
+            
+            users.horoscope, 
+            educations.name as edu,
+            occupations.name as occ,
+            diets.type as diet,
+            smokes.status as smoke,
+            drinks.status as drink,
+            challenged.status as challeng,    
+            move_profile.num as mov,
+            visit_profile.sender as visitor,       
+            
+            users.hiv,
+            users.rsa
+            
+            FROM users
+            
+            LEFT JOIN images ON images.user_id = users.id
+            
+            LEFT JOIN heights ON heights.id = users.height_id
+            LEFT JOIN religions ON religions.id = users.religion_id
+            LEFT JOIN languages ON languages.value = users.language_id
+            LEFT JOIN countries ON countries.id = users.country_id
+            LEFT JOIN incomes ON incomes.id = users.income_id
+            LEFT JOIN maritals ON maritals.id = users.marital_id
+            LEFT JOIN mangliks ON mangliks.id = users.manglik_id
+            LEFT JOIN districts ON districts.id = users.district_id
+            
+            LEFT JOIN educations ON educations.id = users.education_id
+            LEFT JOIN occupations ON occupations.id = users.occupation_id
+            
+            LEFT JOIN diets ON diets.id = users.diet_id
+            LEFT JOIN smokes ON smokes.id = users.smoke_id
+            LEFT JOIN drinks ON drinks.id = users.drink_id
+            LEFT JOIN challenged ON challenged.id = users.challenged_id
+            LEFT JOIN move_profile ON move_profile.receiver = users.id
+            LEFT JOIN visit_profile ON visit_profile.sender = users.id
+            
+            WHERE visit_profile.sender IS NOT NULL 
+       
+        ";
+
+        $sql .= " ORDER BY visit_profile.created_at DESC";
+        $sql .= " LIMIT 10";
+
+        $pdo = Model::getDB();
+        $stmt=$pdo->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    }
+
+
+    public static function shortlist($uid): array
+    {
+
+        $sql = "SELECT
+    
+            users.id,
+            users.pid,
+            users.first_name,
+            users.last_name,
+            users.gender,
+            users.dob,
+          
+            
+            images.user_id as iuid,
+            images.filename,
+            images.pp,
+            
+            heights.ft as ht, 
+            religions.name as religen,
+            languages.text as lang,
+            countries.name as country,
+            incomes.level as income,
+            maritals.status as mstatus,
+            mangliks.status as manglik,
+            districts.text as town,
+            
+            users.horoscope, 
+            educations.name as edu,
+            occupations.name as occ,
+            diets.type as diet,
+            smokes.status as smoke,
+            drinks.status as drink,
+            challenged.status as challeng,    
+            move_profile.num as mov, 
+            
+            users.hiv,
+            users.rsa
+            
+            FROM users
+            
+            LEFT JOIN images ON images.user_id = users.id
+            
+            LEFT JOIN heights ON heights.id = users.height_id
+            LEFT JOIN religions ON religions.id = users.religion_id
+            LEFT JOIN languages ON languages.value = users.language_id
+            LEFT JOIN countries ON countries.id = users.country_id
+            LEFT JOIN incomes ON incomes.id = users.income_id
+            LEFT JOIN maritals ON maritals.id = users.marital_id
+            LEFT JOIN mangliks ON mangliks.id = users.manglik_id
+            LEFT JOIN districts ON districts.id = users.district_id
+            
+            LEFT JOIN educations ON educations.id = users.education_id
+            LEFT JOIN occupations ON occupations.id = users.occupation_id
+            
+            LEFT JOIN diets ON diets.id = users.diet_id
+            LEFT JOIN smokes ON smokes.id = users.smoke_id
+            LEFT JOIN drinks ON drinks.id = users.drink_id
+            LEFT JOIN challenged ON challenged.id = users.challenged_id
+            LEFT JOIN move_profile ON move_profile.receiver = users.id            
+            
+            WHERE move_profile.sender= :id AND move_profile.num = 2
+       
+        ";
+
+        $sql .= " ORDER BY move_profile.created_at DESC";
+        $sql .= " LIMIT 10";
+
+        $pdo = Model::getDB();
+        $stmt=$pdo->prepare($sql);
+        $stmt->bindParam(':id',$uid,PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    }
+
+    public static function newlist($uid): array
+    {
+        $cUser = self::findByID($uid);
+        $cg = $cUser->gender;
+        $min_ht = $cUser->min_ht;
+        $max_ht = $cUser->max_ht;
+        $min_age = $cUser->min_age;
+        $maxDate = \Carbon\Carbon::today()->subYears($min_age)->endOfDay()->toDateString();
+        $max_age = $cUser->max_age;
+        $minDate = \Carbon\Carbon::today()->subYears($max_age)->toDateString();
+        $casteAry = implode(',',json_decode($cUser->mycastes));
+        //$casteAry = array_values($cUser->mycastes);
+
+        $sql = "SELECT
+    
+            users.id,
+            users.pid,
+            users.first_name,
+            users.last_name,
+            users.gender,
+            users.dob,
+            users.height_id,
+            users.manglik_id,
+            
+            images.user_id as iuid,
+            images.filename,
+            images.pp,
+            
+            heights.ft as ht, 
+            religions.name as religen,
+            languages.text as lang,
+            countries.name as country,
+            incomes.level as income,
+            maritals.status as mstatus,
+            mangliks.status as manglik,
+            districts.text as town,
+            
+            users.horoscope, 
+            educations.name as edu,
+            occupations.name as occ,
+            diets.type as diet,
+            smokes.status as smoke,
+            drinks.status as drink,
+            challenged.status as challeng,    
+            move_profile.num as mov, 
+            
+            users.hiv,
+            users.rsa
+            
+            FROM users
+            
+            LEFT JOIN images ON images.user_id = users.id
+            
+            LEFT JOIN heights ON heights.id = users.height_id
+            LEFT JOIN religions ON religions.id = users.religion_id
+            LEFT JOIN languages ON languages.value = users.language_id
+            LEFT JOIN countries ON countries.id = users.country_id
+            LEFT JOIN incomes ON incomes.id = users.income_id
+            LEFT JOIN maritals ON maritals.id = users.marital_id
+            LEFT JOIN mangliks ON mangliks.id = users.manglik_id
+            LEFT JOIN districts ON districts.id = users.district_id
+            
+            LEFT JOIN educations ON educations.id = users.education_id
+            LEFT JOIN occupations ON occupations.id = users.occupation_id
+            
+            LEFT JOIN diets ON diets.id = users.diet_id
+            LEFT JOIN smokes ON smokes.id = users.smoke_id
+            LEFT JOIN drinks ON drinks.id = users.drink_id
+            LEFT JOIN challenged ON challenged.id = users.challenged_id
+            LEFT JOIN move_profile ON move_profile.receiver = users.id            
+            
+            WHERE move_profile.num IS NULL
+            
+            AND users.gender != :cg
+            AND users.height_id >= :min_ht
+            AND users.height_id <= :max_ht
+            AND users.dob <= CAST('$maxDate' AS DATE)
+            AND users.dob >= CAST('$minDate' AS DATE)
+               
+        ";
+        if($cUser->cnb == 0){
+            $sql .= "AND (users.caste_id IN ($casteAry) OR users.caste_id IS NULL)";
+        }else{
+            $sql .= "AND (users.caste_id IN ($casteAry) OR users.caste_id IS NULL OR users.cnb=1)";
+        }
+
+        if($cUser->pm==0){
+            $sql .= "AND (users.manglik_id <> 1 OR users.manglik_id IS NULL)";
+        }else{
+            $sql .= "AND (users.manglik_id <> 2 OR users.manglik_id IS NULL)";
+        }
+
+        $sql .= " ORDER BY users.id DESC";
+        $sql .= " LIMIT 10";
+
+        $pdo = Model::getDB();
+        $stmt=$pdo->prepare($sql);
+        $stmt->bindParam(':cg',$cg,PDO::PARAM_INT);
+        $stmt->bindParam(':min_ht',$min_ht,PDO::PARAM_INT);
+        $stmt->bindParam(':max_ht',$max_ht,PDO::PARAM_INT);
+//        $stmt->bindParam(':min_age',$min_age,PDO::PARAM_INT);
+//        $stmt->bindParam(':max_age',$max_age,PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    }
+
+    public static function customSearchResults($advQuery=''){
+
+        /*
+         * Build query ----- 1
+         * */
+        $sql = "SELECT
+    
+            users.id,
+            users.pid,
+            users.first_name,
+            users.last_name,
+            users.gender,
+            users.dob,
+            
+            images.user_id as iuid,
+            images.filename,
+            images.pp,
+            
+            heights.ft as ht, 
+            religions.name as religen,
+            languages.text as lang,
+            countries.name as country,
+            incomes.level as income,
+            maritals.status as mstatus,
+            mangliks.status as manglik,
+            districts.text as town,
+            
+            users.horoscope, 
+            educations.name as edu,
+            occupations.name as occ,
+            diets.type as diet,
+            smokes.status as smoke,
+            drinks.status as drink,
+            challenged.status as challeng,    
+            move_profile.num as mov,
+            
+            users.hiv,
+            users.rsa
+            
+            FROM users
+            
+            LEFT JOIN images ON images.user_id = users.id
+            
+            LEFT JOIN heights ON heights.id = users.height_id
+            LEFT JOIN religions ON religions.id = users.religion_id
+            LEFT JOIN languages ON languages.value = users.language_id
+            LEFT JOIN countries ON countries.id = users.country_id
+            LEFT JOIN incomes ON incomes.id = users.income_id
+            LEFT JOIN maritals ON maritals.id = users.marital_id
+            LEFT JOIN mangliks ON mangliks.id = users.manglik_id
+            LEFT JOIN districts ON districts.id = users.district_id
+            
+            LEFT JOIN educations ON educations.id = users.education_id
+            LEFT JOIN occupations ON occupations.id = users.occupation_id
+            
+            LEFT JOIN diets ON diets.id = users.diet_id
+            LEFT JOIN smokes ON smokes.id = users.smoke_id
+            LEFT JOIN drinks ON drinks.id = users.drink_id
+            LEFT JOIN challenged ON challenged.id = users.challenged_id
+            LEFT JOIN move_profile ON move_profile.receiver = users.id
+            
+            WHERE users.id <=20 AND move_profile.num IS NULL 
+       
+        ";
+
+
+        if(!empty($advQuery)){
+            $sql .= " WHERE ";
+            $i=1;
+            foreach ($advQuery as $query){
+                if($i < count($advQuery)){
+                    $sql .= $query." AND ";
+                }else{
+                    $sql .= $query;
+                }
+                $i++;
+            }
+        }
+
+        $sql .= " ORDER BY users.id ASC";
+        //$sql .= " ORDER BY rand()";
+        $sql .= " LIMIT 10";
+
+        $pdo = Model::getDB();
+        $stmt=$pdo->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    }
+
     public static function getAdvanceSearchResults($advQuery=''){
 
         /*
@@ -866,13 +1289,111 @@ class User extends \Core\Model
             images.filename,
             images.pp,
             
-            heights.feet as ht, 
+            heights.ft as ht, 
             religions.name as religen,
             languages.text as lang,
             countries.name as country,
             incomes.level as income,
             maritals.status as mstatus,
             mangliks.status as manglik,
+            districts.text as town,
+            
+            users.horoscope, 
+            educations.name as edu,
+            occupations.name as occ,
+            diets.type as diet,
+            smokes.status as smoke,
+            drinks.status as drink,
+            challenged.status as challeng,    
+            move_profile.num as mov,
+            
+            users.hiv,
+            users.rsa
+            
+            FROM users
+            
+            LEFT JOIN images ON images.user_id = users.id
+            
+            LEFT JOIN heights ON heights.id = users.height_id
+            LEFT JOIN religions ON religions.id = users.religion_id
+            LEFT JOIN languages ON languages.value = users.language_id
+            LEFT JOIN countries ON countries.id = users.country_id
+            LEFT JOIN incomes ON incomes.id = users.income_id
+            LEFT JOIN maritals ON maritals.id = users.marital_id
+            LEFT JOIN mangliks ON mangliks.id = users.manglik_id
+            LEFT JOIN districts ON districts.id = users.district_id
+            
+            LEFT JOIN educations ON educations.id = users.education_id
+            LEFT JOIN occupations ON occupations.id = users.occupation_id
+            
+            LEFT JOIN diets ON diets.id = users.diet_id
+            LEFT JOIN smokes ON smokes.id = users.smoke_id
+            LEFT JOIN drinks ON drinks.id = users.drink_id
+            LEFT JOIN challenged ON challenged.id = users.challenged_id
+            LEFT JOIN move_profile ON move_profile.receiver = users.id
+            
+            WHERE users.id <=10
+       
+        ";
+
+
+        if(!empty($advQuery)){
+            $sql .= " WHERE ";
+            $i=1;
+            foreach ($advQuery as $query){
+                if($i < count($advQuery)){
+                    $sql .= $query." AND ";
+                }else{
+                    $sql .= $query;
+                }
+                $i++;
+            }
+        }
+
+        $sql .= " ORDER BY users.id ASC";
+        //$sql .= " ORDER BY rand()";
+        $sql .= " LIMIT 20";
+
+        $pdo = Model::getDB();
+        $stmt=$pdo->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    }
+
+    /* *********************************
+     *  Section 9
+     *  Quick Search ~
+     * **********************************
+     * */
+
+    public static function getQuickSearchResults($advQuery=''): array
+    {
+
+        /*
+         * Build query ----- 1
+         * */
+        $sql = "SELECT
+    
+            users.id,
+            users.pid,
+            users.first_name,
+            users.last_name,
+            users.gender,
+            users.dob,
+            
+            images.user_id as iuid,
+            images.filename,
+            images.pp,
+            
+            heights.ft as ht, 
+            religions.name as religen,
+            languages.text as lang,
+            countries.name as country,
+            incomes.level as income,
+            maritals.status as mstatus,
+            mangliks.status as manglik,
+            districts.text as town,
             
             users.horoscope, 
             educations.name as edu,
@@ -896,6 +1417,7 @@ class User extends \Core\Model
             LEFT JOIN incomes ON incomes.id = users.income_id
             LEFT JOIN maritals ON maritals.id = users.marital_id
             LEFT JOIN mangliks ON mangliks.id = users.manglik_id
+            LEFT JOIN districts ON districts.id = users.district_id
             
             LEFT JOIN educations ON educations.id = users.education_id
             LEFT JOIN occupations ON occupations.id = users.occupation_id
@@ -921,9 +1443,11 @@ class User extends \Core\Model
             }
         }
 
-        //$sql .= " ORDER BY users.id ASC";
-        $sql .= " ORDER BY rand()";
-        $sql .= " LIMIT 50";
+        $sql .= " ORDER BY users.id ASC";
+        //$sql .= " ORDER BY rand()";
+        $sql .= " LIMIT 10";
+
+        //var_dump($sql);
 
         $pdo = Model::getDB();
         $stmt=$pdo->prepare($sql);
@@ -931,6 +1455,7 @@ class User extends \Core\Model
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     }
+
 
 
     /* *********************************
@@ -1147,7 +1672,7 @@ class User extends \Core\Model
             $this->$key=$val;
         }
 
-        $sql = "UPDATE users SET first_name=?, last_name=?, community_id=?, language_id=?, marital_id=?, height_id=?, 
+        $sql = "UPDATE users SET first_name=?, last_name=?, caste_id=?, language_id=?, marital_id=?, height_id=?, 
                 country_id=?, state_id=?, district_id=? WHERE id=?";
 
         $db = Model::getDB();
@@ -1155,7 +1680,7 @@ class User extends \Core\Model
         return $stmt->execute([
             $this->first_name,
             $this->last_name,
-            $this->community_id,
+            $this->caste_id,
             $this->language_id,
             $this->marital_id,
             $this->height_id,
@@ -1178,6 +1703,26 @@ class User extends \Core\Model
         $db = Model::getDB();
         $stmt = $db->prepare($sql);
         return $stmt->execute([$mycastes, $this->id]);
+    }
+
+    public function updatePartnerPreference($data): bool
+    {
+        foreach($data as $key=>$val){
+            $this->$key=$val;
+        }
+        $mycastes = json_encode($this->mycastes);
+        $cnb = $this->cnb;
+        $min_age = $this->min_age;
+        $max_age = $this->max_age;
+        $min_ht = $this->min_ht;
+        $max_ht = $this->max_ht;
+        $pm = $this->pm;
+
+        $sql = "UPDATE users SET mycastes=?,cnb=?,min_age=?,max_age=?,min_ht=?,max_ht=?,pm=? WHERE id =?";
+
+        $db = Model::getDB();
+        $stmt = $db->prepare($sql);
+        return $stmt->execute([$mycastes,$cnb,$min_age,$max_age,$min_ht,$max_ht,$pm,$this->id]);
     }
 
     public function updateEduCareerInfo($data){
@@ -1312,6 +1857,70 @@ class User extends \Core\Model
         $stmt->execute();
         $stmt->fetchAll(PDO::FETCH_OBJ);
     }*/
+
+    public static function liveSearch($start, $limit): array
+    {
+
+        $query = "SELECT * FROM users";
+
+        if($_POST['query'] != ''){
+            $query .= '
+            WHERE first_name LIKE "%'.str_replace('', '%', $_POST['query']).'%" 
+            OR last_name LIKE "%'.str_replace('', '%', $_POST['query']).'%" 
+            OR email LIKE "%'.str_replace('', '%', $_POST['query']).'%" 
+            ';
+        }
+
+        $query .= ' ORDER BY id DESC ';
+
+        $filter_query = $query . 'LIMIT '.$start.','.$limit.'';
+
+
+        $pdo=Model::getDB();
+        $stmt=$pdo->prepare($filter_query);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
+
+
+    }
+
+    public static function liveSearchCount(): int
+    {
+
+        $query = "SELECT * FROM users";
+
+        if($_POST['query'] != ''){
+            $query .= '
+            WHERE first_name LIKE "%'.str_replace('', '%', $_POST['query']).'%" 
+            OR last_name LIKE "%'.str_replace('', '%', $_POST['query']).'%" 
+            OR email LIKE "%'.str_replace('', '%', $_POST['query']).'%" 
+            ';
+        }
+
+
+        $pdo=Model::getDB();
+        $stmt=$pdo->prepare($query);
+        $stmt->execute();
+        return $stmt->rowCount();
+
+
+    }
+
+    public function incrementAc(){
+
+        $rcn = new RecordContact();
+
+        $this->ac = $this->ac+1;
+
+        $db = Model::getDB();
+        $sql = "UPDATE users SET ac=? WHERE id =?";
+        $stmt = $db->prepare($sql);
+        return $stmt->execute([
+            $this->ac,
+            $this->id
+        ]);
+
+    }
 
 
 }

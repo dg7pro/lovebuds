@@ -1,105 +1,87 @@
 @extends('layouts.app')
 
-@section('title', 'Page Title')
 
-@section('app-css')
+@section('page_css')
     <link rel="stylesheet" href="/css/slim.min.css">
 @endsection
 
 @section('content')
 
-    {{--@php
-        $picId = random_token(5);
-    @endphp--}}
+    <!-- userprofile (up) section starts -->
+    <section class="profile">
 
-    <div class="content">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="card card-default">
-                    <div class="card-header card-header-border-bottom">
-                        <h2>Photo Album</h2><a href="{{'/account/manage-photo'}}" class="btn btn-sm btn-info ml-2">Manage Photo</a>
-                    </div>
+        <div class="album-card">
+            <h3 class="album-heading text-blue">Upload your images here:</h3>
+            <p>You can upload maximum of 3 photos. Your images should be single (no group images are allowed), clear, sharp and front facing.</p>
 
-                    <div class="card-body">
-                        <div class="row mb-4">
-                            <div class="col-12">
-                                <p class="mb-5">You can upload maximum of 3 photos. Your images should be single (no group images are allowed), clear, sharp and front facing.
-                                    <a href="#" class=""> Upload Image </a>
-                                </p>
-                            </div>
-                            @if($num<3)
-                                <div class="col-md-4 col-xl-4" id="slim-container">
-                                    <div class="slim" id="my-cropper"
-                                         data-ratio="3:4"
-                                         data-size="600,800"
-                                         data-min-size="300,400"
-                                         {{--data-force-size="300,400"--}}  {{--For output image--}}
-                                         {{--data-force-min-size="true"--}} {{--For output image--}}
-                                         data-filter-sharpen="15"
-                                         data-service="/Album/async"
-                                         {{--data-meta-pic-id="{{$picId+1}}"--}}
-                                         data-did-init="slimInitialised"
-                                         data-did-load="isHotEnough"
-                                         data-did-transform="imageTransformed"
-                                         {{--                     data-will-crop-initial="determineInitialCropRect"--}}
-                                         {{--                     data-will-transform="addTextWatermark"--}}
-                                         {{--                     data-will-transform="addMask"--}}
-                                         data-will-transform="addImageWatermark"
-                                         {{--                     data-will-save="showData"--}}
-                                         data-did-upload="imageUpload"
-                                         data-did-receive-server-error="handleServerError"
-                                         data-will-remove="imageWillBeRemoved"
-                                         data-did-remove="handleImageRemovalCurrent"
-                                    >
-                                        <input type="file" name="slim[]"/>
-                                    </div>
-                                </div>
-                            @endif
+            @if($num<3)
+                <div class="image-area">
+
+                        <div class="slim my-images" id="my-cropper"
+                             data-ratio="3:4"
+                             data-size="600,800"
+                             data-min-size="300,400"
+                             {{--data-force-size="300,400"--}}  {{--For output image--}}
+                             {{--data-force-min-size="true"--}} {{--For output image--}}
+                             data-filter-sharpen="15"
+                             data-service="/Album/async"
+                             {{--data-meta-pic-id="{{$picId+1}}"--}}
+                             data-did-init="slimInitialised"
+                             data-did-load="isHotEnough"
+                             data-did-transform="imageTransformed"
+                             {{--                     data-will-crop-initial="determineInitialCropRect"--}}
+                             {{--                     data-will-transform="addTextWatermark"--}}
+                             {{--                     data-will-transform="addMask"--}}
+                             data-will-transform="addImageWatermark"
+                             {{--                     data-will-save="showData"--}}
+                             data-did-upload="imageUpload"
+                             data-did-receive-server-error="handleServerError"
+                             data-will-remove="imageWillBeRemoved"
+                             data-did-remove="handleImageRemovalCurrent"
+                        >
+                            <input type="file" name="slim[]"/>
                         </div>
-                        <div class="row" id="my-album">
-                            @foreach($images as $image)
-                                <div class="col-md-4 col-xl-4" id="{{'my-pic-'.$image->img_id}}">
-                                    <div class="card mb-4">
-                                        <img class="card-img-top" src="{{'/uploaded/pics/'.$image->filename}}">
-                                        <div class="card-body">
-                                            @if($image->approved==1)
-                                                <h5 class="card-title text-success">{{'Approved'}}</h5>
-                                                <p class="card-text pb-3">Only approved images are visible to others, this is to done for moderation </p>
-                                            @elseif($image->approved==2)
-                                                <h5 class="card-title text-danger">{{'Rejected'}}</h5>
-                                                <p class="card-text pb-3">This photo has not been approved by moderation, delete & upload new one </p>
-                                            @else
-                                                <h5 class="card-title text-info">{{'Under Processing'}}</h5>
-                                                <p class="card-text pb-3">This photo is under process of approval by our team </p>
-                                            @endif
 
-
-                                            {{--<button class="btn btn-sm btn-outline-primary chgAvt" id="{{'chgAvt-'.$image->img_id}}" data-id="{{$image->img_id}}" data-name="{{$image->filename}}" value="{{$image->filename}}" {{$image->pp==1?'disabled':''}}>Change Avatar2</button>--}}
-
-                                            {{--<a href="#" class="btn btn-sm btn-outline-danger">Delete</a>--}}
-                                            {{--<button class="btn btn-outline-danger btn-sm delImage" id="{{'delImage-'.$image->img_id}}" data-id="{{$image->img_id}}" data-name="{{$image->filename}}" value="{{$image->filename}}">Delete</button>--}}
-                                        </div>
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
-                    </div>
-
-                    <!-- Card Footer -->
-                    <div class="card-footer bg-white py-4">
-                        <!-- <a href="#" class="btn-link py-3 text-uppercase">View All</a>-->
-                        <a href="{{'/account/manage-photo'}}" class="btn btn-sm btn-info ml-2">Manage Photo</a>
-                    </div>
                 </div>
+            @endif
+        </div>
+
+        <div class="album-card">
+            <div class="image-area" id="my-album">
+                @foreach($images as $image)
+                    <div id="{{'my-pic-'.$image->img_id}}">
+                        <img src="{{'/uploaded/pics/'.$image->filename}}" class="my-images">
+                    </div>
+                @endforeach
+            </div>
+
+           {{-- <div class="image-area">
+                <div class="my-images"><span class="photo-status"><i class="fa fa-window-close text-red" aria-hidden="true"> </i> Rejected</span></div>
+                <div class="my-images"><span class="photo-status"><i class="fa fa-clock text-orange" aria-hidden="true"> </i> Pending Approval</span></div>
+                <div class="my-images"><span class="photo-status"><i class="fa fa-check text-green" aria-hidden="true"> </i> Approved</span></div>
+
+            </div>--}}
+
+            <div>
+                <div><span class=""><i class="fa fa-camera text-blue" aria-hidden="true"> </i> You can upload maximum of 3 photos</span></div>
+                <div><span class=""><i class="fa fa-check text-green" aria-hidden="true"> </i> The photo has been approved and visible to others</span></div>
+                <div><span class=""><i class="fa fa-clock text-orange" aria-hidden="true"> </i> The photo has been submitted for screening, It is pending approval</span></div>
+                <div><span class=""><i class="fa fa-window-close text-red" aria-hidden="true"> </i> The photo has been rejected by our moderation team</span></div>
+
 
             </div>
+
         </div>
-    </div>
+
+
+    </section>
+    <!-- profiles section ends -->
 
 
 @endsection
 
-@section('app-script')
+
+@section('js')
 
     <script src="/js/slim.kickstart.min.js"></script>
     <script>
@@ -282,7 +264,7 @@
 
             };
             //watermark.src = 'public/images/pqina-logo.svg';
-            watermark.src = '/images/jum-logo4.svg';
+            watermark.src = '/img/jum-logo4.svg';
         }
         function showData(data) {
             console.log('just before saving crop');
@@ -336,3 +318,4 @@
 
 
 @endsection
+

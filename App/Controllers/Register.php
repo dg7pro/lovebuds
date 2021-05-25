@@ -5,26 +5,23 @@ namespace App\Controllers;
 
 use App\Flash;
 use App\Models\User;
+use App\Models\UserVariables;
 use Core\Controller;
 use Core\View;
 
-/**
- * Class Register
- * @package App\Controllers
- */
 class Register extends Controller
 {
 
-    //TODO : Create Separate Registration page
-
     /**
-     * Shows the registration page or index
-     * page where register form is present
+     * Signup form
      */
     public function indexAction()
     {
         $this->requireGuest();
-        header('Location: http://'.$_SERVER['HTTP_HOST'].'/home/index');
+
+        $fors = UserVariables::fetch('fors');
+
+        View::renderBlade('/register/index',['fors'=>$fors]);
 
     }
 
@@ -33,6 +30,8 @@ class Register extends Controller
      */
     public function createAction()
     {
+        /*var_dump($_POST);
+        exit();*/
         $user = new User($_POST);
         if($user->save()){
 
@@ -44,7 +43,7 @@ class Register extends Controller
             foreach($user->errors as $error){
                 Flash::addMessage($error,'danger');
             }
-            $this->redirect('/home/index');
+            $this->redirect('/register/index');
 
         }
 
@@ -54,7 +53,7 @@ class Register extends Controller
      * Shows success page
      */
     public function successAction(){
-        View::renderBlade('Register/success');
+        View::renderBlade('register/success');
     }
 
     /**
@@ -66,7 +65,7 @@ class Register extends Controller
     {
         User::activate($this->route_params['token']);
 
-        $this->redirect('/Register/activated');
+        $this->redirect('/register/activated');
     }
 
     /**
@@ -76,7 +75,7 @@ class Register extends Controller
      */
     public function activatedAction()
     {
-        View::renderBlade('Register/activated');
+        View::renderBlade('register/activated');
     }
 
 }

@@ -20,7 +20,7 @@ class Admin extends Administered
      *
      * @return void
      */
-    public function dashboardAction()
+    /*public function dashboardAction()
     {
         $paidUC = User::getPaidUserCount();
         $total_revenue = 200*$paidUC;
@@ -29,7 +29,7 @@ class Admin extends Administered
         $unApprovedKYC = count(Kyc::getUnapprovedList());
         $avatarUpdateCount = count(Image::imagesForAvatarUpdate());
         View::renderBlade('admin.dashboard',['total_revenue'=>$total_revenue, 'uak'=>$unApprovedKYC, 'uap'=>$unApprovedPhoto, 'auc'=>$avatarUpdateCount, 'new'=>$newMembers,]);
-    }
+    }*/
 
     /**
      * Show new members list
@@ -81,6 +81,30 @@ class Admin extends Administered
     public function pendingKycAction(){
 
         View::renderBlade('admin.pending-kyc');
+
+    }
+
+    /* ==================================================================
+     * 1st Block
+     * Admin Users Block - 1 Functions
+     * ====================================================================
+     * */
+
+    /**
+     * List all Users
+     */
+    public function indexAction(){
+
+        View::renderBlade('admin.index');
+
+    }
+
+    /**
+     * List all Users
+     */
+    public function listUsersAction(){
+
+        View::renderBlade('admin.list_users');
 
     }
 

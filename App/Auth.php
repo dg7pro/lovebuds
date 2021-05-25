@@ -73,7 +73,7 @@ class Auth extends Controller
     public static function getReturnToPage(){
 
 //        return isset($_SESSION['return_to']) ? $_SESSION['return_to'] :'/';
-        return $_SESSION['return_to'] ?? '/account/welcome';
+        return $_SESSION['return_to'] ?? '/account/dashboard';
 
     }
 

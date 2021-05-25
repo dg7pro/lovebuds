@@ -11,6 +11,11 @@
  */
 require dirname(__DIR__) . '/vendor/autoload.php';
 
+/**
+ * Load env variables
+ */
+$dotenv = Dotenv\Dotenv::createImmutable('../');
+$dotenv->load();
 
 /**
  * Error and Exception handling

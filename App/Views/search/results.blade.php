@@ -1,218 +1,77 @@
 @extends('layouts.app')
 
-@section('title', 'Page Title')
-
-@section('app-css')
-    <!-- Core CSS file -->
+@section('page_css')
     <link rel="stylesheet" href="/pswipe/photoswipe.css">
-
-    <!-- Skin CSS file (styling of UI - buttons, caption, etc.)
-         In the folder of skin CSS file there are also:
-         - .png and .svg icons sprite,
-         - preloader.gif (for browsers that do not support CSS animations) -->
     <link rel="stylesheet" href="/pswipe/default-skin/default-skin.css">
-
-    <style>
-        .xyz{
-            margin: 0;
-        }
-    </style>
 @endsection
 
 @section('content')
 
-    <div class="content">
-        <div class="breadcrumb-wrapper breadcrumb-contacts">
-            <div>
-                <h1>Search Results</h1>
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb p-0">
-                        <li class="breadcrumb-item">
-                            <a href="index.html">
-                                <span class="mdi mdi-home"></span>
-                            </a>
-                        </li>
-                        <li class="breadcrumb-item">
-                            App
-                        </li>
-                        <li class="breadcrumb-item" aria-current="page">search results</li>
-                    </ol>
-                </nav>
-            </div>
+    <!-- profiles section starts -->
+    <section class="profiles">
+        @foreach($profiles as $profile)
+            <div class="profiles-card">
 
-        </div>
+                <!-- Main Section -->
+                <div class="main-card">
+                    <div class="profile-sidebar">
+                        {{--<a href=""><img class="profile-image" src="../img/pp1.jpg" alt=""></a>--}}
+                        @if(!isset($profile['pics']))
+                            <img src="{{'/img/'.($profile['gender']==1?'avatar_groom.jpg':'avatar_bride.jpg')}}" class="profile-image" width="135px" alt="User Image1" />
+                            {{--  <img class="profile-image" src="../img/pp1.jpg" width="135px" alt="">--}}
+                        @else
+                        <!-- Galley wrapper that contains all items -->
+                            <div id="{{'gallery'.$profile['id']}}" class="gallery" itemscope itemtype="http://schema.org/ImageGallery">
+                            @foreach($profile['pics'] as $pic)
 
-        <div class="row">
-            @foreach($profiles as $profile)
-                <div class="col-lg-6 col-xl-4">
-                    <div class="card card-default p-4">
-                        <div class="media text-secondary">
-                            {{--<img src="/assets/img/user/u-xl-1.jpg" class="mr-3 img-fluid rounded" alt="Avatar Image">--}}
-                            {{--<img src="https://via.placeholder.com/100x100.jpg?text=JU" class="mr-3 img-fluid rounded" alt="Avatar Image">--}}
-                            @if(!isset($profile['pics']))
-                                <img src="{{'/images/'.($profile['gender']==1?'avatar_groom.jpg':'avatar_bride.jpg')}}" width="100px" class="mr-3 img-fluid rounded" alt="User Image" />
-                            @else
-                            <!-- Galley wrapper that contains all items -->
-                                <div id="{{'gallery'.$profile['id']}}" class="gallery" itemscope itemtype="http://schema.org/ImageGallery">
-                                @foreach($profile['pics'] as $pic)
-                                    {{--<img src="{{'uploaded/tmb/tn_'.$pic['fn']}}" alt="..." width="50px" class="rounded">--}}
-
-                                    <!-- Use figure for a more semantic html -->
-                                        <figure itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject" class="xyz">
-                                            <!-- Link to the big image, not mandatory, but usefull when there is no JS -->
-                                            <a href="{{'/uploaded/pics/'.$pic['fn']}}" data-id="{{$profile['id']}}" class="ju-album"  data-caption="Sea side, south shore<br><em class='text-muted'>© Dominik Schröder</em>" data-width="600" data-height="800" itemprop="contentUrl">
-                                                <!-- Thumbnail -->
-                                                <img src="{{'/uploaded/tmb/tn_'.$pic['fn']}}" alt="..." width="100px" class="mr-3 img-fluid rounded" {{($pic['pp']!=1)?'hidden':''}}>
-                                            </a>
-                                        </figure>
-                                    @endforeach
-                                </div>
-                            @endif
-                            <div class="media-body">
-                                {{--<a href="{{'profile.php?pid='.$profile['pid']}}">
-                                    <h5 class="mt-0 mb-2 text-info">{{$profile['first_name']}}
-                                     <span class="mr-2 badge badge-secondary">{{$profile['pid']}}</span>
-                                </h5>
-                                </a>--}}
-                                <a href="javascript:0" onclick="getUserProfileInfo({{$profile['id']}})" class="media text-secondary">
-                                    <h5 class="mt-0 mb-2 text-info">{{$profile['first_name']}}
-                                        <span class="mr-2 badge badge-secondary">{{$profile['pid']}}</span>
-                                    </h5>
-                                </a>
-                                <ul class="list-unstyled">
-                                    <li class="d-flex mb-1">
-                                        <i class="mdi mdi-map mr-1"></i>
-                                        <span>Age: {{\Carbon\Carbon::parse($profile['dob'])->age}}</span>
-                                    </li>
-                                    <li class="d-flex mb-1">
-                                        <i class="mdi mdi-book-open-page-variant mr-1"></i>
-                                        <span>Education: {{$profile['edu']}}</span>
-                                    </li>
-                                    <li class="d-flex mb-1">
-                                        <i class="mdi mdi-professional-hexagon mr-1"></i>
-                                        <span>Work: {{$profile['occ']}}</span>
-                                    </li>
-                                </ul>
+                                <!-- Use figure for a more semantic html -->
+                                    <figure itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject">
+                                        <!-- Link to the big image, not mandatory, but usefull when there is no JS -->
+                                        <a href="{{'/uploaded/pics/'.$pic['fn']}}" data-id="{{$profile['id']}}" class="ju-album"  data-caption="Sea side, south shore<br><em class='text-muted'>© Dominik Schröder</em>" data-width="600" data-height="800" itemprop="contentUrl">
+                                            <!-- Thumbnail -->
+                                            <img src="{{'/uploaded/tmb/tn_'.$pic['fn']}}" alt="jgjt" width="135px" class="profile-image" {{($pic['pp']!=1)?'hidden':''}}>
+                                        </a>
+                                    </figure>
+                                @endforeach
                             </div>
+                        @endif
+                        <p class="profile-bio">{{\Carbon\Carbon::parse($profile['dob'])->age}} yrs, {{$profile['ht']}}<br>{{$profile['town']}}</p>
+
+                    </div>
+                    <div class="profile-main">
+                        <h2 class="profile-name">{{$profile['first_name']}}</h2>
+{{--                        <p class="profile-position">B.Tech, Software Developer</p>--}}
+                        <p class="profile-position">{{$profile['edu']}}, {{$profile['occ']}}</p>
+                        <p class="profile-body">Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+                            Perspiciatis inventore eos ipsam debitis.
+                        </p>
+                        <div>
+                            <button class="btn btn-pink">Profile</button>
+                            <button id="{{'contact-btn-'.$profile['id']}}" data-id="{{$profile['id']}}" class="btn btn-orange contact">Contact</button>
                         </div>
 
+                    </div>
+                    <div class="profile-handler">
+                        <a title="Share on whatsapp" class="share" href="#"><i class="fas fa-share san"></i></a>
+                        <a title="Shortlist and Like" class="shortlist" href="#"><i class="fas fa-heart san"></i></a>
+                        <a title="Downlist and Hide" class="downlist" href="#"><i class="fas fa-arrow-circle-down san"></i></a>
                     </div>
                 </div>
-            @endforeach
-        </div>
+                <div class="ups-ab">
+                    <span><i class="fab fa-whatsapp"></i>  7565097233</span>
+                    <span><i class="fas fa-phone-alt"></i>  7565097233</span>
+                    <span><i class="far fa-envelope"></i> dg7proj@gmail.com</span>
 
-        <!-- Contact Modal -->
-        <div class="modal fade" id="modal-contact" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-             aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header justify-content-end border-bottom-0">
-                        <button type="button" class="btn-edit-icon" data-dismiss="modal" aria-label="Close">
-                            <i class="mdi mdi-pencil"></i>
-                        </button>
-                        <div class="dropdown">
-                            <button class="btn-dots-icon" type="button" id="dropdownMenuButton" data-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="false">
-                                <i class="mdi mdi-dots-vertical"></i>
-                            </button>
-                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" href="#">Action</a>
-                                <a class="dropdown-item" href="#">Another action</a>
-                                <a class="dropdown-item" href="#">Something else here</a>
-                            </div>
-                        </div>
-                        <button type="button" class="btn-close-icon" data-dismiss="modal" aria-label="Close">
-                            <i class="mdi mdi-close"></i>
-                        </button>
+                    <div id="{{'ups-ab-overlay-'.$profile['id']}}" class="ups-ab-overlay">  <!--user profiles address bar-->
+                        <div class="text">Contact Address</div>
                     </div>
-                    <div class="modal-body pt-0">
-                        <div class="row no-gutters">
-                            <div class="col-md-6">
-                                <div class="profile-content-left px-4">
-                                    <div class="card text-center widget-profile px-0 border-0">
-                                        <div class="card-img mx-auto rounded-circle">
-                                            <img id="userAvatar" src="" alt="user image" width="100px">
-                                        </div>
-                                        <div class="card-body">
-                                            <h4 class="py-2 text-dark" id="pop-fn"></h4>
-                                            {{--<p><a href="#" id="full-profile" class="text-info">~ full profile ~</a></p>--}}
-                                            {{--<a class="btn btn-primary btn-pill btn-lg my-4" href="#">Follow</a>--}}
-                                            <input type="button" class="btn btn-primary btn-pill btn-lg my-4" id="sendInterest" value="Initiate">
-                                        </div>
-                                    </div>
-                                    <div class="d-flex justify-content-between ">
-                                        <div class="text-center pb-4">
-                                            <p class="social-button">
-                                                <a href="javascript:0" id="like-profile" class="mb-1 btn btn-outline btn-linkedin rounded-circle">
-                                                    <i class="mdi mdi-thumb-up"></i>
-                                                </a>
-                                            </p>
-                                            <p>Like</p>
-                                        </div>
-                                        <div class="text-center pb-4">
-                                            <p class="social-button">
-                                                <a href="javascript:0" id="fav-profile" class="mb-1 btn btn-outline btn-google-plus rounded-circle">
-                                                    <i class="mdi mdi-heart"></i>
-                                                </a>
-                                            </p>
-                                            <p>Shortlist</p>
-                                        </div>
-                                        {{--<div class="text-center pb-4">
-                                            <p class="social-button">
-                                                <a href="javascript:0" id="hide-profile" class="mb-1 btn btn-outline btn-linkedin rounded-circle">
-                                                    <i class="mdi mdi-eye-off"></i>
-                                                </a>
-                                            </p>
-                                            <p>Hide</p>
-                                        </div>--}}
-                                        <div class="text-center pb-4">
-                                            <p class="social-button">
-                                                <a href="#" id="full-view" class="mb-1 btn btn-outline btn-linkedin rounded-circle">
-                                                    <i class="mdi mdi-fullscreen"></i>
-                                                </a>
-                                            </p>
-                                            <p>View</p>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="contact-info px-4">
-                                    <h4 class="text-dark mb-1">Basic Information:</h4>
-                                    <p class="text-dark font-weight-medium pt-4 mb-2">Birthday</p>
-                                    <p id="pop-dob">Nov 15, 1990</p>
-                                    <p class="text-dark font-weight-medium pt-4 mb-2">Education</p>
-                                    <p id="pop-edu">Lorem, ipsum dolor</p>
-                                    <p class="text-dark font-weight-medium pt-4 mb-2">Occupation</p>
-                                    <p id="pop-occ">Lorem, ipsum dolor</p>
-                                    <p class="text-dark font-weight-medium pt-4 mb-2">Others:</p>
-                                    <p id="pop-inf">Lorem, ipsum dolor</p>
-
-
-
-                                </div>
-                            </div>
-                            {{--<div class="col-md-4">
-                                <div class="contact-info px-4">
-                                    <h4 class="text-dark mb-1">Contact Details</h4>
-                                    <p class="text-dark font-weight-medium pt-4 mb-2">Email address</p>
-                                    <p>Albrecht.straub@gmail.com</p>
-                                    <p class="text-dark font-weight-medium pt-4 mb-2">Phone Number</p>
-                                    <p>+99 9539 2641 31</p>
-                                    <p class="text-dark font-weight-medium pt-4 mb-2">Birthday</p>
-                                    <p>Nov 15, 1990</p>
-                                    <p class="text-dark font-weight-medium pt-4 mb-2">Event</p>
-                                    <p>Lorem, ipsum dolor</p>
-                                </div>
-                            </div>--}}
-                        </div>
-                    </div>
-
                 </div>
             </div>
-        </div>
-    </div>
+        @endforeach
+
+
+    </section>
+    <!-- profiles section ends -->
 
     <!-- Root element of PhotoSwipe. Must have class pswp. -->
     <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
@@ -261,10 +120,43 @@
             </div>
         </div>
     </div>
+    <!-- End photoswipe -->
 
 @endsection
 
-@section('app-script')
+@section('js')
+
+    <!-- custom js code -->
+    <script>
+
+        $(document).ready(function(){
+            $(".contact").on("click", function(){
+                var dataId = $(this).attr("data-id");
+                alert("The data-id of clicked item is: " + dataId);
+
+                var cbtn = document.getElementById("contact-btn-"+dataId);
+                var addr = document.getElementById("ups-ab-overlay-"+dataId);
+                addr.style.width= 0;
+                addr.style.left= 100;
+                cbtn.setAttribute('disabled','disabled');
+            });
+        });
+
+        // Animated element removal
+        function cuteHide(el) {
+            el.animate({opacity: '0'}, 150, function(){
+                el.animate({height: '0px'}, 150, function(){
+                    el.remove();
+                });
+            });
+        }
+
+        $('.downlist').on('click', function(){
+            var el = $(this).closest('.profiles-card');
+            cuteHide(el);
+        });
+
+    </script>
 
     <!-- Core JS file -->
     <script src="/pswipe/photoswipe.min.js"></script>
@@ -321,77 +213,4 @@
         }(jQuery));
     </script>
 
-    <script>
-        /*======== 5. TOASTER ========*/
-        var toaster = $('#toaster');
-        function callToaster(positionClass, message) {
-            toastr.options = {
-                closeButton: true,
-                debug: false,
-                newestOnTop: false,
-                progressBar: true,
-                positionClass: positionClass,
-                preventDuplicates: false,
-                onclick: null,
-                showDuration: "300",
-                hideDuration: "1000",
-                timeOut: "5000",
-                extendedTimeOut: "1000",
-                showEasing: "swing",
-                hideEasing: "linear",
-                showMethod: "fadeIn",
-                hideMethod: "fadeOut"
-            };
-            toastr.success(message);
-        }
-    </script>
-
-    <script>
-        function getUserProfileInfo(other_id){
-            console.log(other_id);
-            $.post("/ajax/profile-description",{other_id:other_id},function (data, status) {
-                console.log(data);
-                var user = JSON.parse(data);
-                $('#sendInterest').data('id',user.id).data('flag',user.flag);  // not visible
-                $('#pop-fn').html(user.first_name +' '+ user.last_name);
-                $('#full-profile').attr('href','/profile/'+user.pid);
-                $('#like-profile').attr('onclick','likeProfile('+user.id+')');
-                $('#fav-profile').attr('onclick','favProfile('+user.id+')');
-                //$('#hide-profile').attr('onclick','hideProfile('+user.id+')');
-                $('#full-view').attr('href','/profile/'+user.pid);
-                $('#userAvatar').attr('src','/uploaded/tmb/tn_'+user.avatar);
-
-                if(user.flag==9){
-                    $('#sendInterest').prop('value','Connected').attr('disabled','disabled');
-                }else if(user.flag==8){
-                    $('#sendInterest').prop('value','Accept').removeAttr('disabled');
-                }else if(user.flag==7){
-                    $('#sendInterest').prop('value','Sent').attr('disabled','disabled');
-                }else{
-                    $('#sendInterest').prop('value','Initiate').removeAttr('disabled');
-                }
-
-                (user.like)?$('#like-profile').addClass('disabled'):$('#like-profile').removeClass('disabled');
-                (user.fav)?$('#fav-profile').addClass('disabled'):$('#fav-profile').removeClass('disabled');
-                (user.hide)?$('#hide-profile').addClass('disabled'):$('#hide-profile').removeClass('disabled');
-
-
-                $('#pop-dob').html(user.iso + ' '+ user.age);
-                $('#pop-edu').html(user.edu);
-                $('#pop-occ').html(user.occ);
-                $('#pop-inf').html(user.rel+', '+user.lag);
-
-            });
-            $('#modal-contact').modal("show");
-        }
-    </script>
-
-    @include('request.connect_profile')
-    @include('request.like_profile')
-    @include('request.short_profile')
-    @include('request.hide_profile')
 @endsection
-
-
-
-

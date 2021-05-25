@@ -1,201 +1,210 @@
 @extends('layouts.app')
 
-@section('title', 'Ju-Matrimony')
-
 @section('content')
 
-    <div class="content">
-
-        @include('layouts.partials.flash')
-
-        <div class="row">
-            <div class="col-lg-8">
-                <div class="card card-default">
-                    <div class="card-header card-header-border-bottom">
-                        <h3>Just Unite Matrimony</h3>
+    <!-- landing section starts -->
+    <section class="landing">
+        <div class="dark-overlay">
+            <div class="landing-inner">
+                <!-- <h1 class="x-large">ju-matrimony</h1> -->
+                <h1 class="x-large">Just Unite</h1>
+                <!-- <p class="lead">The absolutly free Indian matrimony service created for charitable purpose
+                </p> -->
+                <p class="lead">Register search and find your soulmate, without paying a single rupee
+                </p>
+                @if($authUser)
+                    <div class="buttons">
+                        <a href="{{'/account/dashboard'}}" class="btn btn-pink">Dashboard</a>
+                        <a href="{{'/account/logout'}}" class="btn btn-orange">Logout</a>
                     </div>
-                    <div class="card-body">
-                        <div id="carouselExampleCaptions" class="carousel slide" data-ride="carousel">
-                            <ol class="carousel-indicators">
-                                <li data-target="#carouselExampleCaptions" data-slide-to="0" class="active"></li>
-                                <li data-target="#carouselExampleCaptions" data-slide-to="1"></li>
-                            </ol>
-                            <div class="carousel-inner">
-                                <div class="carousel-item bg-gradient-dark active">
-                                    <img class="d-block w-100" src="/assets/img/elements/ju_slide2.jpg" alt="First slide">
-                                    <div class="carousel-caption d-none d-md-block">
-                                        <h5>Life partner</h5>
-                                        <p>The happiness you get forever </p>
-                                    </div>
-                                </div>
-                                <div class="carousel-item bg-gradient-dark">
-                                    <img class="d-block w-100" src="/assets/img/elements/ju_slide3.jpg" alt="Second slide">
-                                    <div class="carousel-caption d-none d-md-block">
-                                        <h5>Someone Special</h5>
-                                        <p>Find your true soulmate here</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <a class="carousel-control-prev" href="#carouselExampleCaptions" role="button" data-slide="prev">
-                                <span class="mdi mdi-chevron-left mdi-36px" aria-hidden="true"></span>
-                                <span class="sr-only">Previous</span>
-                            </a>
-                            <a class="carousel-control-next" href="#carouselExampleCaptions" role="button" data-slide="next">
-                                <span class="mdi mdi-chevron-right mdi-36px" aria-hidden="true"></span>
-                                <span class="sr-only">Next</span>
-                            </a>
-                        </div>
+                @else
+                    <div class="buttons">
+                        <a href="{{'/register/index'}}" class="btn btn-pink">Register</a>
+                        <a href="{{'/login/index'}}" class="btn btn-orange">Login</a>
+                    </div>
+                @endif
+            </div>
+        </div>
+    </section>
+    <!-- landing section ends -->
+
+
+    <section class="searching">
+        <form method="post" id="quick_search" name="quick_search" action="{{'/quick/search'}}">
+            <div class="search-partner">
+                <!-- <input type="text" name="gender" id="gender" class="form-control search-input"> -->
+                <select name="gender" id="gender" class="form-control search-input">
+                    <option value="2">Bride</option>
+                    <option value="1">Groom</option>
+                </select>
+                <div class="search-input search-age">
+                    <select name="minAge" id="min_age" class="form-control">
+                        <option value="">age from</option>
+                        @foreach($age_rows as $row)
+                            <option value="{{$row}}">{{$row}}</option>
+                        @endforeach
+
+                    </select>
+                    <span class="search-between">-</span>
+                    <select name="maxAge" id="max_age" class="form-control">
+                        <option value="">age to</option>
+                        @foreach($age_rows as $row)
+                            <option value="{{$row}}">{{$row}}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <!-- <input type="text" name="gender" id="gender" class="form-control search-input"> -->
+                <select name="rel" id="religion" class="form-control search-input">
+                    <option value="">Religion</option>
+                    @foreach($religions as $religion)
+                        <option value="{{$religion->id}}">
+                            {{$religion->name}}
+                        </option>
+                    @endforeach
+                    {{--<option value="hindu">Hindu</option>
+                    <option value="muslim">Muslim</option>
+                    <option value="sikh">Sikh</option>--}}
+                </select>
+                <select name="lan" id="community" class="form-control search-input">
+                    <option value="">Language speaking</option>
+                    @foreach($languages as $language)
+                        <option value="{{$language->value}}">
+                            {{$language->text}}
+                        </option>
+                    @endforeach
+                </select>
+                <input type="submit" name="quick-search-submit"  value="Search Partner" class="btn btn-coco search-input">
+            </div>
+        </form>
+    </section>
+
+    <!-- 3 Step Process  -->
+    <section class="services">
+        <div class="container">
+            <h2 class="title">Just 3 steps to follow</h2>
+            <p class="subtitle">This matrimony service is 100% free, we don't charge single penny</p>
+
+            <div class="row">
+
+                <div class="col-md-4">
+                    <div class="service-box">
+                        <img src="img/signup.png" alt="">
+                        <h6>Free Sign Up</h6>
+                        <p>Register and create your marriage profile. It just take 2 min's</p>
+                        <i class="fa fa-arrow-right"></i>
                     </div>
                 </div>
-            </div>
 
-            <div class="col-lg-4">
-                <div class="card card-default">
-                    <div class="card-header card-header-border-bottom">
-                        <h3>Create Account</h3>
-                        <span class="mb-3 ml-2 badge badge-success">Free</span>
+                <div class="col-md-4">
+                    <div class="service-box active-service">
+                        <img src="img/share2.png" alt="">
+                        <h6>Sharing is Caring</h6>
+                        <p>Share once on fb to see contact no's of 101 parties, otherwise site is free</p>
+                        <i class="fa fa-arrow-right"></i>
                     </div>
-                    <div class="card-body">
-                        <form action="{{isset($rflag)?'/Referral/create':'/register/create'}}" method="POST">
-                            <div class="form-row">
-                                <div>
-                                    <input type="hidden" id="referred_by" name="referred_by" value="{{ $referred_by }}">
-                                </div>
-                                <div class="col-md-12 mb-3">
-                                    <label for="cFor">Creating profile for:</label>
-                                    <select class="form-control" id="cFor" name="cFor" required>
-                                        <option selected>Select</option>
-                                        @foreach($fors as $for)
-                                            <option value="{{$for->id}}">{{$for->name}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-
-                                <div class="col-md-12 mt-1 mb-5" id="genderDiv">
-                                    <div class="custom-control custom-radio custom-control-inline">
-                                        <input type="radio" id="male" name="gender" value="1" class="custom-control-input" required>
-                                        <label class="custom-control-label" for="male">Male</label>
-                                    </div>
-                                    <div class="custom-control custom-radio custom-control-inline">
-                                        <input type="radio" id="female" name="gender" value="2" class="custom-control-input" required>
-                                        <label class="custom-control-label" for="female">Female</label>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-12 mb-3">
-                                    <label for="email" data-toggle="popover" data-trigger="hover" data-placement="top"
-                                           data-content="Contact Email Address. Email Verification will be send on this email.">Email:
-                                        <span id="msg-2" class="valid-feedback mt-1 ml-2" hidden> </span>
-                                    </label>
-                                    <div class="spinner-border spinner-border-sm text-info ml-2" id="spinner-2" hidden role="status"></div>
-                                    <input type="email" class="form-control" id="email" name="email" placeholder="Email"
-                                           value="{{ isset($_GET['email']) ? $_GET['email'] : '' }}">
-                                </div>
-
-                                <div class="col-md-12 mb-3">
-                                    <label for="mobile"  data-toggle="popover" data-trigger="hover" data-placement="top"
-                                           data-content="Enter your 10 digits mobile number. The OTP will be send on this number">Mobile:
-                                        <span id="msg-3" class="valid-feedback mt-1 ml-2" hidden> </span>
-                                    </label>
-                                    <div class="spinner-border spinner-border-sm text-info ml-2" id="spinner-3" hidden role="status"></div>
-                                    <input type="text" class="form-control" id="mobile" name="mobile" placeholder="Mobile(10 digits)"
-                                           value="{{ isset($_GET['mobile']) ? $_GET['mobile'] : '' }}" required>
-                                </div>
-
-                                <div class="col-md-12 mb-3">
-                                    <label for="password" data-toggle="popover" data-trigger="hover" data-placement="top"
-                                           data-content="Password must be alphanumeric with atleast one number">Password:
-                                        <span id="msg-4" class="valid-feedback mt-1 ml-2" hidden> </span>
-                                    </label>
-                                    <div class="spinner-border spinner-border-sm text-info ml-2" id="spinner-4" hidden role="status"></div>
-                                    <input type="password" class="form-control" id="password" name="password" placeholder="New Password" autocomplete="new-password" required>
-                                </div>
-
-                            </div>
-
-                            <button class="btn btn-danger btn-block mt-3" name="create-account-submit" type="submit">{{'Join'}}</button>
-                        </form>
+                </div>
+                <div class="col-md-4">
+                    <div class="service-box">
+                        <img src="img/couple.png" alt="" style="width: 75px !important;">
+                        <h6>Be a Couple</h6>
+                        <p>Complete yourself, just find someone very special to you & family</p>
+                        <i class="fa fa-arrow-right"></i>
                     </div>
                 </div>
             </div>
         </div>
+    </section>
+    <!-- End 3 Step Process -->
 
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="card card-default">
-                    <div class="card-header card-header-border-bottom">
-                        <h2>Testimonial Carousel</h2>
-                    </div>
-                    <div class="card-body">
 
-                        <div id="carouselTestimonial" class="carousel carousel-testimonial slide" data-ride="carousel">
-                            <ol class="carousel-indicators indicator-success">
-                                <li data-target="#carouselTestimonial" data-slide-to="0" class="active"></li>
-                                <li data-target="#carouselTestimonial" data-slide-to="1"></li>
-                            </ol>
-                            <div class="carousel-inner">
-                                <div class="carousel-item active">
-                                    <div class="card border-0 text-center">
-                                        <div class="card-img-wrapper ">
-                                            <img src="/assets/img/user/u28.jpg" alt="" class="img-fluid rounded-circle">
-                                        </div>
-                                        <div class="card-body">
-                                            <p>
-                                                Very nice website, just register and start searching your love. Other more
-                                                important thing about this website is: it is free. Compared to other online
-                                                portals which charges thousand of rupees for just 3 or 6 months, jumatrimony
-                                                is free. Their customer service is also very fast, efficient and good just
-                                                drop your message in the chat box given on lower right corner of your mobile.
-                                                I highly recommend, others to register and use this website
-                                            </p>
-                                            <a class="text-dark pt-4 d-block text-center font-weight-medium font-size-15" href="#">Gopal Srivastava</a>
-                                            <span >Master of Computer Application(MCA)</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="carousel-item">
-                                    <div class="card border-0 text-center">
-                                        <div class="card-img-wrapper">
-                                            <img src="/assets/img/user/u27.jpg" alt="" class="img-fluid rounded-circle">
-                                        </div>
-                                        <div class="card-body">
-                                            <p>
-                                                Worth trying it, to search your life partner. The website is simple, fast & good
-                                                to go for the first timers, it also has tons of new features. And the most important
-                                                thing is: it is absolutely free. One time fees of just Rs. 200 is charged for doing
-                                                KYC and other charges such as sms notification. Other wise the service is free.
-                                                The design is also elegant and great. I highly recommend to all single Indians
-                                                to register free and start searching their soul mate
-                                            </p>
-                                            <a class="text-dark pt-4 d-block text-center font-weight-medium font-size-15" href="#">Sudha Gupta</a>
-                                            <span >Bachelor of Medicine & Surgery (MBBS) </span>
-                                        </div>
-                                    </div>
-                                </div>
+    <!-- Start -->
+    <section class="review">
+        <div class="container">
+
+            <div class="bd-example">
+                <div id="carouselExampleCaptions" class="carousel slide" data-ride="carousel">
+                    <ol class="carousel-indicators">
+                        <li data-target="#carouselExampleCaptions" data-slide-to="0" class="active"></li>
+                        <li data-target="#carouselExampleCaptions" data-slide-to="1"></li>
+                        <li data-target="#carouselExampleCaptions" data-slide-to="2"></li>
+                    </ol>
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <img src="/img/t1.jpg">
+                            <div class="carousel-caption">
+                                <h6>Jennifer Lopez</h6>
+                                <small> CEO and Founder @ Microsoft</small>
+                                <p>Nulla vitae elit libero, a pharetra augue mollis interdum. <br>
+                                    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ab in porro
+                                    <br>laboriosam quibusdam illum. Aut expedita ad magnam ullam suscipit,
+                                    <br>eum sed deleniti vel adipisci earum, asperiores cum aliquam quos.</p>
                             </div>
-                            <a class="carousel-control-prev" href="#carouselTestimonial" role="button" data-slide="prev">
-                                <span class="mdi mdi-chevron-left mdi-36px" aria-hidden="true"></span>
-                                <span class="sr-only">Previous</span>
-                            </a>
-                            <a class="carousel-control-next" href="#carouselTestimonial" role="button" data-slide="next">
-                                <span class="mdi mdi-chevron-right mdi-36px" aria-hidden="true"></span>
-                                <span class="sr-only">Next</span>
-                            </a>
+                        </div>
+                        <div class="carousel-item">
+                            <img src="/img/t2.jpg">
+                            <div class="carousel-caption">
+                                <h6>Ashwarya Rai</h6>
+                                <small> Project Manager @ Amazon</small>
+                                <p>Nulla vitae elit libero, a pharetra augue mollis interdum. <br>
+                                    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ab in porro
+                                    <br>laboriosam quibusdam illum. Aut expedita ad magnam ullam suscipit,
+                                    <br>eum sed deleniti vel adipisci earum, asperiores cum aliquam quos.</p>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <img src="/img/t3.jpg">
+                            <div class="carousel-caption">
+                                <h6>Madhuri Dixit</h6>
+                                <small> Senior Developer @ Google</small>
+                                <p>Nulla vitae elit libero, a pharetra augue mollis interdum. <br>
+                                    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ab in porro
+                                    <br>laboriosam quibusdam illum. Aut expedita ad magnam ullam suscipit,
+                                    <br>eum sed deleniti vel adipisci earum, asperiores cum aliquam quos.</p>
+                            </div>
                         </div>
                     </div>
+                    <a class="carousel-control-prev" href="#carouselExampleCaptions" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#carouselExampleCaptions" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
                 </div>
             </div>
+
         </div>
-    </div>
+    </section>
+
+    <!-- End -->
+
 
 @endsection
 
-@section('app-script')
-
-    @include('request.check_gender')
-    @include('request.check_email')
-    @include('request.check_mobile')
-    @include('request.check_password')
-
+@section('js')
+    <script>
+        $(document).ready(function(){
+            $('#min_age').on('change', function(){
+                var minAgeVal = $(this).val();
+                console.log(minAgeVal);
+                if(minAgeVal){
+                    $.ajax({
+                        type:'POST',
+                        url:'/ajax/minmaxAge',
+                        data:{
+                            min_age_val:minAgeVal
+                        },
+                        success:function(data,status){
+                            //console.log(data);
+                            //console.log(status);
+                            $('#max_age').html(data);
+                        }
+                    });
+                }else{
+                    $('#max_age').html('<option value="">min-age first</option>');
+                }
+            });
+        });
+    </script>
 @endsection
-

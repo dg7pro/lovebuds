@@ -47,19 +47,9 @@ class Config
      */
     const SECRET_KEY = 'j3p4C1MleqZq8jOLqlIpFqmm4QKevgI8';
 
-    /**
-     * Mailgun API key
-     *
-     * @var string
-     */
-    const MAILGUN_API_KEY = '320da4d5d9ab0f112db56731a3dfa2a3-9525e19d-c000846e';
 
-    /**
-     * Mailgun domain
-     *
-     * @var string
-     */
-    const MAILGUN_DOMAIN = 'mg.jumatrimony.com';
+
+
 
     const PAYTM_MERCHANT_KEY = '3s&bKIISCD8L%!zE';
     const PAYTM_TXN_URL= 'https://securegw-stage.paytm.in/theia/processTransaction';

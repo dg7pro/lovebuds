@@ -8,16 +8,66 @@ use App\Lib\Helpers;
 use App\Models\User;
 use App\Models\UserVariables;
 use Core\Controller;
-use Core\Model;
 use Core\View;
 
 class Search extends Controller
 {
-    // TODO
 
-    public function advanceAction(){
+    public function testAction(){
 
-        View::renderBlade('search.advance',[
+        $profiles = User::customSearchResults();
+
+        $newProfiles = [];
+        $shortlistedProfiles = [];
+
+        foreach ($profiles as $pro){
+
+            if($pro['mov']==''){
+                array_push($newProfiles,$pro);
+            }
+
+            if($pro['mov']==1){
+                array_push($shortlistedProfiles,$pro);
+            }
+        }
+
+        Helpers::dnd($newProfiles);
+    }
+
+    /**
+     * Profiles list
+     */
+    public function indexAction()
+    {
+//        $profiles = User::getAdvanceSearchResults();
+//
+//        //Helpers::dnd($profiles);
+//
+//        $newProfilesInfo = self::getAssociativeArrayResult($profiles);
+//        $new_list = [];
+//        $short_list = [];
+//
+//        foreach($newProfilesInfo as $p){
+//
+//            if($p['mov']==1){
+//                array_push($short_list,$p);
+//            }
+//            if($p['mov']==null){
+//                array_push($new_list,$p);
+//            }
+//        }
+
+        //Helpers::dnd($newProfilesInfo);
+        /*$address_request_array = [];
+        if(isset($_SESSION['user_id'])) {
+            $address_request_array = Connection::addressRequestSend();
+        }*/
+
+        View::renderBlade('search.profiles2',[
+            //'address_request_array'=>$address_request_array,
+//            'new_profiles'=>$new_list,
+//            'short_profiles'=>$short_list,
+            'num' => 10,
             'languages'=>UserVariables::languages(),
             'religions'=>UserVariables::religions(),
             'countries'=>UserVariables::getCountries(),
@@ -32,15 +82,43 @@ class Search extends Controller
             'smokes'=>UserVariables::smokes(),
             'challenges'=>UserVariables::challenges()
         ]);
-    }
-
-    public function resultAction(){
-
-        $profiles = User::getAdvanceSearchResults();
-        Helpers::dnd($profiles);
-        //var_dump($profiles);
 
     }
+
+    public static function getAssociativeArrayResult($profiles){
+
+        $newProfilesInfo=array();
+        $newProfileKey=array();
+        $newKey = 0;
+
+        foreach($profiles as $profileKey => $profileValue){
+
+            if(!in_array($profileValue["id"],$newProfileKey)){
+                ++$newKey;
+                $newProfilesInfo[$newKey]["id"] = $profileValue["id"];
+                $newProfilesInfo[$newKey]["pid"] = $profileValue["pid"];
+                $newProfilesInfo[$newKey]["first_name"] = $profileValue["first_name"];
+                $newProfilesInfo[$newKey]["last_name"] = $profileValue["last_name"];
+                $newProfilesInfo[$newKey]["gender"] = $profileValue["gender"];
+                $newProfilesInfo[$newKey]["dob"] = $profileValue["dob"];
+                $newProfilesInfo[$newKey]["edu"] = $profileValue["edu"];
+                $newProfilesInfo[$newKey]["occ"] = $profileValue["occ"];
+                $newProfilesInfo[$newKey]["ht"] = $profileValue["ht"];
+                $newProfilesInfo[$newKey]["town"] = $profileValue["town"];
+                $newProfilesInfo[$newKey]["mov"] = $profileValue["mov"];
+            }
+            if($profileValue['filename']!=null){
+                $newProfilesInfo[$newKey]['pics'][$profileKey]["fn"] = $profileValue["filename"];
+                $newProfilesInfo[$newKey]['pics'][$profileKey]["pp"] = $profileValue["pp"];
+            }
+            $newProfileKey[]  = $profileValue["id"];
+        }
+
+        return $newProfilesInfo;
+
+    }
+
+
 
     public static function buildQuery($data){
 
@@ -191,89 +269,7 @@ class Search extends Controller
         return $queries;
     }
 
-    public function resultsAction(){
 
-        $minAge=21;
-        $maxAge=35;
-        $minHt=1;
-        $maxHt=30;
-        $gen=null;
-        $pho=null;
-        $hor=null;
-        $hiv=0;
-        $rsa=null;
 
-        if(isset($_POST['srch-submit'])){
-
-            $queries = self::buildQuery($_POST);
-
-            $profiles = User::getAdvanceSearchResults($queries);
-
-            $newProfilesInfo = self::getAssociativeArrayResult($profiles);
-
-            self::putSearchArrayIntoSession($newProfilesInfo);
-
-            View::renderBlade('search.results',[
-                'profiles'=>$newProfilesInfo,
-                'num' => 10,
-                'languages'=>UserVariables::languages(),
-                'religions'=>UserVariables::religions(),
-                'countries'=>UserVariables::getCountries(),
-                'maritals'=>UserVariables::maritals(),
-                'age_rows'=>UserVariables::getAgeRows(),
-                'heights'=>UserVariables::heights(),
-                'mangliks'=>UserVariables::mangliks(),
-                'educations'=>UserVariables::getEducations(),
-                'occupations'=>UserVariables::getOccupations(),
-                'diets'=>UserVariables::diets(),
-                'drinks'=>UserVariables::drinks(),
-                'smokes'=>UserVariables::smokes(),
-                'challenges'=>UserVariables::challenges()
-            ]);
-
-        }
-
-    }
-
-    public static function getAssociativeArrayResult($profiles){
-
-        $newProfilesInfo=array();
-        $newProfileKey=array();
-        $newKey = 0;
-
-        foreach($profiles as $profileKey => $profileValue){
-
-            if(!in_array($profileValue["id"],$newProfileKey)){
-                ++$newKey;
-                $newProfilesInfo[$newKey]["id"] = $profileValue["id"];
-                $newProfilesInfo[$newKey]["pid"] = $profileValue["pid"];
-                $newProfilesInfo[$newKey]["first_name"] = $profileValue["first_name"];
-                $newProfilesInfo[$newKey]["last_name"] = $profileValue["last_name"];
-                $newProfilesInfo[$newKey]["gender"] = $profileValue["gender"];
-                $newProfilesInfo[$newKey]["dob"] = $profileValue["dob"];
-                $newProfilesInfo[$newKey]["edu"] = $profileValue["edu"];
-                $newProfilesInfo[$newKey]["occ"] = $profileValue["occ"];
-            }
-            if($profileValue['filename']!=null){
-                $newProfilesInfo[$newKey]['pics'][$profileKey]["fn"] = $profileValue["filename"];
-                $newProfilesInfo[$newKey]['pics'][$profileKey]["pp"] = $profileValue["pp"];
-            }
-            $newProfileKey[]  = $profileValue["id"];
-        }
-
-        return $newProfilesInfo;
-
-    }
-
-    public static function putSearchArrayIntoSession($newProfilesInfo){
-
-        $chain = array();
-        foreach ($newProfilesInfo as $npi){
-            array_push($chain,$npi['pid']);
-        }
-        // Putting array into session
-        $_SESSION['chain']=$chain;
-
-    }
 
 }

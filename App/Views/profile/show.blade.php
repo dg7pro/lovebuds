@@ -1,398 +1,329 @@
 @extends('layouts.app')
 
-@section('title', 'Just Unite Free Matrimonial Services')
-@section('app-css')
-    <script src="https://use.fontawesome.com/fd697be719.js"></script>
-    <!-- Core CSS file -->
-    <link rel="stylesheet" href="/pswipe/photoswipe.css">
 
-    <!-- Skin CSS file (styling of UI - buttons, caption, etc.)
-         In the folder of skin CSS file there are also:
-         - .png and .svg icons sprite,
-         - preloader.gif (for browsers that do not support CSS animations) -->
+@section('page_css')
+
+    <link rel="stylesheet" href="/pswipe/photoswipe.css">
     <link rel="stylesheet" href="/pswipe/default-skin/default-skin.css">
-    <style>
-        .xyz{
-            margin: 0;
-        }
-        .blur-contact{
-            filter:blur(2px);
-        }
-        html {
-            scroll-behavior: smooth;
-        }
-    </style>
+
 @endsection
 
+
 @section('content')
-    <div class="content">
-        @if(isset($_SESSION['chain']))
-            <div class="row justify-content-center">
-                <nav aria-label="Page navigation example" class="mb-2">
-                    <ul class="pagination pagination-seperated pagination-seperated-rounded">
-                        @if($pn>=1)
-                            <li class="page-item">
-                                <a class="page-link" href="{{'/profile/'.$_SESSION['chain'][$pn-1]}}" aria-label="Previous">
-                                    <span aria-hidden="true" class="mdi mdi-chevron-left mr-1"></span> Prev
-                                    <span class="sr-only">Previous</span>
-                                </a>
-                            </li>
-                        @endif
-                        @if($pn<$max-1)
-                            <li class="page-item">
-                                <a class="page-link" href="{{'/profile/'.$_SESSION['chain'][$pn+1]}}" aria-label="Next">
-                                    Next
-                                    <span aria-hidden="true" class="mdi mdi-chevron-right ml-1"></span>
-                                    <span class="sr-only">Next</span>
-                                </a>
-                            </li>
-                        @endif
-                    </ul>
-                </nav>
-            </div>
-        @endif
-        <div class="bg-white border rounded">
-            <div class="row no-gutters">
-                <div class="col-lg-4 col-xl-3">
-                    <div class="profile-content-left pt-5 pb-3 px-3 px-xl-5">
-                        <div class="card text-center widget-profile px-0 border-0">
 
-                            @if(empty($images))
-                                <img src="{{'/images/'.($profile->gender==1?'avatar_groom.jpg':'avatar_bride.jpg')}}" width="200px" class="mx-auto img-responsive img-thumbnail rounded" alt="user image" />
-                            @else
-                            <!-- Galley wrapper that contains all items -->
-                                <div id="gallery" class="gallery mx-auto img-responsive img-thumbnail rounded" itemscope itemtype="http://schema.org/ImageGallery">
-                                    <!-- Use figure for a more semantic html -->
-                                    @foreach($images as $image)
-                                        <figure itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject" class="xyz">
-                                            <!-- Link to the big image, not mandatory, but usefull when there is no JS -->
-                                            <a href="{{'/uploaded/pics/'.$image->filename}}" data-id="{{$profile->id}}" class="ju-album"  data-caption="Sea side, south shore<br><em class='text-muted'>© Dominik Schröder</em>" data-width="600" data-height="800" itemprop="contentUrl">
-                                                <!-- Thumbnail -->
-                                                <img src="{{'/uploaded/tmb/tn_'.$image->filename}}" alt="user image" width="200px" {{$image->pp!=1?'hidden':''}}>
-                                            </a>
-                                        </figure>
-                                    @endforeach
-                                </div>
-                            @endif
+    <!-- userprofile (up) section starts -->
+    <section class="profile">
 
-                            <div class="card-body">
-                                <h4 class="py-2 text-dark">{{$profile->first_name.' '.$profile->last_name}}</h4>
-                                <p>@if(\Carbon\Carbon::create($profile->last_activity)->diffInMinutes()<1)
-                                        <span class="text-success">Online Now</span>
-                                    @else
-                                        {{'Online: '. \Carbon\Carbon::create($profile->last_activity)->diffForHumans()}}
-                                    @endif
-                                </p>
-                                @if($flag==9)
-                                    <input type="button" class="btn btn-success btn-pill btn-lg my-4" id="sendInterest" data-id="{{$profile->id}}" data-flag="{{$flag}}" value="Connected" disabled>
-                                @elseif($flag==8)
-                                    <input type="button" class="btn btn-primary btn-pill btn-lg my-4" id="sendInterest" data-id="{{$profile->id}}" data-flag="{{$flag}}" value="Accept">
-                                @elseif($flag==7)
-                                    <input type="button" class="btn btn-info btn-pill btn-lg my-4" id="sendInterest" data-id="{{$profile->id}}" data-flag="{{$flag}}" value="Sent" disabled>
-                                @else
-                                    <input type="button" class="btn btn-info btn-pill btn-lg my-4" id="sendInterest" data-id="{{$profile->id}}" data-flag="{{$flag}}" value="Initiate">
-                                @endif
-                            </div>
+        <div class="up-card">
+
+            <!-- Main Section -->
+            <div class="up-header">
+                <div class="up-sidebar">
+                    {{--<a href=""><img class="up-image" src="../img/pp1.jpg" alt=""></a>--}}
+                    @if(empty($images))
+                        <img class="up-image" src="{{'/img/'.($profile->gender==1?'avatar_groom.jpg':'avatar_bride.jpg')}}" alt="user image">
+                    @else
+                    <!-- Galley wrapper that contains all items -->
+                        <div id="gallery" class="gallery" itemscope itemtype="http://schema.org/ImageGallery">
+                            <!-- Use figure for a more semantic html -->
+                            @foreach($images as $image)
+                                <figure itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject">
+                                    <!-- Link to the big image, not mandatory, but usefull when there is no JS -->
+                                    <a href="{{'/uploaded/pics/'.$image->filename}}" data-id="{{$profile->id}}" class="ju-album"
+                                       data-caption="Sea side, south shore<br><em class='text-muted'>© Dominik Schröder</em>"
+                                       data-width="600" data-height="800" itemprop="contentUrl">
+                                        <!-- Thumbnail -->
+                                        <img class="up-image" src="{{'/uploaded/tmb/tn_'.$image->filename}}" alt="user image 2" {{$image->pp!=1?'hidden':''}}>
+                                    </a>
+                                </figure>
+                            @endforeach
                         </div>
-                        <div class="d-flex justify-content-between pl-2 pr-2">
-                            <div class="text-center pb-4">
-                                {{--<h6 class="text-dark pb-2">1503</h6>--}}
-                                <p class="social-button">
-{{--                                    <a href="javascript:0" id="like-profile" onclick="likeProfile({{$profile->id}})" class="mb-1 btn btn-outline btn-linkedin rounded-circle {{$like==null?'':'disabled'}}">--}}
-                                    <a href="javascript:0" id="like-profile" onclick="likeProfile({{$profile->id}})" class="mb-1 btn btn-outline btn-linkedin rounded-circle {{in_array($profile->id,$user_likes_array)?'disabled':''}}">
-                                        <i class="mdi mdi-thumb-up"></i>
-                                    </a>
-                                </p>
-                                <p>Like</p>
-                            </div>
-                            <div class="text-center pb-4">
-                                {{--<h6 class="text-dark pb-2">2905</h6>--}}
-                                <p class="social-button">
-{{--                                    <a href="javascript:0" id="fav-profile" onclick="favProfile({{$profile->id}})" class="mb-1 btn btn-outline btn-google-plus rounded-circle {{$fav==null?'':'disabled'}}">--}}
-                                    <a href="javascript:0" id="fav-profile" onclick="favProfile({{$profile->id}})" class="mb-1 btn btn-outline btn-google-plus rounded-circle {{in_array($profile->id,$user_shorts_array)?'disabled':''}}">
-                                        <i class="mdi mdi-heart"></i>
-                                    </a>
-                                </p>
-                                <p>Shortlist</p>
-                            </div>
-                            {{--<div class="text-center pb-4">
-                                --}}{{--<h6 class="text-dark pb-2">1200</h6>--}}{{--
-                                <p class="social-button">
-                                    <a href="javascript:0" id="hide-profile" onclick="hideProfile({{$profile->id}})" class="mb-1 btn btn-outline btn-linkedin rounded-circle {{$hide==null?'':'disabled'}}">
-                                        <i class="mdi mdi-eye-off"></i>
-                                    </a>
-                                </p>
-                                <p>Hide</p>
-                            </div>--}}
-                            <div class="text-center pb-4">
-                                {{--<h6 class="text-dark pb-2">1200</h6>--}}
-                                <p class="social-button">
-                                    <a class="mb-1 btn btn-outline btn-linkedin rounded-circle"
-                                       target="_blank" title="share on whatsapp"
-                                       href="https://web.whatsapp.com:/send?text=The Interesting profile I found on JU Matrimony, click the link to see: matrimony.com/profile/{{$profile->pid}}"
-                                       data-text="You can see this profile it matches our taste"
-                                       data-href="{{'https://www.matrimony.com/profile/'.$profile->pid}}">
-                                        <i class="mdi mdi-whatsapp"></i>
-                                    </a>
-                                </p>
-                                <p>Share</p>
-                            </div>
-                        </div>
-                        <hr class="w-100">
+                    @endif
+                    <p class="up-bio">27 yrs, 5'7"<br>Varanasi</p>
 
-                        {{--Comment--}}
-                        {{--Hiding contact information into 2 conditions whn user is not verified or user is not
-                        connected with that profile in case --}}
-
-                        <div class="contact-info pt-4">
-                            {{-- <h5 class="text-dark mb-0">Contact Information</h5>--}}
-                            {{--                            @if(( (!isset($_SESSION['logged-in'])) || !in_array($profile->user_id,$_SESSION['conn']) || ($_SESSION['approved']==0) )&& ($profile->user_id != $_SESSION['id']) )--}}
-                            @if($addressFlag!=9)
-                                <div class="contact-info pt-2">
-                                    <h5 class="text-dark mb-1">Contact Information</h5>
-                                    <p class="text-dark font-weight-medium pt-4 mb-2">Email address
-                                        @include('layouts.partials.hidden-contact-info')
-                                    </p>
-                                    <p class="blur-contact">{{'dummy@gmail.com'}}</p>
-                                    <p class="text-dark font-weight-medium pt-4 mb-2">Phone Number
-                                        @include('layouts.partials.hidden-contact-info')
-                                    </p>
-                                    <p class="blur-contact">+91 {{'9453351473'}}</p>
-                                    <p class="text-dark font-weight-medium pt-4 mb-2">Birthday
-                                        @include('layouts.partials.hidden-contact-info')
-                                    </p>
-                                    {{--<p>Nov 15, 1990</p>--}}
-                                    <p class="blur-contact">{{'Nov 15, 1990'}}</p>
-                                    <p class="text-dark font-weight-medium pt-4 mb-2">Social Profile</p>
-                                    <p class="pb-3 social-button">
-                                        <a href="#" class="mb-1 btn btn-outline btn-twitter rounded-circle disabled">
-                                            <i class="mdi mdi-twitter"></i>
-                                        </a>
-                                        <a href="#" class="mb-1 btn btn-outline btn-linkedin rounded-circle disabled">
-                                            <i class="mdi mdi-linkedin"></i>
-                                        </a>
-                                        <a href="#" class="mb-1 btn btn-outline btn-facebook rounded-circle disabled">
-                                            <i class="mdi mdi-facebook"></i>
-                                        </a>
-                                        <a href="#" class="mb-1 btn btn-outline btn-skype rounded-circle disabled">
-                                            <i class="mdi mdi-skype"></i>
-                                        </a>
-                                    </p>
-                                </div>
-                                {{--<p class="text-muted font-weight-medium pt-4 mb-2">Please verify your profile to see
-                                    contact details of others. This is to ensure that we are totally spam free without
-                                    any fake profiles
-                                </p>--}}
-                            @else
-                                <div class="contact-info pt-2">
-                                    <h5 class="text-dark mb-1">Contact Information</h5>
-                                    <p class="text-dark font-weight-medium pt-4 mb-2">Email address</p>
-                                    <p>{{$profile->email}}</p>
-                                    <p class="text-dark font-weight-medium pt-4 mb-2">Phone Number</p>
-                                    <p>+91 {{$profile->mobile}}</p>
-                                    <p class="text-dark font-weight-medium pt-4 mb-2">Birthday</p>
-                                    {{--                            <p>Nov 15, 1990</p>--}}
-                                    <p>{{$profile->dob}}</p>
-                                    <p class="text-dark font-weight-medium pt-4 mb-2">Social Profile</p>
-                                    <p class="pb-3 social-button">
-                                        <a href="#" class="mb-1 btn btn-outline btn-twitter rounded-circle">
-                                            <i class="mdi mdi-twitter"></i>
-                                        </a>
-                                        <a href="#" class="mb-1 btn btn-outline btn-linkedin rounded-circle">
-                                            <i class="mdi mdi-linkedin"></i>
-                                        </a>
-                                        <a href="#" class="mb-1 btn btn-outline btn-facebook rounded-circle">
-                                            <i class="mdi mdi-facebook"></i>
-                                        </a>
-                                        <a href="#" class="mb-1 btn btn-outline btn-skype rounded-circle">
-                                            <i class="mdi mdi-skype"></i>
-                                        </a>
-                                    </p>
-                                </div>
-                            @endif
-                        </div>
-
-                    </div>
                 </div>
-                <div class="col-lg-8 col-xl-9">
-                    <div class="profile-content-right py-5">
-                        <ul class="nav nav-tabs px-3 px-xl-5 nav-style-border" id="myTab" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link active" id="timeline-tab" data-toggle="tab" href="#timeline" role="tab"
-                                   aria-controls="timeline" aria-selected="true">About {{($profile->gender==1)?'Him':'Her'}}</a>
-                            </li>
-                            {{--<li class="nav-item">
-                                <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab"
-                                   aria-controls="profile" aria-selected="false">Education</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" id="settings-tab" data-toggle="tab" href="#settings" role="tab"
-                                   aria-controls="settings" aria-selected="false">Family</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" id="settings-tab" data-toggle="tab" href="#settings" role="tab"
-                                   aria-controls="settings" aria-selected="false">Desired Partner</a>
-                            </li>--}}
-                        </ul>
 
-                        <!-- Tabs -->
-                        <div class="tab-content px-3 px-xl-5" id="myTabContent">
-                            <div class="tab-pane fade show active" id="timeline" role="tabpanel" aria-labelledby="timeline-tab">
-                                <div class="contact-info pt-5">
-                                    <h5 class="text-primary mb-1">
-                                        <i class="fa fa-user mr-2" aria-hidden="true"></i>
-                                        Basic Information</h5>
-                                    <div class="row">
-                                        <div class="col-md-5">
-                                            <p class="text-dark font-weight-medium pt-4 mb-2">Name:</p>
-                                            <p>{{$profile->first_name.' '.$profile->last_name}}</p>
-                                            <p class="text-dark font-weight-medium pt-4 mb-2">Gender:</p>
-                                            <p>{{$profile->gender==1?'Male':'Female'}}</p>
-                                            <p class="text-dark font-weight-medium pt-4 mb-2">Birthday</p>
-                                            <p>{{$profile->dob}}</p>
-                                            <p class="text-dark font-weight-medium pt-4 mb-2">Marital Status:</p>
-                                            <p>{{($profile->mstatus)?$profile->mstatus:'Not Provided'}}</p>
-                                        </div>
-                                        <div class="col-md-5">
-                                            <p class="text-dark font-weight-medium pt-4 mb-2">Height:</p>
-                                            <p>{{($profile->ht)?$profile->ht:'Not Provided'}}</p>
-                                            <p class="text-dark font-weight-medium pt-4 mb-2">Religion:</p>
-                                            <p>{{($profile->religion)?$profile->religion:'Not Provided'}}</p>
-                                            <p class="text-dark font-weight-medium pt-4 mb-2">Mother Tongue:</p>
-                                            <p>{{($profile->lang)?$profile->lang:'Not Provided'}}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="contact-info pt-5" id="education">
-                                    <h5 class="text-success mb-1">
-                                        <i class="fa fa-graduation-cap mr-2" aria-hidden="true"></i>
-                                        Education & Career</h5>
-                                    <div class="row">
-                                        <div class="col-md-5">
-                                            <p class="text-dark font-weight-medium pt-4 mb-2">Highest Education:</p>
-                                            <p>{{($profile->edu)?$profile->edu:'Not Provided'}}</p>
-                                            <p class="text-dark font-weight-medium pt-4 mb-2">Degree:</p>
-                                            <p>{{($profile->deg)?$profile->deg:'Not Provided'}}</p>
-                                            <p class="text-dark font-weight-medium pt-4 mb-2">University:</p>
-                                            <p>{{($profile->university)?$profile->university:'Not Provided'}}</p>
-                                            <p class="text-dark font-weight-medium pt-4 mb-2">Other Degrees:</p>
-                                            <p>{{($profile->other_deg)?$profile->other_deg:'Not Provided'}}</p>
-                                        </div>
-                                        <div class="col-md-5">
-                                            <p class="text-dark font-weight-medium pt-4 mb-2">Occupation:</p>
-                                            <p>{{($profile->occ)?$profile->occ:'Not Provided'}}</p>
-                                            <p class="text-dark font-weight-medium pt-4 mb-2">Working In:</p>
-                                            <p>{{($profile->working_in)?$profile->working_in:'Not Provided'}}</p>
-                                            <p class="text-dark font-weight-medium pt-4 mb-2">Annual Income:</p>
-                                            <p>{{($profile->income)?$profile->income:'Not Provided'}}</p>
-                                            <p class="text-dark font-weight-medium pt-4 mb-2">Sector:</p>
-                                            <p>{{($profile->sector)?$profile->sector:'Not Provided'}}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="contact-info pt-5">
-                                    <h5 class="text-danger mb-1">
-                                        <i class="fa fa-users mr-2" aria-hidden="true"></i>
-                                        {{--<i class="mdi mdi-account-group" style="font-size: 1.5rem"></i>--}}
-                                        Family Details</h5>
-                                    <div class="row">
-                                        <div class="col-md-5">
-                                            <p class="text-dark font-weight-medium pt-4 mb-2">Father:</p>
-                                            <p>{{($profile->faa)?$profile->faa:'Not Provided'}}</p>
-                                            <p class="text-dark font-weight-medium pt-4 mb-2">Mother:</p>
-                                            <p>{{($profile->maa)?$profile->maa:'Not Provided'}}</p>
-                                            <p class="text-dark font-weight-medium pt-4 mb-2">Brother:</p>
-                                            {{--                                            <p>{{$profile->bros.' of which married '.$profile->mbros}}</p>--}}
-                                            <p>{{($profile->bros)?($profile->bros.' of which married '.$profile->mbros):'Not Provided'}}</p>
-                                            <p class="text-dark font-weight-medium pt-4 mb-2">Sister:</p>
-                                            {{--<p>{{$profile->sis.' of which married '.$profile->msis}}</p>--}}
-                                            <p>{{($profile->sis)?($profile->sis.' of which married '.$profile->msis):'Not Provided'}}</p>
-                                            <p class="text-dark font-weight-medium pt-4 mb-2">Origin:</p>
-                                            <p>{{'Not Provided'}}</p>
-                                        </div>
-                                        <div class="col-md-5">
-                                            <p class="text-dark font-weight-medium pt-4 mb-2">Family Status:</p>
-                                            <p>{{$profile->fama?$profile->fama:'Not Provided'}}</p>
-                                            <p class="text-dark font-weight-medium pt-4 mb-2">Family Income:</p>
-                                            <p>{{$profile->fami?$profile->fami:'Not Provided'}}</p>
-                                            <p class="text-dark font-weight-medium pt-4 mb-2">Family Type:</p>
-                                            <p>{{$profile->famt?$profile->famt:'Not Provided'}}</p>
-                                            <p class="text-dark font-weight-medium pt-4 mb-2">Family Values:</p>
-                                            <p>{{$profile->famv?$profile->famv:'Not Provided'}}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="contact-info pt-5">
-                                    <h5 class="text-info mb-1"><i class="fa fa-star-half-o mr-2" aria-hidden="true"></i>Horoscope</h5>
-                                    <div class="row">
-                                        <div class="col-md-5">
-                                            <p class="text-dark font-weight-medium pt-4 mb-2">Manglik:</p>
-                                            <p>{{$profile->manglik?$profile->manglik:'Not Provided'}}</p>
-                                            <p class="text-dark font-weight-medium pt-4 mb-2">Rashi(Moon Sign):</p>
-                                            <p>{{$profile->rashi?$profile->rashi:'Not Provided'}}</p>
-                                            <p class="text-dark font-weight-medium pt-4 mb-2">Sun Sign:</p>
-                                            <p>{{$profile->sun?$profile->sun:'Not Provided'}}</p>
-
-                                        </div>
-                                        <div class="col-md-5">
-                                            <p class="text-dark font-weight-medium pt-4 mb-2">Nakshatra:</p>
-                                            <p>{{$profile->nak?$profile->nak:'Not Provided'}}</p>
-                                            <p class="text-dark font-weight-medium pt-4 mb-2">Horoscope Match:</p>
-                                            <p>{{($profile->hm)?(($profile->hm==1)?'Necessary':'May be'):'Not Necessary'}}</p>
-
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="contact-info pt-5">
-                                    <h5 class="text-warning mb-1">
-                                        <i class="fa fa-heart mr-2" aria-hidden="true"></i>
-                                        {{--<i class="mdi mdi-account-group" style="font-size: 1.5rem"></i>--}}
-                                        Lifestyle</h5>
-                                    <div class="row">
-                                        <div class="col-md-5">
-                                            <p class="pt-4 mb-2"><span class="text-dark font-weight-medium mr-2">Diet:</span>{{$profile->diet?$profile->diet:'Not Provided'}}</p>
-                                            <p class="pt-4 mb-2"><span class="text-dark font-weight-medium mr-2">Smoke:</span>{{$profile->smoke?$profile->smoke:'Not Provided'}}</p>
-                                            <p class="pt-4 mb-2"><span class="text-dark font-weight-medium mr-2">Drink:</span>{{$profile->drink?$profile->drink:'Not Provided'}}</p>
-                                            <p class="pt-4 mb-2"><span class="text-dark font-weight-medium mr-2">Body Type:</span>{{$profile->body?$profile->body:'Not Provided'}}</p>
-                                            <p class="pt-4 mb-2"><span class="text-dark font-weight-medium mr-2">Complexion:</span>{{$profile->complexion?$profile->complexion:'Not Provided'}}</p>
-                                            <p class="pt-4 mb-2"><span class="text-dark font-weight-medium mr-2">Weight:</span>{{$profile->weight_id?$profile->weight_id.' kgs':'Not Provided'}}</p>
-                                            {{--<p class="text-dark font-weight-medium pt-4 mb-2">Smoke:</p>
-                                            <p>{{$profile->smoke}}</p>
-                                            <p class="text-dark font-weight-medium pt-4 mb-2">Drink:</p>
-                                            <p>{{$profile->drink}}</p>
-                                            <p class="text-dark font-weight-medium pt-4 mb-2">Body Type:</p>
-                                            <p>{{$profile->body}}</p>
-                                            <p class="text-dark font-weight-medium pt-4 mb-2">Complexion:</p>
-                                            <p>{{$profile->complexion}}</p>
-                                            <p class="text-dark font-weight-medium pt-4 mb-2">Weight:</p>
-                                            <p>{{$profile->weight_id.' kgs'}}</p>--}}
-                                        </div>
-                                        <div class="col-md-5">
-                                            <p class="pt-4 mb-2"><span class="text-dark font-weight-medium mr-2">Blood:</span>{{$profile->bg?$profile->bg:'Not Provided'}}</p>
-                                            <p class="pt-4 mb-2"><span class="text-dark font-weight-medium mr-2">Hiv+:</span>{{($profile->hiv==1)?'Yes':'No'}}</p>
-                                            <p class="pt-4 mb-2"><span class="text-dark font-weight-medium mr-2">Thalassemia:</span>{{$profile->thal?$profile->thal :'Not Provided'}}</p>
-                                            <p class="pt-4 mb-2"><span class="text-dark font-weight-medium mr-2">Challenged:</span>{{$profile->chal?$profile->chal :'Not Provided'}}</p>
-                                            {{--<p class="text-dark font-weight-medium pt-4 mb-2">Blood Group:</p>
-                                            <p>{{$profile->bg}}</p>
-                                            <p class="text-dark font-weight-medium pt-4 mb-2">Hiv+:</p>
-                                            <p>{{$profile->hiv}}</p>
-                                            <p class="text-dark font-weight-medium pt-4 mb-2">Thalassemia:</p>
-                                            <p>{{$profile->thal}}</p>
-                                            <p class="text-dark font-weight-medium pt-4 mb-2">Challenged:</p>
-                                            <p>{{$profile->chal}}</p>--}}
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">...</div>
-                            <div class="tab-pane fade" id="settings" role="tabpanel" aria-labelledby="settings-tab">...</div>
-                        </div>
+                <div class="up-main">
+                    <h2 class="profile-name">{{ucfirst($authUser->first_name).' '.ucfirst($authUser->last_name)}}</h2>
+                    <p class="profile-position">B.Tech, Software Developer</p>
+                    <p class="profile-body">Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+                        Perspiciatis inventore eos ipsam debitis.
+                    </p>
+                    <div>
+                        <button class="btn btn-pink">Album</button>
+                        <button id="contact-btn" class="btn btn-orange">Contact</button>
                     </div>
                 </div>
             </div>
+
+            <!-- Handler Bar -->
+            <div class="up-neck">
+                <div class="up-handler">
+                    <a title="Share on whatsapp" class="handle" href="#"><i class="fas fa-share sun"></i></a>
+                    <a title="Shortlist and Like" class="handle" href="#"><i class="fas fa-heart sun"></i></a>
+                    <a title="Downlist and Hide" class="handle" href="#"><i class="fas fa-arrow-circle-down sun"></i></a>
+                </div>
+
+                <!-- Address Bar -->
+                <div class="up-address">
+                    <span><i class="fab fa-whatsapp"></i>  7565097233</span>
+                    <span><i class="fas fa-phone-alt"></i>  7565097233</span>
+                    <span><i class="far fa-envelope"></i> dg7proj@gmail.com</span>
+
+                    <div id="contact-address-overlay" class="address-overlay">
+                        <div class="text">Contact Address</div>
+                    </div>
+                </div>
+
+
+
+            </div>
+
+            <div class="up-body">
+                <h4>About Him</h4>
+                <div class="resume-content">
+
+                    <div class="resume-body">
+                        <h5 class="text-primary"><i class="fa fa-user mr-2"></i>Basic Infomation:</h5>
+                        <div class="bio-group">
+                            <div class="bio">
+                                <span class="bio-field">Name</span>
+                                <span class="bio-colon">:</span>
+                                <span class="bio-value">{{$profile->first_name.' '.$profile->last_name}}</span>
+                            </div>
+                            <div class="bio">
+                                <span class="bio-field">Gender</span>
+                                <span class="bio-colon">:</span>
+                                <span class="bio-value">{{$profile->gender==1?'Male':'Female'}}</span>
+                            </div>
+                            <div class="bio">
+                                <span class="bio-field">Birthday</span>
+                                <span class="bio-colon">:</span>
+                                <span class="bio-value">{{$profile->dob}}</span>
+                            </div>
+                            <div class="bio">
+                                <span class="bio-field">Marital Status</span>
+                                <span class="bio-colon">:</span>
+                                <span class="bio-value">{{($profile->mstatus)?$profile->mstatus:'Not Provided'}}</span>
+                            </div>
+                            <div class="bio">
+                                <span class="bio-field">Height</span>
+                                <span class="bio-colon">:</span>
+                                <span class="bio-value">{{($profile->ht)?$profile->ht:'Not Provided'}}</span>
+                            </div>
+                            <div class="bio">
+                                <span class="bio-field">Complexion</span>
+                                <span class="bio-colon">:</span>
+                                <span class="bio-value">Wheatish</span>
+                            </div>
+                            <div class="bio">
+                                <span class="bio-field">Religion</span>
+                                <span class="bio-colon">:</span>
+                                <span class="bio-value">{{($profile->religion)?$profile->religion:'Not Provided'}}</span>
+                            </div>
+                            <div class="bio">
+                                <span class="bio-field">Mother Tongue</span>
+                                <span class="bio-colon">:</span>
+                                <span class="bio-value">{{($profile->lang)?$profile->lang:'Not Provided'}}</span>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div  class="resume-body">
+                        <h5 class="text-success"><i class="fa fa-graduation-cap mr-2"></i>Education & Career:</h5>
+                        <div class="bio-group">
+                            <div class="bio">
+                                <span class="bio-field">Highest Education</span>
+                                <span class="bio-colon">:</span>
+                                <span class="bio-value">BE/B.Tech</span>
+                            </div>
+                            <div class="bio">
+                                <span class="bio-field">Degree</span>
+                                <span class="bio-colon">:</span>
+                                <span class="bio-value">Not Provided</span>
+                            </div>
+                            <div class="bio">
+                                <span class="bio-field">University</span>
+                                <span class="bio-colon">:</span>
+                                <span class="bio-value">Not Provided</span>
+                            </div>
+                            <div class="bio">
+                                <span class="bio-field">Other Degrees</span>
+                                <span class="bio-colon">:</span>
+                                <span class="bio-value">Not Provided</span>
+                            </div>
+                            <div class="bio">
+                                <span class="bio-field">Occupation</span>
+                                <span class="bio-colon">:</span>
+                                <span class="bio-value">Sports Person</span>
+                            </div>
+                            <div class="bio">
+                                <span class="bio-field">Working In</span>
+                                <span class="bio-colon">:</span>
+                                <span class="bio-value">Not Provided</span>
+                            </div>
+                            <div class="bio">
+                                <span class="bio-field">Annual Income</span>
+                                <span class="bio-colon">:</span>
+                                <span class="bio-value">Not Provided</span>
+                            </div>
+                            <div class="bio">
+                                <span class="bio-field">Sector</span>
+                                <span class="bio-colon">:</span>
+                                <span class="bio-value">Not Provided</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div  class="resume-body">
+                        <h5 class="text-info"><i class="fa fa-users mr-2"></i>Family Details:</h5>
+                        <div class="bio-group">
+                            <div class="bio">
+                                <span class="bio-field">Father</span>
+                                <span class="bio-colon">:</span>
+                                <span class="bio-value">Service-Govt./PSU</span>
+                            </div>
+                            <div class="bio">
+                                <span class="bio-field">Mother</span>
+                                <span class="bio-colon">:</span>
+                                <span class="bio-value">Teacher</span>
+                            </div>
+                            <div class="bio">
+                                <span class="bio-field">Brother</span>
+                                <span class="bio-colon">:</span>
+                                <span class="bio-value">2 of which married 1</span>
+                            </div>
+                            <div class="bio">
+                                <span class="bio-field">Sister</span>
+                                <span class="bio-colon">:</span>
+                                <span class="bio-value">3 of which married 2</span>
+                            </div>
+                            <div class="bio">
+                                <span class="bio-field">Origin</span>
+                                <span class="bio-colon">:</span>
+                                <span class="bio-value">Indian UP</span>
+                            </div>
+                            <div class="bio">
+                                <span class="bio-field">Family Status</span>
+                                <span class="bio-colon">:</span>
+                                <span class="bio-value">Upper Middle</span>
+                            </div>
+                            <div class="bio">
+                                <span class="bio-field">Family Income</span>
+                                <span class="bio-colon">:</span>
+                                <span class="bio-value">Rs. 20-25 lakh</span>
+                            </div>
+                            <div class="bio">
+                                <span class="bio-field">Family Type</span>
+                                <span class="bio-colon">:</span>
+                                <span class="bio-value">Nuclear Family</span>
+                            </div>
+                            <div class="bio">
+                                <span class="bio-field">Family Values</span>
+                                <span class="bio-colon">:</span>
+                                <span class="bio-value">Liberal</span>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div  class="resume-body">
+                        <h5 class="text-warning"><i class="fa fa-heart mr-2"></i>Lifestyle & Others:</h5>
+                        <div class="bio-group">
+                            <div class="bio">
+                                <span class="bio-field">Diet</span>
+                                <span class="bio-colon">:</span>
+                                <span class="bio-value">Vegetarian</span>
+                            </div>
+
+                            <div class="bio">
+                                <span class="bio-field">Smoke</span>
+                                <span class="bio-colon">:</span>
+                                <span class="bio-value">No</span>
+                            </div>
+                            <div class="bio">
+                                <span class="bio-field">Drink</span>
+                                <span class="bio-colon">:</span>
+                                <span class="bio-value">No</span>
+                            </div>
+                            <div class="bio">
+                                <span class="bio-field">Body Type</span>
+                                <span class="bio-colon">:</span>
+                                <span class="bio-value">Average</span>
+                            </div>
+                            <div class="bio">
+                                <span class="bio-field">Weight</span>
+                                <span class="bio-colon">:</span>
+                                <span class="bio-value">59kg</span>
+                            </div>
+                            <div class="bio">
+                                <span class="bio-field">Blood</span>
+                                <span class="bio-colon">:</span>
+                                <span class="bio-value">B+</span>
+                            </div>
+                            <div class="bio">
+                                <span class="bio-field">Hiv+</span>
+                                <span class="bio-colon">:</span>
+                                <span class="bio-value">No</span>
+                            </div>
+                            <div class="bio">
+                                <span class="bio-field">Thalassemia</span>
+                                <span class="bio-colon">:</span>
+                                <span class="bio-value">No</span>
+                            </div>
+                            <div class="bio">
+                                <span class="bio-field">Challenged</span>
+                                <span class="bio-colon">:</span>
+                                <span class="bio-value">No</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div  class="resume-body">
+                        <h5 class="text-danger"><i class="fa fa-star mr-2"></i>Horoscope/Kundli/Astro:</h5>
+
+                        <div class="bio-group">
+                            <div class="bio">
+                                <span class="bio-field">Manglik Status</span>
+                                <span class="bio-colon">:</span>
+                                <span class="bio-value">Manglik</span>
+                            </div>
+                            <div class="bio">
+                                <span class="bio-field">Rashi(Moon sign)</span>
+                                <span class="bio-colon">:</span>
+                                <span class="bio-value">Sagitarus</span>
+                            </div>
+                            <div class="bio">
+                                <span class="bio-field">Sun Sign</span>
+                                <span class="bio-colon">:</span>
+                                <span class="bio-value">Leo</span>
+                            </div>
+                            <div class="bio">
+                                <span class="bio-field">Nakshatra</span>
+                                <span class="bio-colon">:</span>
+                                <span class="bio-value">Aswain</span>
+                            </div>
+                            <div class="bio">
+                                <span class="bio-field">Birth Details</span>
+                                <span class="bio-colon">:</span>
+                                <span class="bio-value">17-Dec-1982 10:20pm Varanasi</span>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+
+
+
+            </div>
+
         </div>
-    </div>
+    </section>
+    <!-- profiles section ends -->
+
 
     <!-- Root element of PhotoSwipe. Must have class pswp. -->
     <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
@@ -444,7 +375,19 @@
 
 @endsection
 
-@section('app-script')
+@section('js')
+    <!-- custom js code -->
+    <script>
+        var btn1 = document.getElementById("contact-btn");
+        var addr = document.getElementById("contact-address-overlay")
+
+        // When the user clicks the button, open the modal
+        btn1.onclick = function() {
+            addr.style.width= 0;
+            addr.style.left= 100;
+            btn1.setAttribute('disabled','disabled');
+        }
+    </script>
 
     <!-- Core JS file -->
     <script src="/pswipe/photoswipe.min.js"></script>
@@ -500,56 +443,5 @@
 
         }(jQuery));
     </script>
-
-    <script>
-        /*======== 5. TOASTER ========*/
-        var toaster = $('#toaster');
-        function callToaster(positionClass, message) {
-            toastr.options = {
-                closeButton: true,
-                debug: false,
-                newestOnTop: false,
-                progressBar: true,
-                positionClass: positionClass,
-                preventDuplicates: false,
-                onclick: null,
-                showDuration: "300",
-                hideDuration: "1000",
-                timeOut: "5000",
-                extendedTimeOut: "1000",
-                showEasing: "swing",
-                hideEasing: "linear",
-                showMethod: "fadeIn",
-                hideMethod: "fadeOut"
-            };
-            toastr.success(message);
-        }
-
-    </script>
-
-
-
-    @if(isset($_SESSION['logged-in']))
-       {{-- @include('scripts.load_notification')
-        @include('scripts.load_connected_profiles')--}}
-    @endif
-   {{-- @include('scripts.function_record_visitor')--}}
-
-    @include('request.connect_profile')
-    @include('request.like_profile')
-    @include('request.short_profile')
-    @include('request.hide_profile')
-
-    @if(isset($_SESSION['user_id']))
-        @include('request.record_visitor')
-    @endif
-
-
-
-
-    @include('request.load_notification')
-
-
-
 @endsection
 

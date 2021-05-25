@@ -132,17 +132,8 @@ class Album extends Authenticated
 
         $album = '';
         foreach($images as $image){
-            $album .= '<div class="col-md-4 col-xl-4" id="my-pic-'.$image['img_id'].'">
-                    <div class="card mb-4">
-                        <img class="card-img-top" src="/uploaded/pics/'.$image['filename'].'">
-                        <div class="card-body">
-                            <h5 class="card-title text-info">Under Processing</h5>
-                            <p class="card-text pb-3">One or more of your photos is under process of approval by our team  </p>
-                            <!--<button href="#" class="btn btn-sm btn-outline-primary chgAvt" id="chgAvt-'.$image['img_id'].'" onclick="changeAvatar('.$image['img_id'].')" data-id="'.$image['img_id'].'" data-name="'.$image['filename'].'" value="'.$image['filename'].'">Change Avatar</button>-->
-                            <!-- <a href="#" class="btn btn-sm btn-outline-danger">Delete</a>-->
-                            <!--<button class="btn btn-outline-danger btn-sm delImage" id="delImage-'.$image['img_id'].'" onclick="deleteImage('.$image['img_id'].')" data-id="'.$image['img_id'].'" data-name="'.$image['filename'].'" value="'.$image['filename'].'">Delete</button>-->
-                        </div>
-                    </div>
+            $album .= '<div id="my-pic-'.$image['img_id'].'">                   
+                        <img class="my-images" src="/uploaded/pics/'.$image['filename'].'">                                      
                 </div>';
         }
 

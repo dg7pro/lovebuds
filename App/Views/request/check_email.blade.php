@@ -7,27 +7,26 @@
         // ==================================
         $('#email').blur(function () {
             var email = $(this).val();
-            $('#msg-2').attr('hidden',true);
-            $('#spinner-2').attr('hidden',false);
             $.ajax({
                 url:"/Ajax/checkEmail",
                 method:'POST',
                 data:{em:email},
                 dataType:"json",
                 success:function (data) {
-                    //console.log(data);
+                    console.log(data);
                     if(data.n == 1){
-                        //$('#btn-signup').attr('disabled',false);
-                        $('#email').removeClass('is-invalid').addClass('is-valid');
-                        $('#msg-2').removeClass('invalid-feedback').addClass('valid-feedback');
+                        $('#email_ok').attr('hidden',false);
+                        $('#email_not_ok').attr('hidden',true);
+                        $('#email_msg').text(data.ht).attr('hidden',true).hide();
                     }else{
-                        //$('#btn-signup').attr('disabled',true);
-                        $('#email').removeClass('is-valid').addClass('is-invalid');
-                        $('#msg-2').removeClass('valid-feedback').addClass('invalid-feedback');
+                        $('#email_ok').attr('hidden',true);
+                        $('#email_not_ok').attr('hidden',false);
+                        //$('#email_msg').text(data.ht).attr('hidden',false).show();
+                        toastr.error(data.ht);
                     }
                     setTimeout(function(){
-                        $('#spinner-2').attr('hidden',true);
-                        $('#msg-2').text(data.ht).attr('hidden',false).show();
+                        //$('#spinner-2').attr('hidden',true);
+
                     }, 500);
                 }
             });

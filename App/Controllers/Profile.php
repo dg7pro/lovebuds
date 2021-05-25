@@ -22,7 +22,7 @@ class Profile extends Controller
 
         $flag = '';
         if(isset($_SESSION['user_id'])){
-            $flag = ConnectProfile::getUserConnectionFlag($_SESSION['user_id'],$profile->id);
+            //$flag = ConnectProfile::getUserConnectionFlag($_SESSION['user_id'],$profile->id);
             /*$like = User::getLikeStatusOff($_SESSION['user_id'],$profile->id);
             $fav = User::getFavStatusOff($_SESSION['user_id'],$profile->id);
             $hide = User::getHideStatusOff($_SESSION['user_id'],$profile->id);*/
