@@ -6,13 +6,27 @@ namespace App\Controllers;
 
 use App\Lib\Helpers;
 use App\Models\User;
-use App\Models\UserVariables;
 use Core\Controller;
 use Core\View;
 
 class Search extends Controller
 {
 
+    /**
+     * Index page
+     * works on ajax
+     */
+    public function indexAction()
+    {
+
+        View::renderBlade('search.profiles2',['num' => 10]);
+
+    }
+
+    /**
+     * Kept for future reference
+     * Custom search
+     */
     public function testAction(){
 
         $profiles = User::customSearchResults();
@@ -35,57 +49,12 @@ class Search extends Controller
     }
 
     /**
-     * Profiles list
+     * Kept for future reference
+     * @param $profiles
+     * @return array
      */
-    public function indexAction()
+    public static function getAssociativeArrayResult($profiles): array
     {
-//        $profiles = User::getAdvanceSearchResults();
-//
-//        //Helpers::dnd($profiles);
-//
-//        $newProfilesInfo = self::getAssociativeArrayResult($profiles);
-//        $new_list = [];
-//        $short_list = [];
-//
-//        foreach($newProfilesInfo as $p){
-//
-//            if($p['mov']==1){
-//                array_push($short_list,$p);
-//            }
-//            if($p['mov']==null){
-//                array_push($new_list,$p);
-//            }
-//        }
-
-        //Helpers::dnd($newProfilesInfo);
-        /*$address_request_array = [];
-        if(isset($_SESSION['user_id'])) {
-            $address_request_array = Connection::addressRequestSend();
-        }*/
-
-        View::renderBlade('search.profiles2',[
-            //'address_request_array'=>$address_request_array,
-//            'new_profiles'=>$new_list,
-//            'short_profiles'=>$short_list,
-            'num' => 10,
-            'languages'=>UserVariables::languages(),
-            'religions'=>UserVariables::religions(),
-            'countries'=>UserVariables::getCountries(),
-            'maritals'=>UserVariables::maritals(),
-            'age_rows'=>UserVariables::getAgeRows(),
-            'heights'=>UserVariables::heights(),
-            'mangliks'=>UserVariables::mangliks(),
-            'educations'=>UserVariables::getEducations(),
-            'occupations'=>UserVariables::getOccupations(),
-            'diets'=>UserVariables::diets(),
-            'drinks'=>UserVariables::drinks(),
-            'smokes'=>UserVariables::smokes(),
-            'challenges'=>UserVariables::challenges()
-        ]);
-
-    }
-
-    public static function getAssociativeArrayResult($profiles){
 
         $newProfilesInfo=array();
         $newProfileKey=array();
@@ -119,8 +88,13 @@ class Search extends Controller
     }
 
 
-
-    public static function buildQuery($data){
+    /**
+     * Kept for future reference
+     * @param $data
+     * @return array
+     */
+    public static function buildQuery($data): array
+    {
 
         // Only fields which are array
         $fields = ['rel','lan','con','mar','edu','ocu','die','smo','dri','man','cha'];
@@ -268,8 +242,6 @@ class Search extends Controller
         }
         return $queries;
     }
-
-
 
 
 }

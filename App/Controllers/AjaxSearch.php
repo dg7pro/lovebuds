@@ -9,6 +9,11 @@ use Core\Controller;
 
 class AjaxSearch extends Controller
 {
+    /**
+     * Create display profile card
+     * @param $profiles
+     * @return string
+     */
     public static function createDisplayCard($profiles): string
     {
 
@@ -72,6 +77,9 @@ class AjaxSearch extends Controller
         return $output;
     }
 
+    /**
+     * Fetch and load new profiles
+     */
     public function loadNewProfiles(){
 
         $newlist = User::newlist($_SESSION['user_id']);
@@ -86,6 +94,9 @@ class AjaxSearch extends Controller
         echo $output;
     }
 
+    /**
+     * Fetch and load shortlisted profiles
+     */
     public function loadShortlistedProfiles(){
 
         $shortlist = User::shortlist($_SESSION['user_id']);
@@ -101,6 +112,9 @@ class AjaxSearch extends Controller
         echo $output;
     }
 
+    /**
+     * Fetch and load recent profile visitors
+     */
     public function loadRecentVisitors(){
 
         $userId = $_SESSION['user_id'];
@@ -119,6 +133,10 @@ class AjaxSearch extends Controller
     }
 
 
+    /**
+     * @param $profiles
+     * @return array
+     */
     public static function getAssociativeArrayResult($profiles): array
     {
         $newProfilesInfo=array();

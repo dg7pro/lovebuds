@@ -21,13 +21,14 @@ class Password extends \Core\Controller
      */
     public function forgotAction()
     {
-        //View::renderTemplate('Password/forgot.html');
         View::renderBlade('password/forgot');
     }
 
+    /**
+     * Reset Success page
+     */
     public function successAction()
     {
-        //View::renderTemplate('Password/forgot.html');
         View::renderBlade('password/reset-success');
     }
 
@@ -46,7 +47,6 @@ class Password extends \Core\Controller
 
         User::sendPasswordReset($_POST['email']);
 
-        //View::renderTemplate('Password/reset_requested.html');
         View::renderBlade('Password/reset-requested');
     }
 
@@ -79,8 +79,8 @@ class Password extends \Core\Controller
 
         if ($user->resetPassword($_POST['password'])) {
 
-            //View::renderTemplate('Password/reset_success.html');
-            View::renderBlade('Password/reset-success');
+            //View::renderBlade('Password/reset-success');
+            $this->redirect('password/success');
 
         } else {
 
@@ -91,10 +91,6 @@ class Password extends \Core\Controller
                 'token' => $token
             ]);
 
-            /*View::renderTemplate('Password/reset.html', [
-                'token' => $token,
-                'user' => $user
-            ]);*/
         }
     }
 
@@ -115,7 +111,6 @@ class Password extends \Core\Controller
 
         } else {
 
-            //View::renderTemplate('Password/token_expired.html');
             View::renderBlade('Password/token-expired');
             exit;
 

@@ -7,7 +7,6 @@ namespace App\Controllers;
 use App\Auth;
 use App\Flash;
 use App\Models\Image;
-use App\Models\Notification;
 use App\Models\Notify;
 use App\Models\UserVariables;
 use Core\View;
@@ -64,30 +63,10 @@ class Account extends Authenticated
 
     }
 
-    public function testAction(){
-        // Render view
-        View::renderBlade('account.test');
-
-    }
-
-    public function formResultAction(){
-
-        var_dump($_POST);
-    }
-
+    /**
+     * Edit User Profile
+     */
     public function editProfileAction(){
-
-        $date_rows = UserVariables::dates();
-        $months = UserVariables::months();
-        $years = UserVariables::years();
-        $religions = UserVariables::religions();
-        $maritals = UserVariables::maritals();
-        $heights = UserVariables::heights();
-        $mangliks = UserVariables::mangliks();
-        $languages = UserVariables::languages();
-
-        $educations = UserVariables::getEducations();
-        $occupations = UserVariables::getOccupations();
 
         View::renderBlade('account.edit-profile', [
             'maritals'=>UserVariables::fetch('maritals'),
@@ -127,39 +106,9 @@ class Account extends Authenticated
             'countries'=>UserVariables::getCountries(),
             'userDistricts'=>UserVariables::fetch('districts'),
 
-
         ]);
     }
 
-
-    public function partnerPreferenceAction(){
-
-        $date_rows = UserVariables::dates();
-        $months = UserVariables::months();
-        $years = UserVariables::years();
-        $religions = UserVariables::religions();
-        $maritals = UserVariables::maritals();
-        $heights = UserVariables::heights();
-        $mangliks = UserVariables::mangliks();
-        $languages = UserVariables::languages();
-        $educations = UserVariables::getEducations();
-        $occupations = UserVariables::getOccupations();
-
-        // Render view
-        View::renderBlade('account.partner-preference',[
-            'dates' => $date_rows,
-            'months' => $months,
-            'years' => $years,
-            'religions' => $religions,
-            'maritals' => $maritals,
-            'heights' => $heights,
-            'mangliks' => $mangliks,
-            'languages' => $languages,
-            'educations' => $educations,
-            'occupations' => $occupations
-        ]);
-
-    }
 
     /**
      * Show self manage album-page
@@ -216,7 +165,7 @@ class Account extends Authenticated
             ]);
 
         }else{
-            $this->redirect('/account/dashboard');
+            $this->redirect('/account/edit-profile');
         }
     }
 

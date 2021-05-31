@@ -5,78 +5,25 @@ namespace App\Controllers;
 
 
 use App\Models\User;
-use App\Models\UserVariables;
 use Core\Controller;
 use Core\View;
 
 class Quick extends Controller
 {
+
+    /**
+     *  Show result of quick search
+     */
     public function searchAction(){
 
-        //var_dump($_GET);
-
-//        $qs['rel']=array();
-//        $qs['lan']=array();
-//
-//        array_push($qs['rel'],$_GET['rel']);
-//        array_push($qs['lan'],$_GET['lan']);
-//        $_GET['rel'] = $qs['rel'];
-//        $_GET['lan'] = $qs['lan'];
-
-        View::renderBlade('quick.new');
-
-
-
-//        print("<br>");
-//        var_dump($qs);
-//        print("<br>");
-//        var_dump($_GET);
-//        exit();
-
-//        $minAge=21;
-//        $maxAge=35;
-//        $minHt=1;
-//        $maxHt=30;
-//        $gen=null;
-//        $pho=null;
-//        $hor=null;
-//        $hiv=0;
-//        $rsa=null;
-
-//        if(isset($_GET['quick-search-submit'])){
-//
-//            $queries = self::buildQuery($_GET);
-//
-//            //var_dump($queries);
-//
-//            $profiles = User::getQuickSearchResults($queries);
-//
-//            $newProfilesInfo = self::getAssociativeArrayResult($profiles);
-//
-////            var_dump($newProfilesInfo);
-////            exit();
-//            View::renderBlade('quick.search',[
-//                'profiles'=>$newProfilesInfo
-////                'num' => 10,
-//               /* 'languages'=>UserVariables::languages(),
-//                'religions'=>UserVariables::religions(),
-//                'countries'=>UserVariables::getCountries(),
-//                'maritals'=>UserVariables::maritals(),
-//                'age_rows'=>UserVariables::getAgeRows(),
-//                'heights'=>UserVariables::heights(),
-//                'mangliks'=>UserVariables::mangliks(),
-//                'educations'=>UserVariables::getEducations(),
-//                'occupations'=>UserVariables::getOccupations(),
-//                'diets'=>UserVariables::diets(),
-//                'drinks'=>UserVariables::drinks(),
-//                'smokes'=>UserVariables::smokes(),
-//                'challenges'=>UserVariables::challenges()*/
-//            ]);
-//
-//        }
+        View::renderBlade('quick.new2');
 
     }
 
+    /**
+     * @param $profiles
+     * @return string
+     */
     public static function createDisplayCard($profiles): string
     {
         $output='';
@@ -135,6 +82,9 @@ class Quick extends Controller
         return $output;
     }
 
+    /**
+     *  Search Handler function
+     */
     public function ajaxSearchProfiles(){
 
         $data = array();
@@ -167,6 +117,11 @@ class Quick extends Controller
     }
 
 
+    /**
+     * Query builder
+     * @param $data
+     * @return array
+     */
     public static function buildQuery($data): array
     {
 
@@ -239,7 +194,13 @@ class Quick extends Controller
         return $queries;
     }
 
-    public static function getAssociativeArrayResult($profiles){
+    /**
+     * Array builder function
+     * @param $profiles
+     * @return array
+     */
+    public static function getAssociativeArrayResult($profiles): array
+    {
 
         $newProfilesInfo=array();
         $newProfileKey=array();
@@ -270,7 +231,6 @@ class Quick extends Controller
         return $newProfilesInfo;
 
     }
-
 
 
 }

@@ -6,22 +6,18 @@ namespace App\Models;
 
 use Core\Model;
 
+/**
+ * Class RecordContact
+ * @package App\Models
+ */
 class RecordContact extends Model
 {
-//    public static function getRC()
-//    {
-// //       static $rc = null;
-////
-////        if ($rc === null) {
-////            $rc = new RecordContact();
-////        }
-//
-//        $rc = new RecordContact();
-//
-//        return $rc;
-//    }
 
-
+    /**
+     * @param $uid
+     * @param $oid
+     * @return bool
+     */
     public function create($uid, $oid): bool
     {
         if(!$this->checkEarlierRecord($uid,$oid)){
@@ -33,6 +29,11 @@ class RecordContact extends Model
         return false;
     }
 
+    /**
+     * @param $uid
+     * @param $oid
+     * @return bool
+     */
     public function checkEarlierRecord($uid, $oid): bool
     {
 

@@ -21,7 +21,7 @@
                 </ul>
 
                 <!-- Login through social -->
-                <div class="social_login">
+                {{--<div class="social_login">
                     <p>with your social network</p>
                     <ul class="social_log">
                         <li><img src="/img/facebook-colored.svg" alt=""></li>
@@ -29,48 +29,81 @@
                         <li><img src="/img/twitter-colored.svg" alt=""></li>
                     </ul>
                     <p>or</p>
-                </div>
+                </div>--}}
 
 
                 <div class="tab-content signin-tab" id="myTabContent">
 
                     <!-- Tab Content 1 -->
                     <div class="tab-pane fade show active" id="signin" role="tabpanel" aria-labelledby="home-tab">
-                        <form>
+
+                        <div class="social_login">
+                            <p>with your social network</p>
+                            <ul class="social_log">
+                                <li><img src="/img/facebook-colored.svg" alt=""></li>
+                                <li><img src="/img/google-plus-colored.svg" alt=""></li>
+                                <li><img src="/img/twitter-colored.svg" alt=""></li>
+                            </ul>
+                            <p>or</p>
+                        </div>
+
+                        <form action="{{'/login/authenticate'}}" method="post">
                             <div class="form-group">
                                 <!-- <label for="exampleInputEmail1">Email address</label> -->
-                                <input type="email" class="form-control" aria-describedby="emailHelp" placeholder="Email">
+                                <input type="email" id="uid" name="uid" class="form-control" aria-describedby="emailHelp" placeholder="Email">
                             </div>
                             <div class="">
                                 <!-- <label for="exampleInputPassword1">Password</label> -->
-                                <input type="password" class="form-control" placeholder="Password">
+                                <input type="password" id="password" name="password" class="form-control" minlength="6" placeholder="Password">
                             </div>
                             <!-- <div class="form-group form-check">
                               <input type="checkbox" class="form-check-input" id="exampleCheck1">
                               <label class="form-check-label" for="exampleCheck1">Remember me</label>
                             </div> -->
-                            <p class="forgot-link"><a href="#">Forgot your Password?</a></p>
-                            <button type="submit" class="btn btn-green btn-block">Login</button>
+                            <p class="forgot-link"><a href="{{'/password/forgot'}}">Forgot your Password?</a></p>
+                            <button type="submit" name="login-submit" class="btn btn-green btn-block">Login</button>
                             <p class="signin-link">Don't have an account? <a data-toggle="tab" href="#signup" role="tab">SignUp</a></p>
                         </form>
                     </div>
 
                     <!-- Tab Content 2 -->
                     <div class="tab-pane fade" id="signup" role="tabpanel" aria-labelledby="profile-tab">
-                        <form>
+                        <form action="{{'/register/create'}}" method="post" autocomplete="off">
+
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <select id="for_popup" class="form-control" name="cFor" required>
+                                        <option selected>Profile for</option>
+                                        <option value=1>Myself</option>
+                                        <option value=2>Son</option>
+                                        <option value=3>Daughter</option>
+                                        <option value=4>Brother</option>
+                                        <option value=5>Sister</option>
+                                        <option value=6>Relative</option>
+                                        <option value=7>Friend</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <select id="gender_popup" name="gender" class="form-control" required>
+                                        <option selected value="">Gender</option>
+                                        <option value=1>Male</option>
+                                        <option value=2>Female</option>
+                                    </select>
+                                </div>
+                            </div>
                             <div class="form-group">
                                 <!-- <label for="exampleInputEmail1">Mobile no.</label> -->
-                                <input type="text" class="form-control"  aria-describedby="emailHelp" placeholder="Mobile no. (10 digits)">
+                                <input type="text" name="mobile" class="form-control"  aria-describedby="emailHelp" placeholder="Mobile no. (10 digits)" required autocomplete="off">
                                 <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
                             </div>
                             <div class="form-group">
                                 <!-- <label for="exampleInputEmail1">Email address</label> -->
-                                <input type="email" class="form-control"  aria-describedby="emailHelp" placeholder="Email">
+                                <input type="email" name="email" class="form-control" aria-describedby="emailHelp" placeholder="Email" required autocomplete="off">
                                 <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
                             </div>
                             <div class="form-group">
                                 <!-- <label for="exampleInputPassword1">Password</label> -->
-                                <input type="password" class="form-control" placeholder="New password">
+                                <input type="password" name="password" class="form-control" placeholder="New password" minlength="6" required autocomplete="new-password">
                             </div>
                             <div class="form-group form-check">
                                 <input type="checkbox" class="form-check-input" id="exampleCheck1">
@@ -78,7 +111,7 @@
                             </div>
 
 
-                            <button type="submit" class="btn btn-green btn-block">Register</button>
+                            <button type="submit" value="Register" class="btn btn-green btn-block">Register</button>
                             <p class="signin-link">Already have an account? <a data-toggle="tab" href="#signin" role="tab">Sign In</a></p>
                         </form>
                     </div>

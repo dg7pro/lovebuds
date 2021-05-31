@@ -3,6 +3,7 @@
 
 namespace App;
 
+use App\Config;
 
 class Token
 {
@@ -27,7 +28,7 @@ class Token
 
     public function getHash(){
 
-        return hash_hmac('sha256',$this->token,config::SECRET_KEY);
+        return hash_hmac('sha256',$this->token,$_ENV['SECRET_KEY']);  // Earlier Config::SECRET_KEY
     }
 
 

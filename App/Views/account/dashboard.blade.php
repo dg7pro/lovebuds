@@ -407,7 +407,11 @@
 
 @section('js')
 
+
     <script>
+        //====================
+        // Partner Preference
+        //====================
         $(document).ready(function(){
             $('#min_age').on('change', function(){
                 var minAgeVal = $(this).val();
@@ -430,6 +434,7 @@
                 }
             });
         });
+
         $(document).ready(function(){
             $('#min_ht').on('change', function(){
                 var minHtVal = $(this).val();
@@ -452,9 +457,7 @@
                 }
             });
         });
-    </script>
 
-    <script>
         $(document).ready(function (){
             $('#save-partner-preference').on('click', function () {
 
@@ -498,32 +501,10 @@
         });
     </script>
 
-
     <script>
-        // $('.alert').on('closed.bs.alert', function () {
-        //     // do something...
-        //     // alert id
-        //     var aid = $(this).attr("data-id");
-        //     console.log(aid);
-        //
-        //     $.ajax({
-        //         url: "/ajax/mar-notification",
-        //         method: 'post',
-        //         data: {
-        //             aid: aid
-        //         },
-        //         dataType: "text",
-        //         success: function (data, status) {
-        //             console.log(data);
-        //             console.log(status);
-        //             // setTimeout(function(){
-        //             //     toastr.success(data);
-        //             // }, 1000);
-        //             //$('#hide-profile').addClass('disabled');
-        //         }
-        //     });
-        // });
-
+        //====================
+        // Notifications
+        //====================
         function marNotification(id){
             console.log(id);
             $.ajax({
@@ -536,41 +517,10 @@
                 success: function (data, status) {
                     console.log(data);
                     console.log(status);
-                    // setTimeout(function(){
-                    //     toastr.success(data);
-                    // }, 1000);
-                    //$('#hide-profile').addClass('disabled');
                 }
             });
         }
 
-        // $(document).ready(function(){
-        //     $(document).on('closed.bs.alert','.alert',function() {
-        //
-        //         var aid = $(this).attr("data-id");
-        //         console.log(aid);
-        //
-        //         $.ajax({
-        //             url: "/ajax/mar-notification",
-        //             method: 'post',
-        //             data: {
-        //                 aid: aid
-        //             },
-        //             dataType: "text",
-        //             success: function (data, status) {
-        //                 console.log(data);
-        //                 console.log(status);
-        //
-        //             }
-        //         });
-        //
-        //     });
-        // });
-    </script>
-    <script>
-        //=================
-        // Read Record
-        //=================
         function readNotifications() {
             var readrecord = "readrecord";
             $.ajax({
@@ -587,26 +537,11 @@
         }
 
         $('.my_notification').on('click', function(){
-
             readNotifications();
             console.log('my current notifications');
-
-            // $.ajax({
-            //     url: "/Ajax/load-recent-visitors",
-            //     method: "POST",
-            //     data:{},
-            //
-            //     success:function(data){
-            //         $('#recent-profile-visitor').html(data);
-            //         // setTimeout(function(){
-            //         //     $('#loader-icon').addClass('display-off');
-            //         // }, 500);
-            //
-            //     }
-            // })
-
         });
     </script>
+
     <script src="/js/select2.min.js"></script>
     <script>
         $(document).ready(function() {

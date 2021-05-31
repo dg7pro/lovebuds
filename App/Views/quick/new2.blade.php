@@ -7,6 +7,8 @@
 
 @section('content')
 
+    <h5>This is new 2</h5>
+
     <!-- profiles section starts -->
     <section class="profiles" id="quick-search-profiles">
 
@@ -98,11 +100,11 @@
 
             //console.log(jsonString);
 
-            var gender = "{{$_POST['gender'] ??''}}";
-            var minAge = "{{$_POST['minAge'] ??''}}";
-            var maxAge = "{{$_POST['maxAge'] ??''}}";
-            var rel = "{{$_POST['rel'] ??''}}";
-            var lan = "{{$_POST['lan'] ??''}}";
+            var gender = "{{$_GET['gender'] ??''}}";
+            var minAge = "{{$_GET['minAge'] ??''}}";
+            var maxAge = "{{$_GET['maxAge'] ??''}}";
+            var rel = "{{$_GET['rel'] ??''}}";
+            var lan = "{{$_GET['lan'] ??''}}";
 
             console.log(gender);
             console.log(minAge);

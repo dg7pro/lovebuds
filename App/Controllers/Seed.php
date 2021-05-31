@@ -3,12 +3,12 @@
 
 namespace App\Controllers;
 
+
+
 use App\Models\User;
-use Faker;
 
 class Seed extends Administered
 {
-    // TODO
 
     public function usersTableAction(){
 

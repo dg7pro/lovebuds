@@ -2,8 +2,7 @@
 
 namespace App\Models;
 
-use App\Controllers\Connection;
-use App\Flash;
+
 use App\Lib\Helpers;
 use App\Mail;
 use App\Token;
@@ -62,12 +61,21 @@ class User extends \Core\Model
             $pid = self::generateProfileId(7);
             $avatar = self::getDefaultAvatar($this->gender);
 
+            $this->myhobbies = [];
+            $this->myinterests = [];
+            $this->mycastes = [];
+            $this->langs = [];
+            $myhobbies = json_encode($this->myhobbies);
+            $myinterests = json_encode($this->myinterests);
+            $mycastes = json_encode($this->mycastes);
+            $langs = json_encode($this->langs);
+
             $token = new Token();
             $hashed_token = $token->getHash();             // Saved in users table
             $this->activation_token = $token->getValue();  // To be send in email
 
-            $sql = 'INSERT INTO users (mobile, email, password_hash, for_id, gender, pid, avatar, activation_hash)
-                    VALUES (:mobile, :email, :password_hash, :cFor, :gender, :pid, :avatar, :activation_hash)';
+            $sql = 'INSERT INTO users (mobile, email, password_hash, for_id, gender, pid, avatar, activation_hash, myhobbies, myinterests, mycastes, langs)
+                    VALUES (:mobile, :email, :password_hash, :cFor, :gender, :pid, :avatar, :activation_hash, :hobbies, :interests, :castes, :langs)';
 
             $db = static::getDB();
             $stmt = $db->prepare($sql);
@@ -80,6 +88,10 @@ class User extends \Core\Model
             $stmt->bindValue(':pid', $pid, PDO::PARAM_STR);
             $stmt->bindValue(':avatar', $avatar, PDO::PARAM_STR);
             $stmt->bindValue(':activation_hash', $hashed_token, PDO::PARAM_STR);
+            $stmt->bindValue(':hobbies',$myhobbies,PDO::PARAM_STR);
+            $stmt->bindValue(':interests',$myinterests,PDO::PARAM_STR);
+            $stmt->bindValue(':castes',$mycastes,PDO::PARAM_STR);
+            $stmt->bindValue(':langs',$langs,PDO::PARAM_STR);
 
             return $stmt->execute();
 
@@ -120,7 +132,7 @@ class User extends \Core\Model
             $this->errors[] = 'Mobile already exists';
         }
 
-        if (strlen($this->password) < 6) {
+        if (strlen($this->password) < 5) {
             $this->errors[] = 'Please enter at least 6 characters for the password';
         }
 
@@ -451,88 +463,6 @@ class User extends \Core\Model
      * ***************************************
      * */
 
-    public function moveProfile($sender,$receiver){
-
-        // json encode
-        //$like_array = json_encode($like_array);
-
-        // prepare query
-        $query = "UPDATE users SET like_array=? WHERE id=?";
-        $pdo = Model::getDB();
-        $stmt=$pdo->prepare($query);
-
-        // save to database
-        $status =  $stmt->execute([$like_array,$this->id]);
-
-        if($status){
-            Notification::save('profile_liked',$profile_id);
-        }
-
-    }
-
-
-    /**
-     * @param $like_array
-     * @param $profile_id
-     * @return void
-     */
-    /*public function likeProfile($like_array,$profile_id){
-
-        // json encode
-        $like_array = json_encode($like_array);
-
-        // prepare query
-        $query = "UPDATE users SET like_array=? WHERE id=?";
-        $pdo = Model::getDB();
-        $stmt=$pdo->prepare($query);
-
-        // save to database
-        $status =  $stmt->execute([$like_array,$this->id]);
-
-        if($status){
-            Notification::save('profile_liked',$profile_id);
-        }
-
-    }*/
-
-    /**
-     * @param $short_array
-     * @return bool
-     */
-    /*public function shortProfile($short_array){
-
-        // json encode
-        $short_array = json_encode($short_array);
-
-        // prepare query
-        $query = "UPDATE users SET short_array=? WHERE id=?";
-        $pdo = Model::getDB();
-        $stmt=$pdo->prepare($query);
-
-        // save to database
-        return $stmt->execute([$short_array,$this->id]);
-
-    }*/
-
-    /**
-     * @param $hide_array
-     * @return bool
-     */
-    /*public function hideProfile($hide_array){
-
-        // json encode
-        $hide_array = json_encode($hide_array);
-
-        // prepare query
-        $query = "UPDATE users SET hide_array=? WHERE id=?";
-        $pdo = Model::getDB();
-        $stmt=$pdo->prepare($query);
-
-        // save to database
-        return $stmt->execute([$hide_array,$this->id]);
-
-    }*/
-
     /**
      * @param $time
      * @return bool
@@ -544,18 +474,6 @@ class User extends \Core\Model
         $pdo = Model::getDB();
         $stmt=$pdo->prepare($sql);
         return $stmt->execute([$time,$id]);
-
-
-    }
-
-    public function updateRandomShortlist($arr){
-
-        $id = $this->id;
-        $sql = "UPDATE users SET short_array=? WHERE id=?";
-        $pdo = Model::getDB();
-        $stmt=$pdo->prepare($sql);
-        return $stmt->execute([$arr,$id]);
-
 
     }
 
@@ -570,142 +488,6 @@ class User extends \Core\Model
         $pdo = Model::getDB();
         $stmt=$pdo->prepare($query);
         return $stmt->execute([$mobile,$userId]);
-    }
-
-    /**
-     * @param $userId
-     * @return mixed
-     */
-    public static function getProfileBasicInfo($userId){
-
-        $sql = "SELECT u.id, u.pid, u.avatar, u.first_name, u.last_name, u.dob, e.name as edu, o.name as occ, sec.name as sec,
-                ton.name as lag, rel.name as rel
-                FROM users AS u
-                LEFT JOIN educations as e ON e.id=u.education_id
-                LEFT JOIN occupations as o ON o.id=u.occupation_id
-                LEFT JOIN sectors as sec ON sec.id = u.sector_id
-                LEFT JOIN religions as rel ON rel.id = u.religion_id
-                LEFT JOIN tongues as ton ON ton.id = u.language_id
-                WHERE u.id='$userId'";
-        $pdo=Model::getDB();
-        $stmt=$pdo->query($sql);
-        $stmt->execute();
-        return $stmt->fetch();
-    }
-
-
-
-    /* **************************************
-     *  Section 5
-     *  Administrative Functions
-     * ***************************************
-     * */
-
-    public static function newMembers(){
-
-        $sql = "SELECT * FROM users WHERE created_at > DATE_SUB(NOW(), INTERVAL 1 WEEK) ORDER BY id desc";
-        $pdo = Model::getDB();
-
-        $stmt = $pdo->query($sql);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_OBJ);
-
-    }
-
-    /**
-     * @return int
-     */
-    public static function getPaidUserCount(){
-
-        $sql = "SELECT * FROM users WHERE is_paid=1";
-
-        $pdo = Model::getDB();
-        $stmt = $pdo->query($sql);
-        $stmt->execute();
-        return $stmt->rowCount();
-
-    }
-
-    /**
-     * Admin Recent Paid Members
-     *
-     * @return array
-     */
-    public static function recentPaidMembers(){
-
-        $sql = "SELECT * FROM users WHERE is_paid=1 ORDER BY id desc LIMIT 10";
-        $pdo = Model::getDB();
-
-        $stmt = $pdo->query($sql);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_OBJ);
-
-    }
-
-    /* **************************************
-    *  Section 6
-    *  Referral Program Functions
-    * ***************************************
-    * */
-
-    /**
-     * Persist referral code and hash to database
-     *
-     * @param $code
-     * @param $hash
-     * @return bool
-     */
-    public function insertUserReferral($code, $hash){
-
-        $sql = "UPDATE users SET referral_code= :referral_code, referral_hash= :referral_hash WHERE id= :user_id";
-
-        $db = Model::getDB();
-        $stmt = $db->prepare($sql);
-        $stmt->bindValue(':referral_code', $code,PDO::PARAM_STR);
-        $stmt->bindValue(':referral_hash', $hash,PDO::PARAM_STR);
-        $stmt->bindValue(':user_id', $this->id, PDO::PARAM_INT);
-
-        return $stmt->execute();
-    }
-
-    /**
-     * Fetch user class from referral code
-     * @param $code
-     * @return mixed
-     */
-    public static function getUserFromReferralCode($code){
-
-        $token = new Token($code);
-        $token_hash = $token->getHash();
-
-        $sql = 'SELECT * FROM users
-                WHERE referral_hash = :token_hash';
-
-        $db = static::getDB();
-        $stmt = $db->prepare($sql);
-        $stmt->bindValue(':token_hash', $token_hash, PDO::PARAM_STR);
-
-        $stmt->setFetchMode(PDO::FETCH_CLASS, get_called_class());
-
-        $stmt->execute();
-
-        return $stmt->fetch();
-
-    }
-
-    /**
-     * Get id of referred-by user
-     * @param $code
-     * @return mixed
-     */
-    protected static function getReferredByUserId($code){
-
-        $referredByUser = self::getUserFromReferralCode($code);
-        if($referredByUser){
-            return $referredByUser->id;
-        }
-        return null;
-
     }
 
 
@@ -924,7 +706,12 @@ class User extends \Core\Model
      * **********************************
      * */
 
-    public static function recentVisitor($uid){
+    /**
+     * @param $uid
+     * @return array
+     */
+    public static function recentVisitor($uid): array
+    {
 
         $sql = "SELECT
     
@@ -984,7 +771,7 @@ class User extends \Core\Model
             LEFT JOIN move_profile ON move_profile.receiver = users.id
             LEFT JOIN visit_profile ON visit_profile.sender = users.id
             
-            WHERE visit_profile.sender IS NOT NULL 
+            WHERE visit_profile.sender IS NOT NULL AND users.is_active = 1
        
         ";
 
@@ -999,6 +786,10 @@ class User extends \Core\Model
     }
 
 
+    /**
+     * @param $uid
+     * @return array
+     */
     public static function shortlist($uid): array
     {
 
@@ -1059,7 +850,7 @@ class User extends \Core\Model
             LEFT JOIN challenged ON challenged.id = users.challenged_id
             LEFT JOIN move_profile ON move_profile.receiver = users.id            
             
-            WHERE move_profile.sender= :id AND move_profile.num = 2
+            WHERE move_profile.sender= :id AND move_profile.num = 2 AND users.is_active=1
        
         ";
 
@@ -1074,6 +865,10 @@ class User extends \Core\Model
 
     }
 
+    /**
+     * @param $uid
+     * @return array
+     */
     public static function newlist($uid): array
     {
         $cUser = self::findByID($uid);
@@ -1146,7 +941,7 @@ class User extends \Core\Model
             LEFT JOIN move_profile ON move_profile.receiver = users.id            
             
             WHERE move_profile.num IS NULL
-            
+            AND users.is_active = 1
             AND users.gender != :cg
             AND users.height_id >= :min_ht
             AND users.height_id <= :max_ht
@@ -1181,7 +976,8 @@ class User extends \Core\Model
 
     }
 
-    public static function customSearchResults($advQuery=''){
+    public static function customSearchResults($advQuery=''): array
+    {
 
         /*
          * Build query ----- 1
@@ -1426,12 +1222,14 @@ class User extends \Core\Model
             LEFT JOIN smokes ON smokes.id = users.smoke_id
             LEFT JOIN drinks ON drinks.id = users.drink_id
             LEFT JOIN challenged ON challenged.id = users.challenged_id
-       
+            
+            WHERE users.is_active=1
         ";
 
 
         if(!empty($advQuery)){
-            $sql .= " WHERE ";
+            //$sql .= " WHERE ";
+            $sql .= " AND ";
             $i=1;
             foreach ($advQuery as $query){
                 if($i < count($advQuery)){
@@ -1625,23 +1423,6 @@ class User extends \Core\Model
         ]);
     }
 
-    public static function getFiveRandomProfiles($gender){
-
-        $sql = "SELECT id from users WHERE gender!=?";
-        $db = Model::getDB();
-        $stmt = $db->prepare($sql);
-        $stmt->execute([$gender]);
-
-        $user_ids = array_keys($stmt->fetchAll(PDO::FETCH_GROUP|PDO::FETCH_ASSOC));
-
-        $list =  array_rand($user_ids,3);
-        $returnArr=array();
-        foreach ($list as $k=>$v){
-            $returnArr[]=$user_ids[$v];
-        }
-        return $returnArr;
-
-    }
 
     public function updateOtp($otp){
 
@@ -1666,7 +1447,12 @@ class User extends \Core\Model
     }
 
 
-    public function updateBasicInfo($data){
+    /**
+     * @param $data
+     * @return bool
+     */
+    public function updateBasicInfo($data): bool
+    {
 
         foreach($data as $key=>$val){
             $this->$key=$val;
@@ -1691,7 +1477,12 @@ class User extends \Core\Model
         ]);
     }
 
-    public function updateCasteInfo($data){
+    /**
+     * @param $data
+     * @return bool
+     */
+    public function updateCasteInfo($data): bool
+    {
 
         foreach($data as $key=>$val){
             $this->$key=$val;
@@ -1705,6 +1496,10 @@ class User extends \Core\Model
         return $stmt->execute([$mycastes, $this->id]);
     }
 
+    /**
+     * @param $data
+     * @return bool
+     */
     public function updatePartnerPreference($data): bool
     {
         foreach($data as $key=>$val){
@@ -1725,7 +1520,12 @@ class User extends \Core\Model
         return $stmt->execute([$mycastes,$cnb,$min_age,$max_age,$min_ht,$max_ht,$pm,$this->id]);
     }
 
-    public function updateEduCareerInfo($data){
+    /**
+     * @param $data
+     * @return bool
+     */
+    public function updateEduCareerInfo($data): bool
+    {
 
         foreach($data as $key=>$val){
             $this->$key=$val;
@@ -1858,6 +1658,11 @@ class User extends \Core\Model
         $stmt->fetchAll(PDO::FETCH_OBJ);
     }*/
 
+    /**
+     * @param $start
+     * @param $limit
+     * @return array
+     */
     public static function liveSearch($start, $limit): array
     {
 
@@ -1884,6 +1689,9 @@ class User extends \Core\Model
 
     }
 
+    /**
+     * @return int
+     */
     public static function liveSearchCount(): int
     {
 

@@ -238,6 +238,30 @@
 
     <!-- custom js code -->
     <script>
+        $(document).ready(function(){
+            $('#for_popup').on('change', function(){
+                var forID = $(this).val();
+                if(forID){
+                    $.ajax({
+                        type:'POST',
+                        url:'/ajax/select-gender-popup',
+                        data:{
+                            for_id:forID
+                        },
+                        success:function(data,status){
+                            //console.log(data);
+                            //console.log(status);
+                            $('#gender_popup').html(data);
+                        }
+                    });
+                }else{
+                    $('#gender_popup').html('<option value="">Gender</option>');
+                }
+            });
+        });
+    </script>
+
+    <script>
 
         $(document).ready(function(){
             $(".contact").on("click", function(){
@@ -256,8 +280,6 @@
                 cbtn.setAttribute('disabled','disabled');
             });
         });
-
-
 
         function fucked(id){
             console.log('contact clicked');
@@ -286,12 +308,6 @@
             addr.style.left= 100;
             cbtn.setAttribute('disabled','disabled');
         }
-
-
-
-
-
-
     </script>
 
    @include('searchJS.loadFunctions')

@@ -8,20 +8,17 @@ use App\Auth;
 use App\Lib\Helpers;
 use App\Models\AddressRequest;
 use App\Models\ConnectProfile;
-use App\Models\HideProfile;
+use App\Models\District;
 use App\Models\Image;
-use App\Models\LikeProfile;
 use App\Models\MoveProfile;
 use App\Models\Notification;
 use App\Models\Notify;
 use App\Models\PhotoRequest;
 use App\Models\RecordContact;
-use App\Models\ShortlistProfile;
 use App\Models\User;
 use App\Models\UserVariables;
 use App\Models\VisitProfile;
 use Core\Controller;
-use Core\Model;
 
 
 /**
@@ -207,12 +204,70 @@ class Ajax extends Controller
 
     }
 
+    /**
+     *  Select district for any state
+     */
+    public function selectDistrict(){
+
+        if(isset($_POST['state_id'])){
+
+            $sid = $_POST['state_id'];
+            //echo $sid;
+
+            $districts = District::fetchAll($sid);
+            $num = count($districts);
+
+            // Generate HTML of city options list
+            if($num > 0){
+                echo '<option value="">Select city</option>';
+                foreach ($districts as $district){
+                    echo '<option value="'.$district['id'].'">'.$district['text'].'</option>';
+                }
+            }else{
+                echo '<option value="">District not available</option>';
+            }
+
+        }
+    }
+
+    /**
+     *  Select Gender for popup registration
+     */
+    public function selectGenderPopup(){
+
+        $male = [2,4];
+        $female = [3,5];
+        $ambiguous = [1,6,7];
+        $htm='';
+
+        if(isset($_POST['for_id'])){
+
+            $for_id = $_POST['for_id'];
+            if(in_array($for_id,$male)){
+                //$gender = 'male';
+                //$val = 1;
+                $htm = '<option value=1>Male</option>';
+            }elseif (in_array($for_id,$female)){
+                $htm = '<option value=2>Female</option>';
+            }else{
+                $htm = '<option value="">Gender</option>
+                        <option value=1>Male</option>
+                        <option value=2>Female</option>';
+            }
+        }
+        echo $htm;
+
+    }
+
 
     /* ***************************************
      *  Ajax User Activity Functions
      * ***************************************
      * */
 
+    /**
+     * Mark notifications read
+     */
     public function marNotification(){
 
         if(isset($_POST['aid'])){
@@ -226,6 +281,9 @@ class Ajax extends Controller
 
     }
 
+    /**
+     *  Fetch all unread notifications
+     */
     public function unreadNotifications(){
 
         if(isset($_POST['readrecord'])){
@@ -254,175 +312,10 @@ class Ajax extends Controller
         }
     }
 
+
     /**
-     * View contact address
+     *  Show & record viewed Contact
      */
-    public function viewAddressAction(){
-
-        if(isset($_SESSION['user_id']) && isset($_POST['receiver'])) {
-
-            $sender = $_SESSION['user_id'];
-            $receiver = $_POST['receiver'];
-
-            $address_request_array = Connection::addressRequestSend();
-
-            if(in_array($receiver,$address_request_array)){
-
-                $message='You have already sent connection to this profile';
-
-            }else{
-
-                if($sender != $receiver){
-                    $result = AddressRequest::create($sender,$receiver);
-                    $result = true;
-                    if($result){
-                        $message = 'Request Successfully sent';
-                        array_push($address_request_array,$receiver);
-                    }else{
-                        $message='You have already sent connection to this profile';
-                    }
-                }else{
-                    $message = "It is your profile";
-                }
-            }
-
-        }else{
-            $message = 'Please login to continue';
-        }
-        echo $message;
-
-    }
-
-    public function viewPhotoAction(){
-
-        if(isset($_SESSION['user_id']) && isset($_POST['receiver'])) {
-
-            $sender = $_SESSION['user_id'];
-            $receiver = $_POST['receiver'];
-
-            $photo_request_array = Connection::photoRequestSend();
-
-            if(in_array($receiver,$photo_request_array)){
-
-                $message='You have already sent photo request to this profile';
-
-            }else{
-
-                if($sender != $receiver){
-                    $result = PhotoRequest::create($sender,$receiver);
-                    $result = true;
-                    if($result){
-                        $message = 'Photo Request Successfully sent';
-                        array_push($photo_request_array,$receiver);
-                    }else{
-                        $message='You have already sent connection to this profile';
-                    }
-                }else{
-                    $message = "It is your profile";
-                }
-            }
-
-        }else{
-            $message = 'Please login to continue';
-        }
-        echo $message;
-
-    }
-
-    public function moveProfileAction(){
-
-        if(isset($_SESSION['user_id']) && isset($_POST['receiver'])) {
-
-            $sender = $_SESSION['user_id'];
-            $receiver = $_POST['receiver'];
-            $index = $_POST['i'];
-
-            if($index==1){
-                $downlist_array = Connection::currentDownlist();
-
-                if(in_array($receiver,$downlist_array)) {
-
-                    $message = 'You have already hide this profile';
-                    echo $message;
-                    exit();
-                }
-            }elseif($index==2){
-
-                $shortlist_array = Connection::currentShortlist();
-                if(in_array($receiver,$shortlist_array)) {
-
-                    $message = 'You have already shorted this profile';
-                    echo $message;
-                    exit();
-                }
-
-            }else{
-                $message = 'Something is not right';
-                echo $message;
-                exit();
-            }
-
-            if($sender != $receiver){
-                $result = MoveProfile::create($sender,$receiver,$index);
-                if($result){
-
-                    $message = ($index==1)?'Profile moved to hidden list':'Profile moved to shortlist';
-                    //array_push($_SESSION['user_likes'],$profile_id);
-                }else{
-                    $message= 'You have already moved this profile';
-                }
-            }else{
-                $message = "It is your profile";
-            }
-
-
-
-        }else{
-            $message = 'Please login to continue';
-        }
-        echo $message;
-    }
-
-    /*public function moveProfileAction(){
-
-        if(isset($_SESSION['user_id']) && isset($_POST['receiver'])) {
-
-            $sender = $_SESSION['user_id'];
-            $receiver = $_POST['receiver'];
-            $index = $_POST['i'];
-
-            $downlist_array = Connection::currentDownlist();
-
-            if(in_array($receiver,$downlist_array)) {
-
-                $message = 'You have already hide this profile';
-
-            }else{
-                if($sender != $receiver){
-
-                    $result = MoveProfile::create($sender,$receiver,$index);
-
-                    if($result){
-                        $message = 'Successfully moved Profile';
-                        //array_push($_SESSION['user_likes'],$profile_id);
-                    }else{
-                        $message= 'You have already moved this profile';
-                    }
-
-                }else{
-                    $message = "It is your profile";
-                }
-
-            }
-
-
-        }else{
-            $message = 'Please login to continue';
-        }
-        echo $message;
-    }*/
-
-
     public function showContact(){
 
         if(isset($_SESSION['user_id']) && isset($_POST['other_id'])){
@@ -448,196 +341,6 @@ class Ajax extends Controller
 
     }
 
-    /**
-     * Like other user profile
-     */
-    public function likeProfileAction(){
-
-        if(isset($_SESSION['user_id']) && isset($_POST['other_id'])) {
-
-            $matri_id = $_SESSION['user_id'];
-            $profile_id = $_POST['other_id'];
-
-            if($matri_id != $profile_id){
-                //$result = LikeProfile::insertNew($matri_id,$profile_id);
-                $user = Auth::getUser();
-                $like_array = Helpers::emptyStringIntoArray($user->like_array);
-                array_push($like_array,$profile_id);
-                $result = $user->likeProfile($like_array,$profile_id);
-
-                if($result){
-                    $message = 'Successfully Liked Profile';
-                    //array_push($_SESSION['user_likes'],$profile_id);
-                }else{
-                    $message= 'You have already liked this profile';
-                }
-
-            }else{
-                $message = "It is your profile";
-            }
-        }else{
-            $message = 'Please login to continue';
-        }
-        echo $message;
-    }
-
-    /**
-     * Shortlist Profile
-     */
-    public function favProfileAction(){
-
-        if(isset($_SESSION['user_id']) && isset($_POST['other_id'])) {
-
-            $matri_id = $_SESSION['user_id'];
-            $profile_id = $_POST['other_id'];
-
-            if($matri_id != $profile_id){
-
-                $user = Auth::getUser();
-                $short_array = Helpers::emptyStringIntoArray($user->short_array);
-                array_push($short_array,$profile_id);
-                $result = $user->shortProfile($short_array);
-
-                //$result = ShortlistProfile::insertNew($matri_id,$profile_id);
-
-                if($result){
-                    //array_push($_SESSION['user_shorts'],$profile_id);
-                    $message = 'Successfully Shortlist Profile';
-                }else{
-                    $message= 'You have already shortlisted this profile';
-                }
-
-
-            }else{
-                $message = "It is your profile";
-            }
-        }else{
-            $message = 'Please login to continue';
-        }
-        echo $message;
-    }
-
-    /**
-     * Hide OtherUser Profile
-     */
-    public function hideProfileAction(){
-
-        if(isset($_SESSION['user_id']) && isset($_POST['other_id'])){
-
-            $matri_id = $_SESSION['user_id'];
-            $profile_id = $_POST['other_id'];
-
-            if($matri_id!=$profile_id){
-
-                $user = Auth::getUser();
-                $hide_array = Helpers::emptyStringIntoArray($user->hide_array);
-                array_push($hide_array,$profile_id);
-                $result = $user->hideProfile($hide_array);
-
-                //$result = HideProfile::insertNew($matri_id,$profile_id);
-
-                if($result){
-                    //array_push($_SESSION['user_hides'],$profile_id);
-                    $message = 'Hidden Profile Successfully';
-                }else{
-                    $message = 'You have already hidden this profile';
-                }
-
-            }else{
-                $message = "It is your profile";
-            }
-        }else{
-            $message =  'Please login to continue';
-
-
-            //$message='love you kusum '.$profile_id;
-        }
-        echo $message;
-    }
-
-    /**
-     * Connect with other User
-     */
-    public function connectProfileAction(){
-
-        if(isset($_SESSION['user_id']) && isset($_POST['other_id'])) {
-
-            $matri_id = $_SESSION['user_id'];
-            $profile_id = $_POST['other_id'];
-
-            $interest_send_array = Connection::interestSend();
-
-            if(in_array($profile_id,$interest_send_array)){
-
-                $message='You have already sent connection to this profile';
-
-            }else{
-
-                if($matri_id != $profile_id){
-                    $result = ConnectProfile::insertNew($matri_id,$profile_id);
-                    $result = true;
-                    if($result){
-                        $message = 'Connection Successfully Sent/Accepted';
-                        array_push($interest_send_array,$profile_id);
-                    }else{
-                        $message='You have already sent connection to this profile';
-                    }
-                }else{
-                    $message = "It is your profile";
-                }
-            }
-
-        }else{
-            $message = 'Please login to continue';
-        }
-        echo $message;
-
-    }
-
-    public function remindProfileAction(){
-
-        if(isset($_SESSION['user_id']) && isset($_POST['other_id'])) {
-
-            $matri_id = $_SESSION['user_id'];
-            $profile_id = $_POST['other_id'];
-
-            if(in_array($profile_id,$_SESSION['reminder_send'])){
-
-                $message='You have already sent reminder to this profile';
-
-            }else{
-
-                if($matri_id != $profile_id){
-
-                    $flag = ConnectProfile::getReminderFlag($matri_id,$profile_id);
-                    // if flag is set  reminder has been already send
-                    if(!$flag){
-                        // Process sending reminder
-                        $message = 'Reminder send successfully';
-                        array_push($_SESSION['reminder_send'],$profile_id);
-                        $url = '/profile/'.Auth::getUser()->pid;
-                        Notification::save('interest_reminder',$profile_id);
-                    }else{
-                        $message='You have already sent reminder to this profile';
-                    }
-                }else{
-                    $message = "It is your profile";
-                }
-            }
-
-        }else{
-            $message = 'Please login to continue';
-        }
-        echo $message;
-
-
-
-    }
-
-    /* ***************************************
-     *  Ajax Other Important Function
-     * ***************************************
-     * */
 
     /**
      * Record last user activity
@@ -657,33 +360,6 @@ class Ajax extends Controller
 
 
         }
-    }
-
-
-    public function addRandomShortlistAction(){
-
-        if(isset($_POST['uid']) && isset($_POST['gen'])){
-
-            $userId=$_POST['uid'];
-            $userGen=$_POST['gen'];
-            $shortedArr = User::getFiveRandomProfiles($userGen);
-            $shortedArr = json_encode($shortedArr);
-
-            $user = Auth::getUser();
-
-            $result = $user->updateRandomShortlist($shortedArr);
-
-            if($result){
-                echo "Random Shortlist Added";
-            }
-
-
-
-
-
-
-        }
-
     }
 
     /**
@@ -731,44 +407,380 @@ class Ajax extends Controller
     }
 
     /**
-     * Loads User Notifications
+     *  Move profile to shortlist or downlist
      */
-    public function loadNotificationAction(){
+    public function moveProfileAction(){
 
-        if(!isset($_SESSION['user_id'])){
-            $output='<li class="dropdown-header">Latest notifications</li>';
-            $output .= '<li><a href="'.'/login/index'.'"><i class="mdi mdi-account-key"></i>Please Login to see..</a></li>';
-            $output .= '<li class="dropdown-footer">
-                            <a class="text-center" href="'.'/account/my-notification'.'"> View All </a>
-                        </li>';
-            echo json_encode($output);
-        }else {
+        if(isset($_SESSION['user_id']) && isset($_POST['receiver'])) {
 
-            $userId = $_SESSION['user_id'];
-            $notifications = Notification::fetchAll($_SESSION['user_id']);
-            $num = count($notifications);
-            $output = '<li class="dropdown-header">Latest notifications</li>';
+            $sender = $_SESSION['user_id'];
+            $receiver = $_POST['receiver'];
+            $index = $_POST['i'];
 
-            if ($num > 0) {
-                foreach ($notifications as $notice) {
-                    //$url = isset($notice->pid)?'/profile/'.$notice->pid:$notice->url;
+            if($index==1){
+                $downlist_array = Connection::currentDownlist();
 
-                    $output .= '<li><a href="'.$notice->url.'"><i class="mdi ' . $notice->icon . '"></i>' . $notice->msg . '</a></li>';
+                if(in_array($receiver,$downlist_array)) {
+
+                    $message = 'You have already hide this profile';
+                    echo $message;
+                    exit();
                 }
-            }
-            else {
-                $output .= '<li><a href="/account/my-notification"><i class="mdi mdi-information-outline"></i>No new notification..</a></li>';
+            }elseif($index==2){
 
+                $shortlist_array = Connection::currentShortlist();
+                if(in_array($receiver,$shortlist_array)) {
+
+                    $message = 'You have already shorted this profile';
+                    echo $message;
+                    exit();
+                }
+
+            }else{
+                $message = 'Something is not right';
+                echo $message;
+                exit();
             }
-            $output .= '<li class="dropdown-footer">
-                            <a class="text-center" href="'.'/account/my-notification'.'"> View All </a>
-                        </li>';
-            echo json_encode($output);
+
+            if($sender != $receiver){
+                $result = MoveProfile::create($sender,$receiver,$index);
+                if($result){
+
+                    $message = ($index==1)?'Profile moved to hidden list':'Profile moved to shortlist';
+                    //array_push($_SESSION['user_likes'],$profile_id);
+                }else{
+                    $message= 'You have already moved this profile';
+                }
+            }else{
+                $message = "It is your profile";
+            }
+
+        }else{
+            $message = 'Please login to continue';
+        }
+        echo $message;
+    }
+
+
+    /* ***************************************
+     *  Ajax Profile Update Functions
+     * ***************************************
+     * */
+
+    /**
+     *  Update basic info edit profile
+     */
+    public function updateBasicInfoAction(){
+
+        if(isset($_POST['bis'])){
+
+            $user = Auth::getUser();
+            $result = $user->updateBasicInfo($_POST);
+
+            $msg = (!$result)?'Server busy! Please try after sometime':'Basic information updated successfully';
+            $re = ['msg'=>$msg];
+            echo json_encode($re);
         }
 
     }
 
+    /**
+     * Update caste info edit profile
+     */
+    public function updateCasteInfoAction(){
+
+        if(isset($_POST['cas'])){
+
+            if(empty($_POST['mycastes'])){
+                $msg = "Castes field is empty";
+            }else{
+                $user = Auth::getUser();
+                $result = $user->updateCasteInfo($_POST);
+                $msg = (!$result)?'Server busy! Please try after sometime':'Preferred Castes updated successfully';
+            }
+            $re = ['msg'=>$msg];
+            echo json_encode($re);
+
+        }
+    }
+
+    /**
+     * Update education and career info edit profile
+     */
+    public function updateEduCareerInfoAction(){
+
+        if(isset($_POST['ecs'])){
+
+            $user = Auth::getUser();
+            $result = $user->updateEduCareerInfo($_POST);
+
+            if(!$result){
+                $msg = 'Server busy! Please try after sometime';
+            }else{
+                $msg = 'Education & Career updated successfully';
+            }
+            $re = ['msg'=>$msg];
+            echo json_encode($re);
+        }
+    }
+
+    /**
+     * Update Family details edit profile
+     */
+    public function updateFamilyInfoAction(){
+
+        if(isset($_POST['fis'])){
+
+            $user = Auth::getUser();
+            $result = $user->updateFamilyInfo($_POST);
+
+            if(!$result){
+                $msg = 'Server busy! Please try after sometime';
+            }else{
+                $msg = 'Family Details updated successfully';
+            }
+            $re = ['msg'=>$msg];
+            echo json_encode($re);
+        }
+    }
+
+    /**
+     *  Update lifestyle info edit profile
+     */
+    public function lifestyleInfoAction(){
+
+        if(isset($_POST['lis'])){
+
+            $user = Auth::getUser();
+            $result = $user->updateLifestyleInfo($_POST);
+
+            $msg = (!$result)?'Server busy! Please try after sometime':'Lifestyle Info updated successfully';
+            $re = ['msg'=>$msg];
+            echo json_encode($re);
+        }
+    }
+
+    /**
+     *  Update likes & interests edit profile
+     */
+    public function likesInfoAction(){
+
+        if(isset($_POST['lik'])){
+
+            if(empty($_POST['myhobbies']) || empty($_POST['myinterests'])){
+                $msg = "Select your hobbies and Interests both";
+            }else{
+                $user = Auth::getUser();
+                $result = $user->updateLikesInfo($_POST);
+                $msg = (!$result)?'Server busy! Please try after sometime':'Likes & Hobbies updated successfully';
+            }
+
+            $re = ['msg'=>$msg];
+            echo json_encode($re);
+        }
+    }
+
+    /**
+     * update Astro-details edit profile
+     */
+    public function horoscopeInfoAction(){
+
+        if(isset($_POST['his'])){
+
+            $user = Auth::getUser();
+            $result = $user->updateAstroDetails($_POST);
+
+            $msg = (!$result)?'Server busy! Please try after sometime':'Astrological details updated successfully';
+            $re = ['msg'=>$msg];
+            echo json_encode($re);
+        }
+
+    }
+
+    /**
+     * Limit the no. of married brothers
+     */
+    public function brosMarried(){
+
+        if(isset($_POST['bros_id'])){
+
+            $bros_id = $_POST['bros_id'];
+            $num = $bros_id;
+            // Generate HTML of city options list
+            if($num > 0){
+                echo '<option value="">Brothers Married</option>';
+                for ($x = 1; $x <= $num; $x++) {
+                    echo '<option value="'.$x.'">'.$x.'</option>';
+                }
+            }else{
+                echo '<option value="">Select Brothers</option>';
+            }
+        }
+    }
+
+    /**
+     * Limit the no. of married sisters
+     */
+    public function sisMarried(){
+
+        if(isset($_POST['sis_id'])){
+
+            $sis_id = $_POST['sis_id'];
+            $num = $sis_id;
+            // Generate HTML of city options list
+            if($num > 0){
+                echo '<option value="">Sisters Married</option>';
+                for ($x = 1; $x <= $num; $x++) {
+                    echo '<option value="'.$x.'">'.$x.'</option>';
+                }
+
+            }else{
+                echo '<option value="">Select Sisters</option>';
+            }
+        }
+    }
+
+    /**
+     * Update Partner Preferences dashboard
+     */
+    public function updatePartnerPreferenceAction(){
+
+        if(isset($_POST['pp'])){
+
+            $user = Auth::getUser();
+            $result = $user->updatePartnerPreference($_POST);
+            $msg = (!$result)?'Server busy! Please try after sometime':'Partner Preference updated successfully';
+            $msg = json_encode($msg);
+
+            $re = ['msg'=>$msg];
+            echo json_encode($re);
+
+        }
+
+    }
+
+    /**
+     *  Limit selection of max age dashboard
+     */
+    public function minmaxAge(){
+
+        if(isset($_POST['min_age_val'])){
+
+            $min_age = $_POST['min_age_val'];
+            $num = $min_age;
+            // Generate HTML of city options list
+            if($num >= 18){
+                echo '<option value="">max-age</option>';
+                for ($x = $num; $x <= 72; $x++) {
+                    echo '<option value="'.$x.'">'.$x.'</option>';
+                }
+            }else{
+                echo '<option value="">min-age first</option>';
+            }
+        }
+    }
+
+    /**
+     *  Limit selection of max height dashboard
+     */
+    public function minmaxHt(){
+
+        if(isset($_POST['min_ht_val'])){
+
+            $heights = UserVariables::fetch('heights');
+            $htArray = json_decode(json_encode($heights), true);
+            $c = count($htArray);
+            $mc = $c-1; // max count (mc) in array since index start from 0;
+
+            $min_ht = $_POST['min_ht_val'];
+            $num = $min_ht;
+            // Generate HTML of city options list
+            if($num >= $htArray[0]['id']){
+                echo '<option value="">max-ht</option>';
+                for ($x = $num; $x < $htArray[$mc]['id']; $x++) {
+                    echo '<option value="'.$x.'">'.$htArray[$x]['feet'].'</option>';
+                }
+            }else{
+                echo '<option value="">min-ht first</option>';
+            }
+        }
+    }
+
+
     /* ***************************************
+     *  Ajax Manage Photo Functions
+     * ***************************************
+     * */
+
+    /**
+     * Delete image functionality for users
+     */
+    public function deleteImage(){
+
+        if(isset($_SESSION['user_id'])) {
+
+            $userId = $_SESSION['user_id'];
+            if (isset($_POST['fn']) && isset($_POST['iid'])) {
+
+                $ds = 0;
+                $fn = $_POST['fn'];                                 // File name of the image to be deleted
+                $iid = $_POST['iid'];                               // Image Id: Unique number assigned during upload
+
+                $row = Image::getImageFromImageId($userId,$iid);
+
+                if ($row->pp == 0) {
+
+                    $statusD = Image::unlinkImage($userId,$iid);
+                    //$statusD = 1;
+
+                    if($statusD){
+                        $msg = "Image deleted successfully";
+                        $ds = 1;
+                    }else {
+                        $msg = "Image Could not be deleted";
+                        $ds = 0;
+                    }
+
+
+                }else{
+                    $msg = "Profile Image can not be deleted";
+                    $ds = 0;
+                }
+                $data = ['msg'=>$msg,'ds'=>$ds,'iid'=>$iid];
+                echo json_encode($data);
+            }
+        }
+    }
+
+    /**
+     *  Change avatar functionality for users
+     */
+    public function changeAvatar(){
+
+        $userId = $_SESSION['user_id'];
+
+        if(isset($_POST['fn']) && isset($_POST['iid'])) {
+
+            $fn = $_POST['fn'];
+            $iid = $_POST['iid'];
+
+            $status = Image::changeSelfAvatar($userId,$iid,$fn);
+
+            if($status){
+                $msg = "Avatar Changed successfully";
+            }else{
+                $msg = "Something went wrong please try after sometime";
+            }
+
+            $idata = ['msg'=>$msg,'iid'=>$iid];
+            echo json_encode($idata);
+
+        }
+    }
+
+
+
+    /* *************************************************************************************************************
      *  Ajax Fetch User Function
      * TODO: Checking Required of this section
      * ***************************************
@@ -812,9 +824,6 @@ class Ajax extends Controller
 
         }
     }
-
-
-
 
     protected function validateMobile($mobile){
 
@@ -863,405 +872,6 @@ class Ajax extends Controller
 
 
 
-    /* ***************************************
-     *  Ajax Fetch User Function
-     * TODO: Checking Required of this section
-     * ***************************************
-     * */
-
-    public function profileDescriptionAction(){
-
-        if(isset($_POST['other_id'])){
-
-            $other_id = $_POST['other_id'];
-
-            $flag=''; $like=''; $fav=''; $hide='';
-
-            if(isset($_SESSION['user_id'])){
-
-                $auth_user = Auth::getUser();
-                $likesArr = $auth_user->likesArr();
-                $shortsArr = $auth_user->shortsArr();
-                $hidesArr = $auth_user->hidesArr();
-
-                /*$flag = ConnectProfile::getUserConnectionFlag($_SESSION['user_id'],$other_id);
-                $like = LikeProfile::getUserLikeStatus($_SESSION['user_id'],$other_id);
-                $fav = ShortlistProfile::getUserFavStatus($_SESSION['user_id'],$other_id);
-                $hide = HideProfile::getUserHideStatus($_SESSION['user_id'],$other_id);*/
-
-                $flag = ConnectProfile::getUserConnectionFlag($_SESSION['user_id'],$other_id);
-                $like = in_array($other_id,$likesArr);
-                $fav = in_array($other_id,$shortsArr);
-                $hide = in_array($other_id,$hidesArr);
-
-            }
-
-            $basicInfo = User::getProfileBasicInfo($other_id);
-            $count = count($basicInfo);
-
-            $basicInfo=(array)$basicInfo;
-            $basicInfo['flag']=$flag;
-            $basicInfo['like']=$like;
-            $basicInfo['fav']=$fav;
-            $basicInfo['hide']=$hide;
-            $basicInfo['iso']= \Carbon\Carbon::parse($basicInfo['dob'])->isoFormat('MMMM Do YYYY');
-            $basicInfo['age']= "(".\Carbon\Carbon::parse($basicInfo['dob'])->age.' '.'yrs'.")";
-
-            $basicInfo = (object)$basicInfo;
-
-
-            if($count>0){
-                $response = $basicInfo;
-            }else{
-                $response['status']=200;
-                $response['message']="No data found!";
-            }
-            echo json_encode($response);
-        }
-    }
-
-
-
-    /* ***************************************
-     *  Ajax Profile Update Functions
-     * ***************************************
-     * */
-
-
-    /**
-     *
-     */
-    public function updateBasicInfoAction(){
-
-        if(isset($_POST['bis'])){
-
-            $user = Auth::getUser();
-            $result = $user->updateBasicInfo($_POST);
-
-            $msg = (!$result)?'Server busy! Please try after sometime':'Basic information updated successfully';
-            $re = ['msg'=>$msg];
-            echo json_encode($re);
-        }
-
-
-    }
-
-    /**
-     *
-     */
-    public function updateCasteInfoAction(){
-
-        if(isset($_POST['cas'])){
-
-            if(empty($_POST['mycastes'])){
-                $msg = "Castes field is empty";
-            }else{
-                $user = Auth::getUser();
-                $result = $user->updateCasteInfo($_POST);
-                $msg = (!$result)?'Server busy! Please try after sometime':'Preferred Castes updated successfully';
-            }
-            $re = ['msg'=>$msg];
-            echo json_encode($re);
-
-        }
-    }
-
-    /**
-     * Update Partner Preferences
-     */
-    public function updatePartnerPreferenceAction(){
-
-        if(isset($_POST['pp'])){
-
-            $user = Auth::getUser();
-            $result = $user->updatePartnerPreference($_POST);
-            $msg = (!$result)?'Server busy! Please try after sometime':'Partner Preference updated successfully';
-            $msg = json_encode($msg);
-
-            $re = ['msg'=>$msg];
-            echo json_encode($re);
-
-        }
-
-    }
-
-    /**
-     *
-     */
-    public function updateEduCareerInfoAction(){
-
-        if(isset($_POST['ecs'])){
-
-            $user = Auth::getUser();
-            $result = $user->updateEduCareerInfo($_POST);
-
-            if(!$result){
-                $msg = 'Server busy! Please try after sometime';
-            }else{
-                $msg = 'Education & Career updated successfully';
-            }
-            $re = ['msg'=>$msg];
-            echo json_encode($re);
-        }
-    }
-
-    /**
-     *
-     */
-    public function updateFamilyInfoAction(){
-
-
-        if(isset($_POST['fis'])){
-
-            $user = Auth::getUser();
-            $result = $user->updateFamilyInfo($_POST);
-
-            if(!$result){
-                $msg = 'Server busy! Please try after sometime';
-            }else{
-                $msg = 'Family Details updated successfully';
-            }
-            $re = ['msg'=>$msg];
-            echo json_encode($re);
-        }
-    }
-
-    /**
-     *
-     */
-    public function lifestyleInfoAction(){
-
-        if(isset($_POST['lis'])){
-
-            $user = Auth::getUser();
-            $result = $user->updateLifestyleInfo($_POST);
-
-            $msg = (!$result)?'Server busy! Please try after sometime':'Lifestyle Info updated successfully';
-            $re = ['msg'=>$msg];
-            echo json_encode($re);
-        }
-    }
-
-    /**
-     *
-     */
-    public function likesInfoAction(){
-
-        if(isset($_POST['lik'])){
-
-            if(empty($_POST['myhobbies']) || empty($_POST['myinterests'])){
-                $msg = "Select your hobbies and Interests both";
-            }else{
-                $user = Auth::getUser();
-                $result = $user->updateLikesInfo($_POST);
-                $msg = (!$result)?'Server busy! Please try after sometime':'Likes & Hobbies updated successfully';
-            }
-
-            $re = ['msg'=>$msg];
-            echo json_encode($re);
-        }
-    }
-
-    /**
-     *
-     */
-    public function horoscopeInfoAction(){
-
-        if(isset($_POST['his'])){
-
-            $user = Auth::getUser();
-            $result = $user->updateAstroDetails($_POST);
-
-            $msg = (!$result)?'Server busy! Please try after sometime':'Astrological details updated successfully';
-            $re = ['msg'=>$msg];
-            echo json_encode($re);
-        }
-
-    }
-
-    /**
-     *
-     */
-    public function brosMarried(){
-
-        if(isset($_POST['bros_id'])){
-
-            $bros_id = $_POST['bros_id'];
-            $num = $bros_id;
-            // Generate HTML of city options list
-            if($num > 0){
-                echo '<option value="">Brothers Married</option>';
-                for ($x = 1; $x <= $num; $x++) {
-                    echo '<option value="'.$x.'">'.$x.'</option>';
-                }
-            }else{
-                echo '<option value="">Select Brothers</option>';
-            }
-        }
-    }
-
-    /**
-     *
-     */
-    public function sisMarried(){
-
-        if(isset($_POST['sis_id'])){
-
-            $sis_id = $_POST['sis_id'];
-            $num = $sis_id;
-            // Generate HTML of city options list
-            if($num > 0){
-                echo '<option value="">Sisters Married</option>';
-                for ($x = 1; $x <= $num; $x++) {
-                    echo '<option value="'.$x.'">'.$x.'</option>';
-                }
-
-            }else{
-                echo '<option value="">Select Sisters</option>';
-            }
-        }
-    }
-
-
-    public function minmaxAge(){
-
-        if(isset($_POST['min_age_val'])){
-
-            $min_age = $_POST['min_age_val'];
-            $num = $min_age;
-            // Generate HTML of city options list
-            if($num >= 18){
-                echo '<option value="">max-age</option>';
-                for ($x = $num; $x <= 72; $x++) {
-                    echo '<option value="'.$x.'">'.$x.'</option>';
-                }
-            }else{
-                echo '<option value="">min-age first</option>';
-            }
-        }
-    }
-
-    public function minmaxHt(){
-
-        if(isset($_POST['min_ht_val'])){
-
-            $heights = UserVariables::fetch('heights');
-            $htArray = json_decode(json_encode($heights), true);
-            $c = count($htArray);
-            $mc = $c-1; // max count (mc) in array since index start from 0;
-
-            $min_ht = $_POST['min_ht_val'];
-            $num = $min_ht;
-            // Generate HTML of city options list
-            if($num >= $htArray[0]['id']){
-                echo '<option value="">max-ht</option>';
-                for ($x = $num; $x < $htArray[$mc]['id']; $x++) {
-                    echo '<option value="'.$x.'">'.$htArray[$x]['feet'].'</option>';
-                }
-            }else{
-                echo '<option value="">min-ht first</option>';
-            }
-        }
-    }
-
-
-    /* ***************************************
-     *  Ajax Manage Photo Functions
-     * ***************************************
-     * */
-
-    public function deleteImage(){
-
-        if(isset($_SESSION['user_id'])) {
-
-            $userId = $_SESSION['user_id'];
-            if (isset($_POST['fn']) && isset($_POST['iid'])) {
-
-                $ds = 0;
-                $fn = $_POST['fn'];                                 // File name of the image to be deleted
-                $iid = $_POST['iid'];                               // Image Id: Unique number assigned during upload
-
-                $row = Image::getImageFromImageId($userId,$iid);
-
-                if ($row->pp == 0) {
-
-                    $statusD = Image::unlinkImage($userId,$iid);
-                    //$statusD = 1;
-
-                    if($statusD){
-                        $msg = "Image deleted successfully";
-                        $ds = 1;
-                    }else {
-                        $msg = "Image Could not be deleted";
-                        $ds = 0;
-                    }
-
-
-                }else{
-                    $msg = "Profile Image can not be deleted";
-                    $ds = 0;
-                }
-                $data = ['msg'=>$msg,'ds'=>$ds,'iid'=>$iid];
-                echo json_encode($data);
-            }
-        }
-    }
-
-    public function changeAvatar(){
-
-        $userId = $_SESSION['user_id'];
-
-        if(isset($_POST['fn']) && isset($_POST['iid'])) {
-
-            $fn = $_POST['fn'];
-            $iid = $_POST['iid'];
-
-            $status = Image::changeSelfAvatar($userId,$iid,$fn);
-
-            if($status){
-                $msg = "Avatar Changed successfully";
-            }else{
-                $msg = "Something went wrong please try after sometime";
-            }
-
-            $idata = ['msg'=>$msg,'iid'=>$iid];
-            echo json_encode($idata);
-
-        }
-    }
-
-    public static function getAssociativeArrayResult($profiles){
-
-        $newProfilesInfo=array();
-        $newProfileKey=array();
-        $newKey = 0;
-
-        foreach($profiles as $profileKey => $profileValue){
-
-            if(!in_array($profileValue["id"],$newProfileKey)){
-                ++$newKey;
-                $newProfilesInfo[$newKey]["id"] = $profileValue["id"];
-                $newProfilesInfo[$newKey]["pid"] = $profileValue["pid"];
-                $newProfilesInfo[$newKey]["first_name"] = $profileValue["first_name"];
-                $newProfilesInfo[$newKey]["last_name"] = $profileValue["last_name"];
-                $newProfilesInfo[$newKey]["gender"] = $profileValue["gender"];
-                $newProfilesInfo[$newKey]["dob"] = $profileValue["dob"];
-                $newProfilesInfo[$newKey]["edu"] = $profileValue["edu"];
-                $newProfilesInfo[$newKey]["occ"] = $profileValue["occ"];
-                $newProfilesInfo[$newKey]["ht"] = $profileValue["ht"];
-                $newProfilesInfo[$newKey]["town"] = $profileValue["town"];
-                $newProfilesInfo[$newKey]["mov"] = $profileValue["mov"];
-            }
-            if($profileValue['filename']!=null){
-                $newProfilesInfo[$newKey]['pics'][$profileKey]["fn"] = $profileValue["filename"];
-                $newProfilesInfo[$newKey]['pics'][$profileKey]["pp"] = $profileValue["pp"];
-            }
-            $newProfileKey[]  = $profileValue["id"];
-        }
-
-        return $newProfilesInfo;
-
-    }
 
 
 

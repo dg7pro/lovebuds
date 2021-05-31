@@ -30,12 +30,20 @@
 
 
     <section class="searching">
-        <form method="post" id="quick_search" name="quick_search" action="{{'/quick/search'}}">
+        <form method="get" id="quick_search" name="quick_search" action="{{'/quick/search'}}">
             <div class="search-partner">
                 <!-- <input type="text" name="gender" id="gender" class="form-control search-input"> -->
                 <select name="gender" id="gender" class="form-control search-input">
-                    <option value="2">Bride</option>
-                    <option value="1">Groom</option>
+                    @if($authUser)
+                        @if($authUser->gender==1)
+                            <option value="2" selected>Bride</option>
+                        @else
+                            <option value="1" selected>Groom</option>
+                        @endif
+                    @else
+                        <option value="2" selected>Bride</option>
+                        <option value="1">Groom</option>
+                    @endif
                 </select>
                 <div class="search-input search-age">
                     <select name="minAge" id="min_age" class="form-control">

@@ -219,16 +219,4 @@ class UserVariables extends Model
         return date($sFormat, $fVal);
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
 }

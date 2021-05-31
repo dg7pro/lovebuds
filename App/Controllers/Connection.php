@@ -4,10 +4,7 @@
 namespace App\Controllers;
 
 
-use App\Models\AddressRequest;
-use App\Models\ConnectProfile;
 use App\Models\MoveProfile;
-use App\Models\PhotoRequest;
 use App\Models\RecordContact;
 
 class Connection extends Authenticated
@@ -21,31 +18,11 @@ class Connection extends Authenticated
         return $rc;
     }
 
-    protected static function getCP(){
-
-        static $cp = null;
-        if($cp===null) {
-            $cp = new ConnectProfile();
-        }
-        return $cp;
-    }
-
-    protected static function getAR(){
-
-        static $ar = null;
-        if($ar===null) {
-            $ar = new AddressRequest();
-        }
-        return $ar;
-    }
-
-    protected static function getPR(){
-
-        static $pr = null;
-        if($pr===null) {
-            $pr = new PhotoRequest();
-        }
-        return $pr;
+    public static function recordContact($oid): bool
+    {
+        $rc = self::getRC();
+        $uid = $_SESSION['user_id'];
+        return $rc->create($uid,$oid);
     }
 
     protected static function getMP(){
@@ -70,43 +47,5 @@ class Connection extends Authenticated
         $id = $_SESSION['user_id'];
         return $mp->getShortlist($id);
     }
-
-
-    public static function interestSend(){
-
-        $cp = self::getCP();
-        $id = $_SESSION['user_id'];
-        return $cp->interestSendToIds($id);
-    }
-
-    public static function addressRequestSend(){
-
-        $ar = self::getAR();
-        $id = $_SESSION['user_id'];
-        return $ar->addressRequestSendToIds($id);
-    }
-
-    public static function photoRequestSend(){
-
-        $pr = self::getPR();
-        $id = $_SESSION['user_id'];
-        return $pr->photoRequestSendToIds($id);
-    }
-
-    public static function interestReceived(){
-
-        $cp = self::getCP();
-        $id = $_SESSION['user_id'];
-        return $cp->interestReceivedFromIds($id);
-    }
-
-    public static function recordContact($oid): bool
-    {
-        $rc = self::getRC();
-        $uid = $_SESSION['user_id'];
-        return $rc->create($uid,$oid);
-    }
-
-
 
 }

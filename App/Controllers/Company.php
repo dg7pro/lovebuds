@@ -8,7 +8,7 @@ use Core\Controller;
 use Core\View;
 
 /**
- * Class Company - Checked
+ * Class Company
  * @package App\Controllers
  */
 class Company extends Controller

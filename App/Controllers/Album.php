@@ -12,7 +12,7 @@ use Exception;
 use Intervention\Image\ImageManager;
 
 /**
- * Class Album - Checked
+ * Class Album
  * @package App\Controllers
  */
 class Album extends Authenticated
@@ -92,6 +92,11 @@ class Album extends Authenticated
             if($output){
 
                 $thumbnail = 'tn_'.$output['name'];
+
+                $tmb_path = 'uploaded/tmb/';
+                if(!is_dir($tmb_path)){
+                    mkdir($tmb_path, 0755, true);
+                }
                 $manager = new ImageManager();
                 $width = $manager->make('uploaded/pics/'.$output['name'])->width();
                 $img = $manager->make('uploaded/pics/'.$output['name'])

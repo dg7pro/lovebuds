@@ -9,7 +9,7 @@ use PDO;
 
 class Image extends Model
 {
-    // TODO: Prpper Checking and Commenting
+
 
     public static function fetchProfileImages($userId){
 
@@ -123,7 +123,13 @@ class Image extends Model
         return $token;
     }
 
-    public static function approveUserPhoto($userId,$imgId){
+    /**
+     * @param $userId
+     * @param $imgId
+     * @return bool
+     */
+    public static function approveUserPhoto($userId, $imgId): bool
+    {
 
         $sql = "UPDATE images SET approved=? WHERE user_id=? AND img_id=?";
         $pdo = Model::getDB();
@@ -136,7 +142,13 @@ class Image extends Model
         return $status;
     }
 
-    public static function rejectUserPhoto($userId,$imgId){
+    /**
+     * @param $userId
+     * @param $imgId
+     * @return bool
+     */
+    public static function rejectUserPhoto($userId, $imgId): bool
+    {
 
         $sql = "UPDATE images SET approved=? WHERE user_id=? AND img_id=?";
         $pdo = Model::getDB();
@@ -170,7 +182,13 @@ class Image extends Model
         return $result['filename'];
     }
 
-    public static function changeUserAvatar($userId, $imgId){
+    /**
+     * @param $userId
+     * @param $imgId
+     * @return bool
+     */
+    public static function changeUserAvatar($userId, $imgId): bool
+    {
 
         self::clearUserAvatar($userId);
 
@@ -208,8 +226,11 @@ class Image extends Model
     }
 
 
-    protected static function setAvatarIndexOnProfilePicRejection($userId,$imgId){
-
+    /**
+     * @param $userId
+     * @param $imgId
+     */
+    protected static function setAvatarIndexOnProfilePicRejection($userId, $imgId){
 
         $sql = "SELECT i.pp, u.gender FROM images as i
                 LEFT JOIN users as u ON u.id = i.user_id

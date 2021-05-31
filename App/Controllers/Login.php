@@ -65,6 +65,9 @@ class Login extends Controller
         }
     }
 
+    /**
+     * Ask inactive user to resend activation link
+     */
     public function activateAccountAction(){
 
         $email = $_GET['email'] ?? '';

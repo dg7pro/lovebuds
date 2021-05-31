@@ -16,13 +16,14 @@
         <p class="lead"><i class="fas fa-user"> </i> Create Your Account</p>
 
         <form action="{{'/register/create'}}" class="form" method="post" autocomplete="off">
-            <div class="form-group">
+            <div class="form-group inputWithIcon">
                 <select id="cFor" name="cFor" required>
                     <option value='' style="color:gray">Creating profile for</option>
                     @foreach($fors as $for)
                         <option class="others" value="{{$for->id}}">{{$for->name}}</option>
                     @endforeach
                 </select>
+                <i id="cfor_ok" class="fas fa-check-circle text-green" hidden></i>
             </div>
 
             <div id="genderDiv">
@@ -70,7 +71,10 @@
                {{-- <label for="cPassword" style="margin-bottom: 0; padding-left: 0.25rem">Confirm Password:
                     <span id="cpw_msg" class="form-text"></span>
                 </label>--}}
-                <input type="password" id="cPassword" name="cPassword" placeholder="Retype Password" minlength="6" required autocomplete="new-password">
+                <input type="password" id="cPassword" name="cPassword" placeholder="Retype Password" minlength="6" required >
+                {{--<i id="cpw_not_ok" class="fas fa-times-circle text-red" hidden ></i>--}}
+                <i id="cpw_ok" class="fas fa-check-circle text-green" hidden ></i>
+
             </div>
 
             <input type="submit" value="Register" class="btn btn-green">
@@ -83,6 +87,43 @@
 @endsection
 
 @section('js')
+    <script>
+        $(document).ready(function() {
+            $('#cFor').on('blur', function () {
+                if ($('#newPassword').val() === '') {
+                    $('#cfor_ok').attr('hidden',false);
+                } else
+                    $('#cfor_ok').attr('hidden',true);
+            });
+
+            $('#newPassword, #cPassword').on('keyup', function () {
+                if ($('#newPassword').val() === $('#cPassword').val()) {
+                    //$('#message').html('Matching').css('color', 'green');
+                    //$('#cpw_not_ok').attr('hidden',true);
+                    $('#cpw_ok').attr('hidden',false);
+                } else
+                    //$('#message').html('Not Matching').css('color', 'red');
+                    $('#cpw_ok').attr('hidden',true);
+                    //$('#cpw_not_ok').attr('hidden',false);
+            });
+        });
+    </script>
+    <script>
+        var password = document.getElementById("newPassword")
+            , confirm_password = document.getElementById("cPassword");
+
+        function validatePassword(){
+            if(password.value != confirm_password.value) {
+                confirm_password.setCustomValidity("Passwords Don't Match");
+            } else {
+                confirm_password.setCustomValidity('');
+            }
+        }
+
+        password.onchange = validatePassword;
+        confirm_password.onkeyup = validatePassword;
+    </script>
+
     <script>
         $(document).ready(function() {
             $('#cFor').css('color','gray');
@@ -132,25 +173,10 @@
         });
     </script>
 
-    <script>
-        var password = document.getElementById("password")
-            , confirm_password = document.getElementById("cPassword");
-
-        function validatePassword(){
-            if(password.value != confirm_password.value) {
-                confirm_password.setCustomValidity("Passwords Don't Match");
-            } else {
-                confirm_password.setCustomValidity('');
-            }
-        }
-
-        password.onchange = validatePassword;
-        confirm_password.onkeyup = validatePassword;
-    </script>
-
     @include('request.check_email')
     @include('request.check_mobile')
     @include('request.check_password')
+{{--    @include('request.check_confirm_password')--}}
 
 
 @endsection

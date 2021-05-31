@@ -779,7 +779,7 @@
                 if(stateID){
                     $.ajax({
                         type:'POST',
-                        url:'ajax/select-district.php',
+                        url:'/ajax/select-district',
                         data:{
                             state_id:stateID
                         },

@@ -14,19 +14,19 @@ class Config
      * Database host
      * @var string
      */
-    const DB_HOST = 'localhost';
+    const DB_HOST = '';
 
     /**
      * Database name
      * @var string
      */
-    const DB_NAME = 'matrimony';
+    const DB_NAME = '';
 
     /**
      * Database user
      * @var string
      */
-    const DB_USER = 'root';
+    const DB_USER = '';
 
     /**
      * Database password
@@ -43,14 +43,8 @@ class Config
 
     /**
      * Secret key for hashing
-     * @var boolean
+     * @var string
      */
-    const SECRET_KEY = 'j3p4C1MleqZq8jOLqlIpFqmm4QKevgI8';
+    const SECRET_KEY = '';
 
-
-
-
-
-    const PAYTM_MERCHANT_KEY = '3s&bKIISCD8L%!zE';
-    const PAYTM_TXN_URL= 'https://securegw-stage.paytm.in/theia/processTransaction';
 }

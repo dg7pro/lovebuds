@@ -19,12 +19,6 @@ class Auth extends Controller
 
         $_SESSION['user_id'] = $user->id;
 
-        $_SESSION['recommended_profiles'] = UserConnections::recommendedIds();
-        $_SESSION['new_profiles'] = UserConnections::newProfileIds();
-        $_SESSION['visitor_profiles'] = UserConnections::visitorIds();
-        $_SESSION['reminder_send'] = [];
-
-
         if($remember_me){
 
             if($user->rememberLogin()){
@@ -161,32 +155,5 @@ class Auth extends Controller
         return self::getUser()->id;
 
     }
-
-    /*public static function userLikes(){
-
-        if(isset($_SESSION['user_id'])) {
-            $user_likes = self::getUser()->like_array;
-            return Helpers::emptyStringIntoArray($user_likes);
-        }
-    }
-
-    public static function userShorts(){
-
-        if(isset($_SESSION['user_id'])) {
-            $user_shorts = self::getUser()->short_array;
-            return Helpers::emptyStringIntoArray($user_shorts);
-        }
-    }
-
-    public static function userHides(){
-
-        if(isset($_SESSION['user_id'])) {
-            $user_hides = self::getUser()->hide_array;
-            return Helpers::emptyStringIntoArray($user_hides);
-        }
-
-    }*/
-
-
 
 }

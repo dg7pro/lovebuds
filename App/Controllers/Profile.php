@@ -4,7 +4,6 @@
 namespace App\Controllers;
 
 
-use App\Models\ConnectProfile;
 use App\Models\Image;
 use App\Models\User;
 use Core\Controller;
