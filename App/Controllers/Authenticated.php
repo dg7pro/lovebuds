@@ -7,7 +7,7 @@ namespace App\Controllers;
 use Core\Controller;
 
 /**
- * Class Authenticated - Checked
+ * Class Authenticated
  * @package App\Controllers
  */
 abstract class Authenticated extends Controller

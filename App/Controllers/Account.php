@@ -5,6 +5,7 @@ namespace App\Controllers;
 
 
 use App\Auth;
+use App\Csrf;
 use App\Flash;
 use App\Models\Image;
 use App\Models\Notify;
@@ -13,8 +14,7 @@ use Core\View;
 
 
 /**
- * Account Controller
- *
+ * Class Account
  * @package App\Controllers
  */
 class Account extends Authenticated
@@ -50,6 +50,7 @@ class Account extends Authenticated
         $image = Image::getUserImages($_SESSION['user_id']);
 
         $notifications = Notify::fetchAll($_SESSION['user_id']);
+        $pf = '<em>Please fill</em>';
 
         // Render view
         View::renderBlade('account.dashboard',[
@@ -58,7 +59,8 @@ class Account extends Authenticated
             'age_rows'=>UserVariables::getAgeRows(),
             'image'=>$image,
             'authUser'=>$user,
-            'notifications'=>$notifications
+            'notifications'=>$notifications,
+            'pf'=>$pf
         ]);
 
     }
@@ -68,6 +70,7 @@ class Account extends Authenticated
      */
     public function editProfileAction(){
 
+        $user = Auth::getUser();
         View::renderBlade('account.edit-profile', [
             'maritals'=>UserVariables::fetch('maritals'),
             'religions'=>UserVariables::fetch('religions'),
@@ -98,7 +101,7 @@ class Account extends Authenticated
             'hobbies'=>UserVariables::fetch('hobbies'),
             'interests'=>UserVariables::fetch('interests'),
             'states'=>UserVariables::fetch('states'),
-            'allCastes'=>UserVariables::fetch('castes'),
+            'allCastes'=>UserVariables::getCastes($user->religion_id),
             'mangliks'=>UserVariables::fetch('mangliks'),
             'signs'=>UserVariables::fetch('signs'),
             'nakshatras'=>UserVariables::fetch('nakshatras'),
@@ -108,7 +111,6 @@ class Account extends Authenticated
 
         ]);
     }
-
 
     /**
      * Show self manage album-page
@@ -137,8 +139,9 @@ class Account extends Authenticated
      */
     public function createProfileAction(){
 
-        if(Auth::getUser()->name=='') {
+        if (Auth::getUser()->name == '') {
 
+            $arr = isset($_GET['arr'])?json_decode($_GET['arr'],true):'';
             $date_rows = UserVariables::dates();
             $months = UserVariables::months();
             $years = UserVariables::years();
@@ -149,8 +152,15 @@ class Account extends Authenticated
             $languages = UserVariables::languages();
             $educations = UserVariables::getEducations();
             $occupations = UserVariables::getOccupations();
+            $incomes = UserVariables::incomes();
+            $communities = UserVariables::communities();
+            $countries = UserVariables::getCountries();
+            $districts = UserVariables::districts();
+            $castes = UserVariables::getCastes(1);
+            $states = UserVariables::states();
 
             View::renderBlade('account/createProfile', [
+                'arr'=>$arr,
                 'dates' => $date_rows,
                 'months' => $months,
                 'years' => $years,
@@ -160,7 +170,13 @@ class Account extends Authenticated
                 'mangliks' => $mangliks,
                 'languages' => $languages,
                 'educations' => $educations,
-                'occupations' => $occupations
+                'occupations' => $occupations,
+                'incomes'=> $incomes,
+                'communities'=>$communities,
+                'countries'=>$countries,
+                'districts'=>$districts,
+                'castes'=>$castes,
+                'states'=>$states
 
             ]);
 
@@ -175,17 +191,32 @@ class Account extends Authenticated
      */
     public function saveProfileAction(){
 
-        if(isset($_POST['create-profile-submit'])){
+        $csrf = new Csrf($_POST['token']);
+        if(!$csrf->validate()){
+            unset($_SESSION["csrf_token"]);
+            die("CSRF token validation failed");
+        }
+
+        if (isset($_POST['create-profile-submit'])) {
 
             $user = Auth::getUser();
             $result = $user->saveUserProfile($_POST);
 
             if($result){
                 Flash::addMessage('Profile created successfully', Flash::SUCCESS);
-                //Notification::save('profile_created',$user->id);
+                // TODO: Notify user on profile creation
+
                 $this->redirect('/account/dashboard');
+            }else{
+                $arr = json_encode($_POST);
+
+                foreach ($user->errors as $error) {
+                    Flash::addMessage($error, 'danger');
+                }
+                $this->redirect('/account/create-profile?arr='.$arr);
             }
         }
+
     }
 
 }

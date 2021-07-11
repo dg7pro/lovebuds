@@ -9,6 +9,15 @@
 {{--            display: none;--}}
 {{--        }--}}
 {{--    </style>--}}
+    <style>
+        .loading{
+            padding-bottom: 60vh;
+            /*display: none;*/
+        }
+        .display-off{
+            display: none;
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -26,14 +35,16 @@
                 <li class="nav-item" role="presentation">
                     <a class="btn btn-yellow nav-item shortlisted-profiles" id="pills-profile-tab" data-toggle="pill" href="#pills-profile"
                        role="tab" aria-controls="pills-profile" aria-selected="false">
-                        <i class="fab fa-black-tie text-white"></i>
+                        {{--<i class="fab fa-black-tie text-white"></i>--}}
+                        <i class="fas fa-heart text-white"></i>
                         Shortlisted
                     </a>
                 </li>
                 <li class="nav-item" role="presentation">
                     <a class="btn btn-blue nav-item recent_visitor" id="pills-contact-tab" data-toggle="pill" href="#pills-contact"
                        role="tab" aria-controls="pills-contact" aria-selected="false">
-                        <i class="fas fa-graduation-cap text-white"></i>
+                        <i class="fas fa-search text-white"></i>
+                        {{--<i class="fa fa-eye text-white"></i>--}}
                         Recent Visitor
                     </a>
                 </li>
@@ -49,6 +60,7 @@
             <h4 class="text-center text-secondary">-- New Profiles --</h4>
 
             <section class="profiles" id="new-profiles">
+                <span id="ring-loader-1" class="text-center loading"><img src="/img/ring.gif" alt=""></span>
                {{-- @foreach($new_profiles as $profile)
                     <div class="profiles-card">
 
@@ -128,6 +140,8 @@
             <h4 class="text-center text-secondary">-- Shortlisted Profiles --</h4>
 
             <section class="profiles" id="shortlisted-profiles">
+                {{--<span id="ring-loader" class="text-center" style="padding-bottom: 60vh"><img src="/img/ring.gif" alt=""></span>--}}
+                <span id="ring-loader-2" class="text-center loading"><img src="/img/ring.gif" alt=""></span>
                 {{--@foreach($short_profiles as $profile)
                     <div class="profiles-card">
 
@@ -197,7 +211,11 @@
                     </div>
                 @endforeach--}}
             </section>
-
+            @if($s_num>10)
+                <div class="profiles-buttons">
+                <a href="{{'/search/shortlisted'}}" class="btn btn-blue mb-5"><i class="fas fa-heart san"></i>All Shortlisted Profiles</a>
+            </div>
+            @endif
         </div>
         <!-- My Album end -->
 
@@ -208,9 +226,13 @@
 {{--                <img src="/img/LoaderIcon.gif" alt="">--}}
 {{--            <div>--}}
             <section class="profiles" id="recent-profile-visitor">
-
+                <span id="ring-loader-3" class="text-center loading"><img src="/img/ring.gif" alt=""></span>
             </section>
-
+            @if($r_num>1)
+                <div class="profiles-buttons">
+                <a href="{{'/search/recent-visitors'}}" class="btn btn-blue mb-5"><i class="fas fa-heart san"></i>All Recent Visitors</a>
+            </div>
+            @endif
         </div>
     </div>
 
@@ -220,7 +242,7 @@
     <!-- profiles section ends -->
 
 
-    @include('modal.signup-login')
+   {{-- @include('modal.signup-login')--}}
     @include('modal.photoswipe')
 
 
@@ -237,7 +259,7 @@
     @include('searchJS.moveFunctions')
 
     <!-- custom js code -->
-    <script>
+    {{--<script>
         $(document).ready(function(){
             $('#for_popup').on('change', function(){
                 var forID = $(this).val();
@@ -259,11 +281,11 @@
                 }
             });
         });
-    </script>
+    </script>--}}
 
     <script>
 
-        $(document).ready(function(){
+        /*$(document).ready(function(){
             $(".contact").on("click", function(){
                 console.log('fucked');
                 var dataId = $(this).attr("data-id");
@@ -279,9 +301,9 @@
 
                 cbtn.setAttribute('disabled','disabled');
             });
-        });
+        });*/
 
-        function fucked(id){
+        /*function viewContactAdd(id){
             console.log('contact clicked');
             console.log(id);
             alert("The data-id of clicked item is: " + id);
@@ -307,6 +329,118 @@
             addr.style.width= 0;
             addr.style.left= 100;
             cbtn.setAttribute('disabled','disabled');
+        }*/
+
+        function viewContactAdd(id){
+            console.log('contact clicked');
+            console.log(id);
+            //alert("The data-id of clicked item is: " + id);
+            $.confirm({
+                title: 'View Contact details ',
+                content: 'The number of contacts viewed by you is counted and recorded to fight <strong>spam</strong>',
+                icon: 'fa fa-question-circle',
+                animation: 'scale',
+                closeAnimation: 'scale',
+                opacity: 0.5,
+                buttons: {
+                    'confirm': {
+                        text: 'Proceed',
+                        btnClass: 'btn-blue',
+                        action: function(){
+                            $.ajax({
+                                headers:{
+                                    'CsrfToken': $('meta[name="csrf-token"]').attr('content'),
+                                },
+                                url: "/AjaxActivity/show-contact",
+                                method: 'post',
+                                data: {
+                                    other_id:id
+                                },
+                                dataType:"json",
+                                success: function (data, status) {
+                                    console.log(data);
+                                    console.log(status);
+                                    setTimeout(function(){
+                                        toastr.success(data.msg);
+                                    }, 1000);
+                                    $('#addr-'+id).html(data.addr);
+                                    //$('#hide-profile').addClass('disabled');
+                                },
+                                error: function( jqXhr, textStatus, errorThrown ){
+                                    console.log( jqXhr.responseJSON.message );
+                                    console.log( errorThrown );
+                                    //console.log( jqXhr.responseText );
+                                    $.alert({
+                                        title: 'Security Alert!',
+                                        content: jqXhr.responseJSON.message + ' Please logout and login after sometime to continue.',
+                                        icon: 'fa fa-skull',
+                                        animation: 'scale',
+                                        closeAnimation: 'scale',
+                                        buttons: {
+                                            okay: {
+                                                text: 'Okay',
+                                                btnClass: 'btn-blue'
+                                            }
+                                        }
+                                    });
+                                }
+                            });
+
+                            var cbtn = document.getElementById("contact-btn-"+id);
+                            var addr = document.getElementById("ups-ab-overlay-"+id);
+                            addr.style.width= 0;
+                            addr.style.left= 100;
+                            cbtn.setAttribute('disabled','disabled');
+                        }
+                    },
+                    cancel: function(){
+                        $.alert('You clicked <strong>cancel</strong>. Thanx we can\'t continue.');
+                    },
+
+                }
+            });
+
+        }
+
+        function sendWhatsappInterest(id){
+            console.log('send whatsapp clicked');
+            console.log(id);
+            //alert("The data-id of clicked item is: " + id);
+
+            $.ajax({
+                headers:{
+                    'CsrfToken': $('meta[name="csrf-token"]').attr('content'),
+                },
+                url: "/AjaxActivity/show-contact",
+                method: 'post',
+                data: {
+                    other_id:id
+                },
+                dataType:"json",
+                success: function (data, status) {
+                    console.log(data);
+                    console.log(status);
+                },
+                error: function( jqXhr, textStatus, errorThrown ){
+                    console.log( jqXhr.responseJSON.message );
+                    console.log( errorThrown );
+                    //console.log( jqXhr.responseText );
+                    $.alert({
+                        title: 'Security Alert!',
+                        content: jqXhr.responseJSON.message + ' Please logout and login after sometime to continue.',
+                        icon: 'fa fa-skull',
+                        animation: 'scale',
+                        closeAnimation: 'scale',
+                        buttons: {
+                            okay: {
+                                text: 'Okay',
+                                btnClass: 'btn-blue'
+                            }
+                        }
+                    });
+                }
+            });
+
         }
     </script>
 

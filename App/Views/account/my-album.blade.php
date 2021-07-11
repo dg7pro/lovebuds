@@ -10,7 +10,7 @@
     <!-- userprofile (up) section starts -->
     <section class="profile">
 
-        <div class="album-card">
+        <div class="album-card mt-5">
             <h3 class="album-heading text-blue">Upload your images here:</h3>
             <p>You can upload maximum of 3 photos. Your images should be single (no group images are allowed), clear, sharp and front facing.</p>
 
@@ -43,14 +43,24 @@
                         </div>
 
                 </div>
+
+            {{--@else
+                <p class="text-danger">You have reached a maximum upload limit of 3 photos. Delete the old once to upload new </p>--}}
             @endif
         </div>
 
-        <div class="album-card">
+        <div class="album-card mb-5">
             <div class="image-area" id="my-album">
                 @foreach($images as $image)
-                    <div id="{{'my-pic-'.$image->img_id}}">
+                    <div id="{{'my-pic-'.$image->img_id}}" class="imgWithIcon">
                         <img src="{{'/uploaded/pics/'.$image->filename}}" class="my-images">
+                        @if($image->approved ==2)
+                            <i class="fa fa-window-close text-red img-i" aria-hidden="true"> </i>
+                        @elseif($image->approved==1)
+                            <i class="fa fa-check text-green img-i" aria-hidden="true"> </i>
+                        @else
+                            <i class="fa fa-clock text-orange img-i" aria-hidden="true"> </i>
+                        @endif
                     </div>
                 @endforeach
             </div>
@@ -68,9 +78,11 @@
                 <div><span class=""><i class="fa fa-clock text-orange" aria-hidden="true"> </i> The photo has been submitted for screening, It is pending approval</span></div>
                 <div><span class=""><i class="fa fa-window-close text-red" aria-hidden="true"> </i> The photo has been rejected by our moderation team</span></div>
 
-
             </div>
-
+            <div class="mt-4">
+                <a href="{{'/account/manage-photo'}}" class="btn btn-sm btn-pink">Manage Photo</a>
+                <a href="{{'/account/dashboard'}}" class="btn btn-sm btn-yellow">Go to Dashboard</a>
+            </div>
         </div>
 
 

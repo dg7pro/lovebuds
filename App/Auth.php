@@ -4,15 +4,20 @@
 namespace App;
 
 
-use App\Lib\Helpers;
-use App\Models\Profile;
 use App\Models\RememberedLogin;
 use App\Models\User;
-use App\Models\UserConnections;
 use Core\Controller;
 
+/**
+ * Class Auth
+ * @package App
+ */
 class Auth extends Controller
 {
+    /**
+     * @param $user
+     * @param $remember_me
+     */
     public static function login($user, $remember_me){
 
         session_regenerate_id(true);
@@ -28,9 +33,11 @@ class Auth extends Controller
             }
         }
 
-
     }
 
+    /**
+     *  Destroy user session and logout
+     */
     public static function logout(){
 
         // Unset all of the session variables.
@@ -53,24 +60,40 @@ class Auth extends Controller
 
     }
 
-    public static function isLoggedIn(){
+    /**
+     * Check if user is logged in
+     * @return bool
+     */
+    public static function isLoggedIn(): bool
+    {
 
         return isset($_SESSION['user_id']);
 
     }
 
+    /**
+     * Remembers page where user intended
+     * to go before login
+     */
     public static function rememberRequestedPage(){
 
         $_SESSION['return_to']=$_SERVER['REQUEST_URI'];
     }
 
+    /**
+     * Used for redirection to intended page
+     * @return mixed|string
+     */
     public static function getReturnToPage(){
 
-//        return isset($_SESSION['return_to']) ? $_SESSION['return_to'] :'/';
         return $_SESSION['return_to'] ?? '/account/dashboard';
 
     }
 
+    /**
+     * Get Auth User
+     * @return mixed
+     */
     public static function getUser(){
 
         if(isset($_SESSION['user_id'])){
@@ -129,27 +152,30 @@ class Auth extends Controller
         }
     }
 
-
-
-    public static function displayName(){
-
-        if(isset($_SESSION['user_id'])) {
-//            return (self::getUser()->name == '') ? (self::getUser()->pid) : (self::getUser()->name);
-            return (self::getUser()->first_name == '') ? (self::getUser()->pid) :
-                (self::getUser()->first_name.' '.self::getUser()->last_name);
-        }
-    }
-
-    public static function isAdmin(){
+    /**
+     * Check if current user is admin
+     * @return bool
+     */
+    public static function isAdmin(): bool
+    {
         return self::isLoggedIn() && self::getUser()->is_admin;
     }
 
-    public static function isGuest(){
+    /**
+     * Check is current user is Guest
+     * @return bool
+     */
+    public static function isGuest(): bool
+    {
 
         return self::isLoggedIn() !== true;
 
     }
 
+    /**
+     * get primary key of logged user
+     * @return mixed
+     */
     public static function id(){
 
         return self::getUser()->id;

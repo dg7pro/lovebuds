@@ -21,6 +21,79 @@ class Quick extends Controller
     }
 
     /**
+     * Create display profile card
+     * @param $profiles
+     * @param $pid
+     * @return string
+     */
+    public static function createDisplayCard2($profiles,$pid): string
+    {
+
+        $output='';
+        foreach($profiles as $profile) {
+            $output .= '<div class="profiles-card"><div class="main-card"><div class="profile-sidebar">';
+            if(!isset($profile['pics'])){
+                $output .= '<img src="'.( $profile['gender']==1?'/img/avatar_groom.jpg':'/img/avatar_bride.jpg' ).'" class="profile-image" width="135px" alt="User Image1" />';
+            }
+            else{
+
+                $output .= '<div id="gallery'.$profile['id'].'" class="gallery" itemscope itemtype="http://schema.org/ImageGallery">';
+                foreach($profile['pics'] as $pic){
+                    $output .= '<figure itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject">                                                
+                                        <a href="/uploaded/pics/'.$pic['fn'].'" data-id="'.$profile['id'].'" class="ju-album2" data-caption="xyz" data-width="600" data-height="800" itemprop="contentUrl">                                                   
+                                            <img src="/uploaded/tmb/tn_'.$pic['fn'].'" alt="dfdf" width="135px" class="profile-image"'.($pic['pp']!=1?'hidden':'').'>
+                                        </a>
+                                    </figure>';
+                }
+                $output .= '</div>';
+            }
+
+            $output .= '<p class="profile-bio"><a class="profile-name" href="/profile/'.$profile['pid'].'" target="_blank" style="text-decoration: none"><b>'.$profile['pid'].'</b></a><br>'.$profile['town'].'</p>';
+            $output .= '</div>';
+
+            $output .= '<div class="profile-main">
+                                <a class="profile-name" href="/profile/'.$profile['pid'].'" target="_blank" style="text-decoration: none"><h2>'.$profile['first_name'].'</h2></a>
+                                <p class="profile-position">Age: '.\Carbon\Carbon::parse($profile['dob'])->age.'yrs, Ht: '.$profile['ht'].', '.$profile['manglik'].'</p>
+                                <p class="profile-body">'.$profile['caste'].', '.$profile['lang'].', '.$profile['mstatus'].',<em> '.$profile['edu'].', '.$profile['occ'].', Income: '.$profile['income'].'</em>
+                                , Location: '.$profile['district'].', '.$profile['state'].', '.$profile['country'].'
+                                </p>
+                                <div>';
+            if($_SESSION['user_id']){
+                $output .= '<a href="https://wa.me/91'.$profile['mobile'].'?text=Hi I am interested, here is my profile: http://www.jumatrimony.com/profile/'.$pid.'" target="_blank" id="contact-btn-'.$profile['id'].'" class="btn btn-pink" role="button" onclick="sendWhatsappInterest('.$profile['id'].'); return true;">Wa Interest</a>';
+            }else{
+                $output .= '<button type="button" class="btn btn-orange" data-toggle="modal" data-target="#exampleModal">Wa Interest</button>';
+            }
+            if($_SESSION['user_id']){
+                $output .= '<button id="contact-btn-'.$profile['id'].'" data-id="'.$profile['id'].'" class="btn btn-orange contact" onclick="viewContactAdd('.$profile['id'].')">Contact</button>';
+            }else{
+                $output .= '<button type="button" class="btn btn-orange" data-toggle="modal" data-target="#exampleModal">Contactc</button>';
+            }
+
+            $output .= '</div></div>';
+
+            $output .= '<div class="profile-handler">
+                                <a title="Share on whatsapp" class="share" href="https://wa.me/?text=This profile seems to be the perfect match - http://www.jumatrimony.com/profile/'.$profile['pid'].'" target="_blank"><i class="fas fa-share san"></i></a>
+                                <a title="Shortlist and Like" data-id="'.$profile['id'].'" class="shortlist" href="javascript:void(0)"><i class="fas fa-heart san"></i></a>
+                                <a title="Downlist and Hide" data-id="'.$profile['id'].'" class="downlist" href="javascript:void(0)"><i class="fas fa-arrow-circle-down san"></i></a>
+                            </div>';
+            $output .= '</div>';
+
+            $output .= '<div class="ups-ab">
+                            <span><i class="fab fa-whatsapp"></i> '.$profile['mobile'].'</span>
+                            <span class="mr-1"><i class="fas fa-phone-alt"></i>  '.$profile['mobile'].'</span>
+                            <span class="ml-3"><i class="far fa-envelope"></i> '.$profile['email'].'</span>
+
+                            <div id="ups-ab-overlay-'.$profile['id'].'" class="ups-ab-overlay">
+                                <!--user profiles address bar-->
+                                <div class="text">Contact Address</div>
+                            </div>
+                        </div>';
+            $output .= '</div>';
+        }
+        return $output;
+    }
+
+    /**
      * @param $profiles
      * @return string
      */
@@ -45,14 +118,15 @@ class Quick extends Controller
                 $output .= '</div>';
             }
 
-            $output .= '<p class="profile-bio">'.\Carbon\Carbon::parse($profile['dob'])->age.' yrs, '.$profile['ht'].'<br>'.$profile['town'].'</p>';
+            $output .= '<p class="profile-bio">'.\Carbon\Carbon::parse($profile['dob'])->age.' yrs, '.$profile['ht'].'<br>'.$profile['district'].'</p>';
             $output .= '</div>';
 
             $output .= '<div class="profile-main">
                                 <h2 class="profile-name">'.$profile['first_name'].'</h2>
                                 <p class="profile-position">'.$profile['edu'].', '.$profile['occ'].'</p>
-                                <p class="profile-body">Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-                                    Perspiciatis inventore eos ipsam debitis.
+                                 <p class="profile-body">'.$profile['religion'].', '.$profile['lang'].', '.$profile['mstatus'].', '.$profile['manglik'].', Income: '.$profile['income'].'/annum,
+                                  Location: '.$profile['district'].', '.$profile['state'].', '.$profile['country'].'
+                                  
                                 </p>
                                 <div>
                                     <button class="btn btn-pink" data-toggle="modal" data-target="#exampleModal">Full Profile</button>';
@@ -62,8 +136,8 @@ class Quick extends Controller
 
             $output .= '</div></div>';
 
-            $output .= '<div class="profile-handler">
-                                <a title="Share on whatsapp" class="share" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-share san"></i></a>
+            $output .= '<div class="profile-handler">                              
+                                <a title="Share on whatsapp" class="share" target="_blank" href="https://wa.me/?text=This profile seems to be the perfect match - http://www.jumatrimony.com/profile/'.$profile['pid'].'"><i class="fas fa-share san"></i></a>
                                 <a title="Shortlist and Like" data-id="'.$profile['id'].'" class="shortlist" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-heart san"></i></a>
                                 <a title="Downlist and Hide" data-id="'.$profile['id'].'" class="downlist" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-arrow-circle-down san"></i></a>
                             </div>';
@@ -91,7 +165,8 @@ class Quick extends Controller
         $data['rel']=array();
         $data['lan']=array();
 
-        $data['gender']=$_POST['gender']!=''?$_POST['gender']:2;
+        $sex = $_POST['sex']!=''?$_POST['sex']:2;
+        $data['gender']=$_POST['gender']!=''?$_POST['gender']:$sex;
         $data['minAge']=$_POST['minAge'];
         $data['maxAge']=$_POST['maxAge'];
         array_push($data['rel'],$_POST['rel']);
@@ -160,7 +235,7 @@ class Quick extends Controller
 
                             case 'lan':
                                 $query = ${$key.'_query'};
-                                array_push($queries,"users.language_id IN ($query)");
+                                array_push($queries,"users.community_id IN ($query)");
                                 break;
                         }
 
@@ -220,8 +295,17 @@ class Quick extends Controller
                 $newProfilesInfo[$newKey]["occ"] = $profileValue["occ"];
                 $newProfilesInfo[$newKey]["ht"] = $profileValue["ht"];
                 $newProfilesInfo[$newKey]["town"] = $profileValue["town"];
+                $newProfilesInfo[$newKey]["manglik"] = $profileValue["manglik"];
+                $newProfilesInfo[$newKey]["religion"] = $profileValue["religion"];
+                $newProfilesInfo[$newKey]["caste"] = $profileValue["caste"];
+                $newProfilesInfo[$newKey]["lang"] = $profileValue["lang"];
+                $newProfilesInfo[$newKey]["mstatus"] = $profileValue["mstatus"];
+                $newProfilesInfo[$newKey]["income"] = $profileValue["income"];
+                $newProfilesInfo[$newKey]["country"] = $profileValue["country"];
+                $newProfilesInfo[$newKey]["state"] = $profileValue["state"];
+                $newProfilesInfo[$newKey]["district"] = $profileValue["district"];
             }
-            if($profileValue['filename']!=null){
+            if($profileValue['filename']!=null && $profileValue['approved']!=0 && $profileValue['linked']!=0){
                 $newProfilesInfo[$newKey]['pics'][$profileKey]["fn"] = $profileValue["filename"];
                 $newProfilesInfo[$newKey]['pics'][$profileKey]["pp"] = $profileValue["pp"];
             }

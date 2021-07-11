@@ -21,19 +21,6 @@
             </div>
         </div>
 
-       {{-- <div class="card mt-3 mb-3">
-            <div class="card-header">
-                Search User
-            </div>
-            <div class="card-body">
-                <div class="form-group">
-                    <input type="text" id="search_box" name="search_box" class="form-control"
-                           placeholder="Type your search query here...">
-                </div>
-                <div class="table-responsive" id="dynamic_content"></div>
-            </div>
-        </div>--}}
-
         <div class="form-group">
             <input type="text" id="search_box" name="search_box" class="form-control"
                    placeholder="Type your search query here...">

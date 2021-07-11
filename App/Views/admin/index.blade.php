@@ -25,9 +25,9 @@
                 <p class="admin-text">Complete List and Management of different Courses or Groups</p>
                 <a href="{{'/admin/make-avatar'}}" class="btn btn-green">Update Avatar </a>
             </div>
-            <div class="admin-box"><h5 class="admin-title">Users/Members</h5>
+            <div class="admin-box"><h5 class="admin-title">Site Settings</h5>
                 <p class="admin-text">Complete List and Management of different Courses or Groups</p>
-                <a href="/admin/list-group" class="btn btn-pink">Users/Members </a></div>
+                <a href="/admin/site-settings" class="btn btn-pink">Admin Settings </a></div>
             <div class="admin-box">
                 <h5 class="admin-title">Users/Members</h5>
                 <p class="admin-text">Complete List and Management of different Courses or Groups</p>

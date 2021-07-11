@@ -118,40 +118,6 @@
             });
         });
 
-        // JU===============================================
-        // Make Avatar
-        // =================================================
-        /*$(document).ready(function () {
-            $('.make-avatar').on('click', function () {
-
-                var imgId = $(this).val();
-                var usrId = $(this).data('id');
-                var code = "make-avatar";
-
-                console.log('avatar btn clicked');
-                console.log(imgId);
-                console.log(usrId);
-
-                $.ajax({
-                    url: "ajax/moderate_photo.php",
-                    method: 'post',
-                    data: {
-                        code:code,
-                        iid:imgId,
-                        uid:usrId
-                    },
-                    dataType: "json",
-                    success: function (data, status) {
-                        console.log(data.msg);
-                        console.log(data.iid);
-                        console.log(status);
-                        if(data.pas === 1){
-                            $('#approve-'+data.iid).attr('disabled','disabled');
-                        }
-                    }
-                });
-            });
-        });*/
     </script>
 
 @endsection

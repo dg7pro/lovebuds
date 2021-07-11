@@ -7,13 +7,21 @@ namespace App\Models;
 use Core\Model;
 use PDO;
 
+/**
+ * Class Image
+ * @package App\Models
+ */
 class Image extends Model
 {
 
+    /**
+     * @param $userId
+     * @return array
+     */
+    public static function fetchProfileImages($userId): array
+    {
 
-    public static function fetchProfileImages($userId){
-
-        $sql = "SELECT * FROM images WHERE user_id=? AND linked = 1";
+        $sql = "SELECT * FROM images WHERE user_id=? AND linked = 1 AND approved = 1";
         $pdo=Model::getDB();
 
         $stmt = $pdo->prepare($sql);
@@ -22,7 +30,10 @@ class Image extends Model
     }
 
 
-    // Deprecated
+    /**
+     * @param $id
+     * @return mixed
+     */
     public static function getUserImages($id){
 
         $imgSql = "SELECT * FROM images WHERE user_id=? AND approved=1 AND pp=1";
@@ -33,7 +44,13 @@ class Image extends Model
 
     }
 
-    public static function getUnApprovedImages(){
+
+    /**
+     * Fetch unapproved images
+     * @return array
+     */
+    public static function getUnApprovedImages(): array
+    {
         $sql = "SELECT * FROM images WHERE approved=0 AND linked = 1";
         $pdo = Model::getDB();
 
@@ -42,8 +59,13 @@ class Image extends Model
         return $images = $stmt->fetchAll(PDO::FETCH_OBJ);
     }
 
-    public static function getUserUploadedImages($id){
-
+    /**
+     * Fetch user images
+     * @param $id
+     * @return array
+     */
+    public static function getUserUploadedImages($id): array
+    {
         $imgSql = "SELECT * FROM images WHERE user_id=? AND linked=1";
         $db = Model::getDB();
         $stmt = $db->prepare($imgSql);
@@ -52,26 +74,29 @@ class Image extends Model
 
     }
 
-
-    public static function checkForFirstImage($id){
-
+    /**
+     * @param $id
+     * @return int
+     */
+    public static function checkForFirstImage($id): int
+    {
         $sql = "SELECT * FROM images WHERE user_id=?";
 
         $pdo = Model::getDB();
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$id]);
         return $stmt->rowCount();
-
-
     }
 
-    public static function persistUserImage($userId,$fileName){
+    /**
+     * @param $userId
+     * @param $fileName
+     * @return bool
+     */
+    public static function persistUserImage($userId, $fileName): bool
+    {
 
-        //==============================
-        // Making first image as avatar
-        // Then inserting into database
-        //==============================
-
+        // check if this is first image
         $x = self::checkForFirstImage($userId);
 
         $pdo = Model::getDB();
@@ -83,10 +108,11 @@ class Image extends Model
             $stmt = $pdo->prepare($sql);
             $result=$stmt->execute([$userId,$img_id,1,$fileName]);
 
+            // if first image make it avatar
             $sqlP = "UPDATE users SET avatar=?,photo=? WHERE id=?";
             $stmt = $pdo->prepare($sqlP);
             $stmt->execute([$fileName,1,$userId]);
-            //$_SESSION['pic'] = $nm;
+
         }else{
             $sql = "INSERT INTO images (user_id,img_id,filename) VALUES (?,?,?)";
             $stmt = $pdo->prepare($sql);
@@ -97,7 +123,12 @@ class Image extends Model
 
     }
 
-    public static function fetchUserImagesForDisplay($userId){
+    /**
+     * @param $userId
+     * @return array
+     */
+    public static function fetchUserImagesForDisplay($userId): array
+    {
 
         $sql = "SELECT * FROM images WHERE user_id=? AND linked = 1";
         $pdo=Model::getDB();
@@ -113,7 +144,8 @@ class Image extends Model
      * @param $size
      * @return string
      */
-    protected static function random_token($size){
+    protected static function random_token($size): string
+    {
         $token = '';
         $keys = range(0, 9);
 
@@ -137,7 +169,8 @@ class Image extends Model
         $status =  $stmt->execute([1,$userId,$imgId]);
 
         if($status){
-            Notification::save('photo_approved',$userId);
+            $message = 'Photo approved by moderator <a href="/account/manage-photo"><strong> View </strong></a>';
+            Notify::save($userId,$message,$_SESSION['user_id']);
         }
         return $status;
     }
@@ -164,14 +197,25 @@ class Image extends Model
 
     }
 
-    protected static function clearUserAvatar($userId){
+    /**
+     * @param $userId
+     * @return bool
+     */
+    protected static function clearUserAvatar($userId): bool
+    {
 
         $sql = "UPDATE images SET pp=?, ac=? WHERE user_id=?";
         $pdo=Model::getDB();
         $stmt=$pdo->prepare($sql);
         return $stmt->execute([0,0,$userId]);
+
     }
 
+    /**
+     * @param $userId
+     * @param $imgId
+     * @return mixed
+     */
     public static function getImageFilename($userId, $imgId){
 
         $sql = "SELECT filename FROM images WHERE user_id=? AND img_id=?";
@@ -190,10 +234,11 @@ class Image extends Model
     public static function changeUserAvatar($userId, $imgId): bool
     {
 
+        // For all the images profile pic pp is set to 0
         self::clearUserAvatar($userId);
 
         $sql = "UPDATE images SET pp=? WHERE user_id=? AND img_id=?";
-        $pdo=Model::getDB();                                                     // For all the images profile pic pp is set to 0
+        $pdo=Model::getDB();
         $stmt = $pdo->prepare($sql);
         $statusX =  $stmt->execute([1,$userId,$imgId]);
 
@@ -208,15 +253,13 @@ class Image extends Model
         return false;
     }
 
-    public static function defaultUserAvatar($userId, $imgId, $gen){
-
-        self::clearUserAvatar($userId);
-        $avatar = ($gen==1)?'avatar_groom.jpg':'avatar_bride.jpg';
-        return self::updateAvatarField($userId,$avatar);
-
-    }
-
-    protected static function updateAvatarField($userId, $avatar){
+    /**
+     * @param $userId
+     * @param $avatar
+     * @return bool
+     */
+    protected static function updateAvatarField($userId, $avatar): bool
+    {
 
         $pdo=Model::getDB();
         $sql="UPDATE users SET avatar=? WHERE id=?";
@@ -247,7 +290,11 @@ class Image extends Model
         }
     }
 
-    public static function imagesForAvatarUpdate(){
+    /**
+     * @return array
+     */
+    public static function imagesForAvatarUpdate(): array
+    {
 
         $sql="SELECT i.*,u.gender FROM images as i
         LEFT JOIN users as u ON u.id=i.user_id
@@ -261,8 +308,6 @@ class Image extends Model
 
     /**
      * Fetch image by image id
-     * Used in Ajax Controller
-     *
      * @param $userId
      * @param $imgId
      * @return mixed
@@ -279,13 +324,12 @@ class Image extends Model
 
     /**
      * Soft delete image
-     * Used in Ajax Controller
-     *
      * @param $userId
      * @param $imgId
      * @return bool
      */
-    public static function unlinkImage($userId, $imgId){
+    public static function unlinkImage($userId, $imgId): bool
+    {
 
         $sql = "UPDATE images SET linked=? WHERE user_id=? AND img_id=?";
         $pdo=Model::getDB();
@@ -294,7 +338,14 @@ class Image extends Model
 
     }
 
-    public static function changeSelfAvatar($userId,$imgId,$fileName){
+    /**
+     * @param $userId
+     * @param $imgId
+     * @param $fileName
+     * @return bool
+     */
+    public static function changeSelfAvatar($userId, $imgId, $fileName): bool
+    {
 
         $pdo=Model::getDB();
 
@@ -310,7 +361,6 @@ class Image extends Model
             return self::updateAvatarField($userId,$fileName);
         }
         return false;
-
 
     }
 

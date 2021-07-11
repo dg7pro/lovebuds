@@ -1,7 +1,5 @@
 @extends('layouts.app')
 
-
-
 @section('page_css')
     <style>
         .others {color:black}
@@ -60,20 +58,8 @@
                             <div class="col-md-4 mb-3 px-2">
                                 <label for="dob">Date of Birth</label>
                                 <input type="text" class="form-control" id="dob" value="{{Carbon\Carbon::parse($authUser->dob)->isoFormat('LL')}}" disabled>
-                                {{-- {{ Carbon\Carbon::parse($authUser->dob)->isoFormat('LLL') }}--}}
-                                {{--                                    <input type="date" class="form-control" name="dob" id="dob" value="{{$authUser->dob}}"  min="1951-01-01" max="1998-12-31">--}}
                             </div>
                             <!-- *** -->
-                            {{--<div class="col-md-6 mb-3 px-2">
-                                <label for="com_update">Community</label>
-                                <select id="com_update" name="com_update" class="form-control">
-                                    <option>Choose...</option>
-                                    @foreach($languages as $community)
-                                        <option value="{{$community->value}}" {{($authUser->community_id==$community->value)?'Selected':''}}>{{$community->text}}</option>
-                                    @endforeach
-                                </select>
-                            </div>--}}
-
                             <div class="col-md-6 mb-3 px-2">
                                 <label for="cas_update">Your Caste</label>
                                 <select id="cas_update" name="cas_update" class="form-control">
@@ -132,24 +118,50 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="col-md-4 mb-3 px-2">
-                                <label for="st_update">State</label>
-                                <select id="st_update" name="st_update" class="form-control">
-                                    <option value="">Choose...</option>
-                                    @foreach($states as $state)
-                                        <option value="{{$state->id}}" {{($authUser->state_id==$state->id)?'Selected':''}}>{{$state->text}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="col-md-4 mb-3 px-2">
-                                <label for="ds_update">Districts/Cities</label>
-                                <select id="ds_update" name="ds_update" class="form-control">
-                                    <option value="">Select state first</option>
-                                    @foreach($userDistricts as $ud)
-                                        <option value="{{$ud->id}}" {{($authUser->district_id==$ud->id)?'Selected':''}}>{{$ud->text}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
+                            @if($authUser->country_id==77)
+                                <div class="col-md-4 mb-3 px-2">
+                                    <label for="st_update">State</label>
+                                    <select id="st_update" name="st_update" class="form-control">
+                                        <option value="">Choose...</option>
+                                        @foreach($states as $state)
+                                            <option value="{{$state->text}}" data-id="{{$state->id}}" {{($authUser->state==$state->text)?'Selected':''}}>{{$state->text}}</option>
+                                        @endforeach
+                                    </select>
+                                    <input type="text" class="form-control" id="st_entry" name="st_entry" placeholder="State/Province" hidden>
+                                </div>
+                                <div class="col-md-4 mb-3 px-2">
+                                    <label for="ds_update">Districts/Cities</label>
+                                    <select id="ds_update" name="ds_update" class="form-control" >
+                                        <option value="">Select state first</option>
+                                        @foreach($userDistricts as $ud)
+                                            <option value="{{$ud->text}}" {{($authUser->district==$ud->text)?'Selected':''}}>{{$ud->text}}</option>
+                                        @endforeach
+                                    </select>
+                                    <input type="text" class="form-control" id="ds_entry" name="ds_entry" placeholder="City/Town" hidden>
+                                </div>
+                            @else
+                                <div class="col-md-4 mb-3 px-2">
+                                    <label for="st_update">State</label>
+                                    <select id="st_update" name="st_update" class="form-control" hidden>
+                                        <option value="">Choose...</option>
+                                        @foreach($states as $state)
+                                            <option value="{{$state->text}}" data-id="{{$state->id}}" {{($authUser->state==$state->text)?'Selected':''}}>{{$state->text}}</option>
+                                        @endforeach
+                                    </select>
+                                    <input type="text" class="form-control" id="st_entry" name="st_entry" placeholder="State/Province" value="{{$authUser->state}}">
+                                </div>
+                                <div class="col-md-4 mb-3 px-2">
+                                    <label for="ds_update">Districts/Cities</label>
+                                    <select id="ds_update" name="ds_update" class="form-control" hidden>
+                                        <option value="">Select state first</option>
+                                        @foreach($userDistricts as $ud)
+                                            <option value="{{$ud->text}}" {{($authUser->district==$ud->text)?'Selected':''}}>{{$ud->text}}</option>
+                                        @endforeach
+                                    </select>
+                                    <input type="text" class="form-control" id="ds_entry" name="ds_entry" placeholder="City/Town" value="{{$authUser->district}}">
+                                </div>
+
+                            @endif
                         </div>
                         <button class="btn btn-blue" type="submit" id="basic-info-update" name="basic-info-update" value="submit">Submit form</button>
 
@@ -263,7 +275,7 @@
                                 <select id="income" class="form-control">
                                     <option>Choose...</option>
                                     @foreach($incomes as $income)
-                                        <option value="{{$income->id}}" {{($authUser->income_id==$income->id)?'Selected':''}}>{{$income->ranze}}</option>
+                                        <option value="{{$income->id}}" {{($authUser->income_id==$income->id)?'Selected':''}}>{{$income->level}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -274,7 +286,7 @@
             </div>
         </div>
 
-        <div class="row justify-content-center mb-5">
+        <div class="row justify-content-center mb-5" id="family_details">
             <div class="col-xl-12">
                 <div class="card card-default">
                     <div class="card-header card-header-border-bottom bg-coco">
@@ -283,6 +295,12 @@
                     <div class="card-body">
 
                         <div class="form-row">
+
+                            <div class="col-md-6 mb-3 px-2">
+                                <label for="father_name">Father's Name</label>
+                                <input type="text" class="form-control" name="father_name" id="father_name" placeholder="Father name" value="{{$authUser->father_name}}">
+                            </div>
+
                             <div class="col-md-6 mb-3 px-2">
                                 <label for="father">Father Is</label>
                                 <select id="father" class="form-control">
@@ -292,6 +310,13 @@
                                     @endforeach
                                 </select>
                             </div>
+
+                            <div class="col-md-6 mb-3 px-2">
+                                <label for="mother_name">Mother's Name</label>
+                                <input type="text" class="form-control" name="mother_name" id="mother_name" placeholder="Mother name" value="{{$authUser->mother_name}}">
+                            </div>
+
+
                             <div class="col-md-6 mb-3 px-2">
                                 <label for="mother">Mother Is</label>
                                 <select id="mother" class="form-control">
@@ -304,13 +329,6 @@
 
                             <div class="col-md-6 mb-2 px-2">
                                 <label for="brother">Brothers</label>
-                                {{--<div class="input-group">
-                                    --}}{{--<div class="input-group-prepend">
-                                        <span class="input-group-text">No of Brothers of which Married</span>
-                                    </div>--}}{{--
-                                    <input type="text" id="bros" aria-label="First name" placeholder="No. of Brothers" class="form-control" value="{{$authUser->bros}}">
-                                    <input type="text" id="mbros" aria-label="Last name" placeholder="married one's" class="form-control" value="{{$authUser->mbros}}">
-                                </div>--}}
 
                                 <div class="input-group mb-2">
                                     <select class="custom-select" style="margin-left: 0; background: none" id="bros">
@@ -330,13 +348,6 @@
 
                             <div class="col-md-6 mb-2 px-2">
                                 <label for="sisters">Sisters</label>
-                                {{--<div class="input-group">
-                                    --}}{{--<div class="input-group-prepend">
-                                        <span class="input-group-text">No of Sisters of which Married</span>
-                                    </div>--}}{{--
-                                    <input type="text" id="sis" aria-label="sisters" placeholder="No. of Sisters" class="form-control" value="{{$authUser->sis}}">
-                                    <input type="text" id="msis" aria-label="married_sis" placeholder="married one's" class="form-control" value="{{$authUser->msis}}">
-                                </div>--}}
 
                                 <div class="input-group mb-2">
                                     <select class="custom-select" style="margin-left: 0; background: none" id="sis">
@@ -598,7 +609,8 @@
             </div>
         </div>
 
-        <div class="row justify-content-center mb-5">
+        @if( in_array($authUser->religion_id,[1,3,5,6]))
+            <div class="row justify-content-center mb-5">
             <div class="col-xl-12">
                 <div class="card card-default">
                     <div class="card-header card-header-border-bottom bg-pink">
@@ -606,34 +618,6 @@
                     </div>
                     <div class="card-body">
                         <div class="form-row">
-                            {{--<div class="col-md-4 mb-3 px-2">
-                                <label for="cn_update">Living In Country:</label>
-                                <select id="cn_update" name="cn_update" class="form-control">
-                                    <option>Choose...</option>
-                                    @foreach($countries as $country)
-                                        <optgroup label="{{$country['alpha']}}">
-                                            @foreach($country['coni'] as $con)
-                                                <option value="{{$con["id"]}}" {{($authUser->country_id==$con["id"])?'Selected':''}}>{{$con["name"]}}</option>
-                                            @endforeach
-                                        </optgroup>
-                                    @endforeach
-                                </select>
-                            </div>--}}
-                            {{--<div class="col-md-6 mb-3 px-2">
-                                <label for="sob">Place of Birth</label>
-                                <select id="sob" class="form-control">
-                                    <option value="">Choose...</option>
-                                    @foreach($states as $state)
-                                        <option value="{{$state->text}}" {{($authUser->state_id==$state->id)?'Selected':''}}>{{$state->text}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="col-md-6 mb-3 px-2">
-                                <label for="district">Districts/Cities</label>
-                                <select id="district" class="form-control">
-                                    <option value="7">Select state first</option>
-                                </select>
-                            </div>--}}
                             <div class="col-md-4 mb-3 px-2">
                                 <label for="sunSign">Sun Sign</label>
                                 <select id="sunSign" class="form-control">
@@ -694,7 +678,7 @@
                                 </select>
                             </div>
 
-                            <div class="col-md-12 mb-4 mt-4 px-2">
+                            <div class="col-md-12 mb-3 mt-3 px-2">
                                 <label class="mr-5">I have Horoscope: </label>
                                 <div class="custom-control custom-radio custom-control-inline">
                                     <input type="radio" id="horo-1" name="horo" value="1" class="custom-control-input" {{($authUser->horoscope==1)?'checked':''}}>
@@ -705,13 +689,26 @@
                                     <label class="custom-control-label" for="horo-2"> No</label>
                                 </div>
                             </div>
+                            @if($authUser->horoscope==1)
+                                <div id="kundliDiv" class="col-md-12 mb-4 px-2">
+                                    {{--<label for="kundli_details">Kundli (Birth Details)</label>--}}
+                                    <input type="text" class="form-control" name="kundli_details" id="kundli_details" placeholder="Please enter:   Date, Time & Place of birth" value="{{$authUser->kundli_details}}" required>
+                                    <small id="kundli_details" class="form-text text-muted ml-2">Date, Time & Place of birth. (Example: 17 Dec 1989 10:20pm Varanasi UP IN)</small>
+                                </div>
+                            @else
+                                <div id="kundliDiv" class="col-md-12 mb-4 px-2" hidden>
+                                    {{--<label for="kundli_details">Kundli (Birth Details)</label>--}}
+                                    <input type="text" class="form-control" name="kundli_details" id="kundli_details" placeholder="Please enter:   Date, Time & Place of birth" value="{{$authUser->kundli_details}}">
+                                    <small id="kundli_details" class="form-text text-muted ml-2">Date, Time & Place of birth. (Example: 17 Dec 1989 10:20pm Varanasi UP IN)</small>
+                                </div>
+                            @endif
                         </div>
                         <button class="btn btn-pink" id="horoscope-info-update" type="submit">Update Astro Details</button>
                     </div>
                 </div>
             </div>
         </div>
-
+        @endif
     </section>
 
 
@@ -727,21 +724,59 @@
     </script>
 
     <script>
+        $(document).ready(function() {
+            $("input[name$='horo']").click(function() {
+                var kval = $(this).val();
+                if(kval == 1){
+                    $("#kundliDiv").attr('hidden',false);
+                    $('#kundliDiv').show('slow');
+                }else{
+                    $('#kundliDiv').hide('slow');
+                }
+
+                //$("div.desc").hide();
+                //$("#Cars" + test).show();
+            });
+        });
+
         $(document).ready(function(){
             $('#bros').on('change', function(){
                 var brosID = $(this).val();
                 console.log(brosID);
                 if(brosID){
                     $.ajax({
+                        headers:{
+                            'CsrfToken': $('meta[name="csrf-token"]').attr('content'),
+                            // 'CsrfToken': '65f575dd7ba89dbd08a02a86bf990514eb8182254f9af1299d75cd1f92a7ec1',
+                        },
                         type:'POST',
-                        url:'/ajax/brosMarried',
+                        url:'/ajaxLoad/brosMarried',
                         data:{
                             bros_id:brosID
                         },
+                        dataType: "json",
                         success:function(data,status){
                             //console.log(data);
                             //console.log(status);
-                            $('#mbros').html(data);
+                            $('#mbros').html(data.opt);
+                        },
+                        error: function( jqXhr, textStatus, errorThrown ){
+                            console.log( jqXhr.responseJSON.message );
+                            console.log( errorThrown );
+                            //console.log( jqXhr.responseText );
+                            $.alert({
+                                title: 'Security Alert!',
+                                content: jqXhr.responseJSON.message + ' Please logout and login after sometime to continue.',
+                                icon: 'fa fa-skull',
+                                animation: 'scale',
+                                closeAnimation: 'scale',
+                                buttons: {
+                                    okay: {
+                                        text: 'Okay',
+                                        btnClass: 'btn-blue'
+                                    }
+                                }
+                            });
                         }
                     });
                 }else{
@@ -756,15 +791,38 @@
                 console.log(sisID);
                 if(sisID){
                     $.ajax({
+                        headers:{
+                            'CsrfToken': $('meta[name="csrf-token"]').attr('content'),
+                            // 'CsrfToken': '65f575dd7ba89dbd08a02a86bf990514eb8182254f9af1299d75cd1f92a7ec1',
+                        },
                         type:'POST',
-                        url:'/ajax/sisMarried',
+                        url:'/ajaxLoad/sisMarried',
                         data:{
                             sis_id:sisID
                         },
+                        dataType: "json",
                         success:function(data,status){
                             //console.log(data);
                             //console.log(status);
-                            $('#msis').html(data);
+                            $('#msis').html(data.opt);
+                        },
+                        error: function( jqXhr, textStatus, errorThrown ){
+                            console.log( jqXhr.responseJSON.message );
+                            console.log( errorThrown );
+                            //console.log( jqXhr.responseText );
+                            $.alert({
+                                title: 'Security Alert!',
+                                content: jqXhr.responseJSON.message + ' Please logout and login after sometime to continue.',
+                                icon: 'fa fa-skull',
+                                animation: 'scale',
+                                closeAnimation: 'scale',
+                                buttons: {
+                                    okay: {
+                                        text: 'Okay',
+                                        btnClass: 'btn-blue'
+                                    }
+                                }
+                            });
                         }
                     });
                 }else{
@@ -774,19 +832,68 @@
         });
 
         $(document).ready(function(){
+
+            $('#cn_update').change(function(){
+                var cntry = $(this).find(':selected').val();
+                console.log(cntry);
+                if(cntry!=77){
+                    $('#st_update').hide().attr('hidden', true);
+                    $('#ds_update').hide().attr('hidden', true);
+                    $('#st_entry').attr('hidden', false);
+                    $('#ds_entry').attr('hidden', false);
+                    // $('#st_update').attr('hidden', true);
+                    // $('#ds_update').attr('hidden', true);
+                }
+                else{
+                    $('#st_entry').attr('hidden', true);
+                    $('#ds_entry').attr('hidden', true);
+                    $('#st_update').attr('hidden', false).show();
+                    $('#ds_update').attr('hidden', false).show();
+                    /*$('#st_update').show();
+                    $('#ds_update').show();*/
+                }
+            });
+        });
+
+        $(document).ready(function(){
             $('#st_update').on('change', function(){
-                var stateID = $(this).val();
+                //var stateID = $(this).val();
+                var stateID = $(this).find(':selected').attr("data-id");
+                console.log(stateID);
                 if(stateID){
                     $.ajax({
+                        headers:{
+                            'CsrfToken': $('meta[name="csrf-token"]').attr('content'),
+                            // 'CsrfToken': '65f575dd7ba89dbd08a02a86bf990514eb8182254f9af1299d75cd1f92a7ec1',
+                        },
                         type:'POST',
-                        url:'/ajax/select-district',
+                        url:'/ajaxLoad/select-district',
                         data:{
                             state_id:stateID
                         },
+                        dataType: "json",
                         success:function(data,status){
                             //console.log(data);
                             //console.log(status);
-                            $('#ds_update').html(data);
+                            $('#ds_update').html(data.opt);
+                        },
+                        error: function( jqXhr, textStatus, errorThrown ){
+                            console.log( jqXhr.responseJSON.message );
+                            console.log( errorThrown );
+                            //console.log( jqXhr.responseText );
+                            $.alert({
+                                title: 'Security Alert!',
+                                content: jqXhr.responseJSON.message + ' Please logout and login after sometime to continue.',
+                                icon: 'fa fa-skull',
+                                animation: 'scale',
+                                closeAnimation: 'scale',
+                                buttons: {
+                                    okay: {
+                                        text: 'Okay',
+                                        btnClass: 'btn-blue'
+                                    }
+                                }
+                            });
                         }
                     });
                 }else{
@@ -814,11 +921,23 @@
                 var ht = $('#ht_update').val();
 
                 var cn = $('#cn_update').val();
-                var st = $('#st_update').val();
-                var ds = $('#ds_update').val();
+                if(cn==77){
+                    var st = $('#st_update').val();
+                    var ds = $('#ds_update').val();
+                }else{
+                    var st = $('#st_entry').val();
+                    var ds = $('#ds_entry').val();
+                }
+                console.log(st);
+                console.log(ds);
+
                 //console.log('reached here');
                 $.ajax({
-                    url: "/ajax/updateBasicInfo",
+                    headers:{
+                        'CsrfToken': $('meta[name="csrf-token"]').attr('content'),
+                        // 'CsrfToken': '65f575dd7ba89dbd08a02a86bf990514eb8182254f9af1299d75cd1f92a7ec1',
+                    },
+                    url: "/ajaxUpdate/updateBasicInfo",
                     method: 'post',
                     data: {
                         bis:bis,
@@ -830,8 +949,8 @@
                         marital_id:ms,
                         height_id:ht,
                         country_id:cn,
-                        state_id:st,
-                        district_id:ds
+                        state:st,
+                        district:ds
                     },
                     dataType: "json",
                     success: function (data, status) {
@@ -841,6 +960,24 @@
                         }, 500);
                         console.log(data.msg);
                         console.log(status);
+                    },
+                    error: function( jqXhr, textStatus, errorThrown ){
+                        console.log( jqXhr.responseJSON.message );
+                        console.log( errorThrown );
+                        //console.log( jqXhr.responseText );
+                        $.alert({
+                            title: 'Security Alert!',
+                            content: jqXhr.responseJSON.message + ' Please logout and login after sometime to continue.',
+                            icon: 'fa fa-skull',
+                            animation: 'scale',
+                            closeAnimation: 'scale',
+                            buttons: {
+                                okay: {
+                                    text: 'Okay',
+                                    btnClass: 'btn-blue'
+                                }
+                            }
+                        });
                     }
                 });
             });
@@ -859,7 +996,11 @@
                 var income = $('#income').val();
 
                 $.ajax({
-                    url: "/ajax/updateEduCareerInfo",
+                    headers:{
+                        'CsrfToken': $('meta[name="csrf-token"]').attr('content'),
+                        // 'CsrfToken': '65f575dd7ba89dbd08a02a86bf990514eb8182254f9af1299d75cd1f92a7ec1',
+                    },
+                    url: "/ajaxUpdate/updateEduCareerInfo",
                     method: 'post',
                     data: {
                         ecs:ecs,
@@ -880,6 +1021,24 @@
                         }, 500);
                         console.log(data);
                         console.log(status);
+                    },
+                    error: function( jqXhr, textStatus, errorThrown ){
+                        console.log( jqXhr.responseJSON.message );
+                        console.log( errorThrown );
+                        //console.log( jqXhr.responseText );
+                        $.alert({
+                            title: 'Security Alert!',
+                            content: jqXhr.responseJSON.message + ' Please logout and login after sometime to continue.',
+                            icon: 'fa fa-skull',
+                            animation: 'scale',
+                            closeAnimation: 'scale',
+                            buttons: {
+                                okay: {
+                                    text: 'Okay',
+                                    btnClass: 'btn-blue'
+                                }
+                            }
+                        });
                     }
                 });
             });
@@ -887,6 +1046,8 @@
             $('#family-info-update').on('click', function () {
 
                 var fis = $('#family-info-update').val();
+                var father_name = $('#father_name').val();
+                var mother_name = $('#mother_name').val();
                 var father = $('#father').val();
                 var mother = $('#mother').val();
                 var bros = $('#bros').val();
@@ -900,10 +1061,16 @@
                 var famIncome = $('#famIncome').val();
 
                 $.ajax({
-                    url: "/ajax/updateFamilyInfo",
+                    headers:{
+                        'CsrfToken': $('meta[name="csrf-token"]').attr('content'),
+                        // 'CsrfToken': '65f575dd7ba89dbd08a02a86bf990514eb8182254f9af1299d75cd1f92a7ec1',
+                    },
+                    url: "/ajaxUpdate/updateFamilyInfo",
                     method: 'post',
                     data: {
                         fis:fis,
+                        father_name:father_name,
+                        mother_name:mother_name,
                         father_id: father,
                         mother_id: mother,
                         bros:bros,
@@ -923,6 +1090,24 @@
                         }, 500);
                         console.log(data);
                         console.log(status);
+                    },
+                    error: function( jqXhr, textStatus, errorThrown ){
+                        console.log( jqXhr.responseJSON.message );
+                        console.log( errorThrown );
+                        //console.log( jqXhr.responseText );
+                        $.alert({
+                            title: 'Security Alert!',
+                            content: jqXhr.responseJSON.message + ' Please logout and login after sometime to continue.',
+                            icon: 'fa fa-skull',
+                            animation: 'scale',
+                            closeAnimation: 'scale',
+                            buttons: {
+                                okay: {
+                                    text: 'Okay',
+                                    btnClass: 'btn-blue'
+                                }
+                            }
+                        });
                     }
                 });
             });
@@ -948,7 +1133,11 @@
                 console.log(langs);
 
                 $.ajax({
-                    url: "/ajax/lifestyleInfo",
+                    headers:{
+                        'CsrfToken': $('meta[name="csrf-token"]').attr('content'),
+                        // 'CsrfToken': '65f575dd7ba89dbd08a02a86bf990514eb8182254f9af1299d75cd1f92a7ec1',
+                    },
+                    url: "/ajaxUpdate/lifestyleInfo",
                     method: 'post',
                     data: {
                         lis:lis,
@@ -976,6 +1165,24 @@
                         }, 500);
                         console.log(data.msg);
                         console.log(status);
+                    },
+                    error: function( jqXhr, textStatus, errorThrown ){
+                        console.log( jqXhr.responseJSON.message );
+                        console.log( errorThrown );
+                        //console.log( jqXhr.responseText );
+                        $.alert({
+                            title: 'Security Alert!',
+                            content: jqXhr.responseJSON.message + ' Please logout and login after sometime to continue.',
+                            icon: 'fa fa-skull',
+                            animation: 'scale',
+                            closeAnimation: 'scale',
+                            buttons: {
+                                okay: {
+                                    text: 'Okay',
+                                    btnClass: 'btn-blue'
+                                }
+                            }
+                        });
                     }
                 });
             });
@@ -988,7 +1195,11 @@
                 console.log(myInterests);
 
                 $.ajax({
-                    url: "/ajax/likesInfo",
+                    headers:{
+                        'CsrfToken': $('meta[name="csrf-token"]').attr('content'),
+                        // 'CsrfToken': '65f575dd7ba89dbd08a02a86bf990514eb8182254f9af1299d75cd1f92a7ec1',
+                    },
+                    url: "/ajaxUpdate/likesInfo",
                     method: 'post',
                     data: {
                         lik:lik,
@@ -1003,6 +1214,24 @@
                         }, 500);
                         console.log(data);
                         console.log(status);
+                    },
+                    error: function( jqXhr, textStatus, errorThrown ){
+                        console.log( jqXhr.responseJSON.message );
+                        console.log( errorThrown );
+                        //console.log( jqXhr.responseText );
+                        $.alert({
+                            title: 'Security Alert!',
+                            content: jqXhr.responseJSON.message + ' Please logout and login after sometime to continue.',
+                            icon: 'fa fa-skull',
+                            animation: 'scale',
+                            closeAnimation: 'scale',
+                            buttons: {
+                                okay: {
+                                    text: 'Okay',
+                                    btnClass: 'btn-blue'
+                                }
+                            }
+                        });
                     }
                 });
             });
@@ -1014,7 +1243,11 @@
                 console.log(myCastes);
 
                 $.ajax({
-                    url: "/ajax/updateCasteInfo",
+                    headers:{
+                        'CsrfToken': $('meta[name="csrf-token"]').attr('content'),
+                        // 'CsrfToken': '65f575dd7ba89dbd08a02a86bf990514eb8182254f9af1299d75cd1f92a7ec1',
+                    },
+                    url: "/ajaxUpdate/updateCasteInfo",
                     method: 'post',
                     data: {
                         cas:cas,
@@ -1028,6 +1261,24 @@
                         }, 500);
                         console.log(data);
                         console.log(status);
+                    },
+                    error: function( jqXhr, textStatus, errorThrown ){
+                        console.log( jqXhr.responseJSON.message );
+                        console.log( errorThrown );
+                        //console.log( jqXhr.responseText );
+                        $.alert({
+                            title: 'Security Alert!',
+                            content: jqXhr.responseJSON.message + ' Please logout and login after sometime to continue.',
+                            icon: 'fa fa-skull',
+                            animation: 'scale',
+                            closeAnimation: 'scale',
+                            buttons: {
+                                okay: {
+                                    text: 'Okay',
+                                    btnClass: 'btn-blue'
+                                }
+                            }
+                        });
                     }
                 });
             });
@@ -1042,12 +1293,17 @@
                 var manglik = $('#manglik').val();
                 var hm = $('#hm').val();
                 var hp = $('#hp').val();
+                var kundli_details = $('#kundli_details').val();
 
 
                 //console.log('Hello');
 
                 $.ajax({
-                    url: "/ajax/horoscopeInfo",
+                    headers:{
+                        'CsrfToken': $('meta[name="csrf-token"]').attr('content'),
+                        // 'CsrfToken': '65f575dd7ba89dbd08a02a86bf990514eb8182254f9af1299d75cd1f92a7ec1',
+                    },
+                    url: "/ajaxUpdate/horoscopeInfo",
                     method: 'post',
                     data: {
                         his:his,
@@ -1057,7 +1313,8 @@
                         horoscope:horo,
                         manglik_id:manglik,
                         hm:hm,
-                        hp:hp
+                        hp:hp,
+                        kundli_details:kundli_details
                     },
                     dataType: "json",
                     success: function (data, status) {
@@ -1067,10 +1324,27 @@
                         }, 500);
                         console.log(data);
                         console.log(status);
+                    },
+                    error: function( jqXhr, textStatus, errorThrown ){
+                        console.log( jqXhr.responseJSON.message );
+                        console.log( errorThrown );
+                        //console.log( jqXhr.responseText );
+                        $.alert({
+                            title: 'Security Alert!',
+                            content: jqXhr.responseJSON.message + ' Please logout and login after sometime to continue.',
+                            icon: 'fa fa-skull',
+                            animation: 'scale',
+                            closeAnimation: 'scale',
+                            buttons: {
+                                okay: {
+                                    text: 'Okay',
+                                    btnClass: 'btn-blue'
+                                }
+                            }
+                        });
                     }
                 });
             });
-
 
         });
     </script>

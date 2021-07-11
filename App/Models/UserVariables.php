@@ -8,10 +8,19 @@ use Carbon\Carbon;
 use Core\Model;
 use PDO;
 
+/**
+ * Class UserVariables
+ * @package App\Models
+ */
 class UserVariables extends Model
 {
 
-    public static function fetch($tbl){
+    /**
+     * @param $tbl
+     * @return array
+     */
+    public static function fetch($tbl): array
+    {
 
         $sql="SELECT * FROM $tbl";
         $db=static::getDB();
@@ -20,7 +29,24 @@ class UserVariables extends Model
 
     }
 
-    public static function getTongues(){
+    /**
+     * @param $rid
+     * @return array
+     */
+    public static function getCastes($rid): array
+    {
+        $sql="SELECT * FROM castes WHERE religion_id=?";
+        $pdo = Model::getDB();
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$rid]);
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
+    }
+
+    /**
+     * @return array
+     */
+    public static function getTongues(): array
+    {
         $sql = "SELECT * FROM directions as d 
         LEFT JOIN tongues as t ON t.direction_id = d.value";
 
@@ -47,7 +73,11 @@ class UserVariables extends Model
         return $tongues;
     }
 
-    public static function getCountries(){
+    /**
+     * @return array
+     */
+    public static function getCountries(): array
+    {
         $sql = "SELECT * FROM alphabets as a 
         LEFT JOIN countries as c ON c.alphabet_id = a.value WHERE a.active=1 ORDER BY a.value, c.name";
 
@@ -74,7 +104,11 @@ class UserVariables extends Model
         return $countries;
     }
 
-    public static function getEducations(){
+    /**
+     * @return array
+     */
+    public static function getEducations(): array
+    {
 
         $sql = "SELECT s.id as val,
                     s.name as text,
@@ -107,7 +141,11 @@ class UserVariables extends Model
         return $educations;
     }
 
-    public static function getOccupations(){
+    /**
+     * @return array
+     */
+    public static function getOccupations(): array
+    {
         $sql = "SELECT c.id as val,
         c.name as cat,
         o.category_id,
@@ -139,7 +177,11 @@ class UserVariables extends Model
         return $occupations;
     }
 
-    public static function getWts(){
+    /**
+     * @return array
+     */
+    public static function getWts(): array
+    {
         $wts = array();
         for($i=41;$i<=140;$i++){
             $wts[]=$i;
@@ -147,7 +189,11 @@ class UserVariables extends Model
         return $wts;
     }
 
-    public static function getAgeRows(){
+    /**
+     * @return array
+     */
+    public static function getAgeRows(): array
+    {
         $age_rows = array();
         for($i=18;$i<=72;$i++){
             $age_rows[]=$i;
@@ -156,7 +202,7 @@ class UserVariables extends Model
     }
 
 
-    public static function languages(){ return $languages = self::fetch('languages');}
+    public static function  languages(){ return $languages = self::fetch('languages');}
     public static function  religions(){ return $religions = self::fetch('religions');}
     public static function  maritals(){ return $maritals = self::fetch('maritals');}
     public static function  heights(){ return $heights = self::fetch('heights');}
@@ -169,8 +215,15 @@ class UserVariables extends Model
     public static function  degrees(){ return $degrees = self::fetch('degrees');}
     public static function  universities(){ return $universities = self::fetch('universities');}
     public static function  communities(){ return $communities = self::fetch('communities');}
+    public static function  castes(){ return $castes = self::fetch('castes');}
+    public static function  incomes(){ return $castes = self::fetch('incomes');}
+    public static function  states(){ return $states = self::fetch('states');}
 
-    public static  function dates(){
+    /**
+     * @return array
+     */
+    public static  function dates(): array
+    {
         $date_rows = array();
         for($i=1;$i<=31;$i++){
             $date_rows[]=$i;
@@ -178,7 +231,11 @@ class UserVariables extends Model
         return $date_rows;
     }
 
-    public static  function months(){
+    /**
+     * @return array[]
+     */
+    public static  function months(): array
+    {
         return array(
             ['value'=>1,'text'=>'January'],
             ['value'=>2,'text'=>'February'],
@@ -195,7 +252,11 @@ class UserVariables extends Model
         );
     }
 
-    public static function years(){
+    /**
+     * @return array
+     */
+    public static function years(): array
+    {
         $years = array();
         $cy=Carbon::now()->year;
         $min = $cy-65;
@@ -206,6 +267,12 @@ class UserVariables extends Model
         return $years;
     }
 
+    /**
+     * @param $sStartDate
+     * @param $sEndDate
+     * @param string $sFormat
+     * @return false|string
+     */
     public static function randomDate($sStartDate, $sEndDate, $sFormat = 'Y-m-d')
     {
         // Convert the supplied date to timestamp

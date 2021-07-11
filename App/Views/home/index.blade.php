@@ -1,5 +1,14 @@
 @extends('layouts.app')
 
+@section('page_og')
+    <meta property="og:url" content="http://www.jumatrimony.com/home/index"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:title" content="JU Matrimony Service"/>
+    <meta property="og:description" content="Free Indian Matrimony Service, so find lifepartner - a perfect Jeevansathi.
+                            God creates couple and we just unite them together"/>
+    <meta property="og:image" content="{{'/img/showcase.jpg'}}"/>
+@endsection
+
 @section('content')
 
     <!-- landing section starts -->
@@ -7,10 +16,10 @@
         <div class="dark-overlay">
             <div class="landing-inner">
                 <!-- <h1 class="x-large">ju-matrimony</h1> -->
-                <h1 class="x-large">Just Unite</h1>
+                <h1 class="x-large baloo">Join & Unite</h1>
                 <!-- <p class="lead">The absolutly free Indian matrimony service created for charitable purpose
                 </p> -->
-                <p class="lead">Register search and find your soulmate, without paying a single rupee
+                <p class="lead text-center baloo">Register search and find your soulmate, without paying a single rupee
                 </p>
                 @if($authUser)
                     <div class="buttons">
@@ -89,14 +98,14 @@
     <!-- 3 Step Process  -->
     <section class="services">
         <div class="container">
-            <h2 class="title">Just 3 steps to follow</h2>
-            <p class="subtitle">This matrimony service is 100% free, we don't charge single penny</p>
+            <h2 class="title baloo">Just 3 steps to follow</h2>
+            <p class="subtitle baloo">This matrimony service is 100% free, we don't charge single penny</p>
 
             <div class="row">
 
                 <div class="col-md-4">
-                    <div class="service-box">
-                        <img src="img/signup.png" alt="">
+                    <div class="service-box box-1">
+                        <img src="/img/signup.png" alt="">
                         <h6>Free Sign Up</h6>
                         <p>Register and create your marriage profile. It just take 2 min's</p>
                         <i class="fa fa-arrow-right"></i>
@@ -105,15 +114,16 @@
 
                 <div class="col-md-4">
                     <div class="service-box active-service">
-                        <img src="img/share2.png" alt="">
+                        <img src="/img/share2.png" alt="">
                         <h6>Sharing is Caring</h6>
                         <p>Share once on fb to see contact no's of 101 parties, otherwise site is free</p>
                         <i class="fa fa-arrow-right"></i>
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="service-box">
-                        <img src="img/couple.png" alt="" style="width: 75px !important;">
+                    <div class="service-box box-3">
+                        {{--<img src="/img/couple.png" alt="" style="width: 75px !important;">--}}
+                        <img src="/img/couple.png" alt="">
                         <h6>Be a Couple</h6>
                         <p>Complete yourself, just find someone very special to you & family</p>
                         <i class="fa fa-arrow-right"></i>
@@ -138,36 +148,54 @@
                     </ol>
                     <div class="carousel-inner">
                         <div class="carousel-item active">
-                            <img src="/img/t1.jpg">
+                            <img src="/img/u26.jpg">
                             <div class="carousel-caption">
-                                <h6>Jennifer Lopez</h6>
-                                <small> CEO and Founder @ Microsoft</small>
-                                <p>Nulla vitae elit libero, a pharetra augue mollis interdum. <br>
+                                <h6>Ankita Jaiswal</h6>
+{{--                                <small> CEO and Founder @ Microsoft</small>--}}
+                                <small> 24 yrs 5'3" M.Com Katni MP</small>
+                                {{--<p>Nulla vitae elit libero, a pharetra augue mollis interdum. <br>
                                     Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ab in porro
                                     <br>laboriosam quibusdam illum. Aut expedita ad magnam ullam suscipit,
-                                    <br>eum sed deleniti vel adipisci earum, asperiores cum aliquam quos.</p>
+                                    <br>eum sed deleniti vel adipisci earum, asperiores cum aliquam quos.</p>--}}
+                                <p>Worth trying it, the site is really helpful in searching partner <br>
+                                    their service is free in comparison to other portals which charges heavily. <br>
+                                    directly see the mobile no. of profiles in which you feel interest.
+                                    <br>The only drawback is that you can’t upload more than 3 photos</p>
                             </div>
                         </div>
                         <div class="carousel-item">
-                            <img src="/img/t2.jpg">
+                            <img src="/img/u28.jpg">
                             <div class="carousel-caption">
-                                <h6>Ashwarya Rai</h6>
-                                <small> Project Manager @ Amazon</small>
-                                <p>Nulla vitae elit libero, a pharetra augue mollis interdum. <br>
+                                <h6>Gopal Srivastav</h6>
+                                <small> 32 yrs 5'9" MCA Varanasi UP</small>
+                                {{--<p>Nulla vitae elit libero, a pharetra augue mollis interdum. <br>
                                     Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ab in porro
                                     <br>laboriosam quibusdam illum. Aut expedita ad magnam ullam suscipit,
-                                    <br>eum sed deleniti vel adipisci earum, asperiores cum aliquam quos.</p>
+                                    <br>eum sed deleniti vel adipisci earum, asperiores cum aliquam quos.</p>--}}
+                                <p>Website is simple, fast & good to go to find your soul mate <br>
+                                    it also has tons of new features, & most important thing it is free. <br>
+                                    the design is also elegant I highly recommend this site to all single Indians
+                                    <br> so register join & start searching: to unite with your soul mate</p>
                             </div>
                         </div>
                         <div class="carousel-item">
-                            <img src="/img/t3.jpg">
+                            <img src="/img/u27.jpg">
                             <div class="carousel-caption">
-                                <h6>Madhuri Dixit</h6>
-                                <small> Senior Developer @ Google</small>
-                                <p>Nulla vitae elit libero, a pharetra augue mollis interdum. <br>
+                                <h6>Sudha Gupta</h6>
+                                {{--<small> Senior Developer @ Google</small>--}}
+                                <small> 29 yrs 5'2" Doctor Noida UP</small>
+                                <p>Very nice website, just register and start searching your love. <br>
+                                    Start searching & shortlist whenever you find nice profile then deal one by one
+                                    <br> It is much better than sharing your photo & bio on facebook or whatsapp <br>
+                                    This matchmaking service is free & so every single must create their profile here.</p>
+                                {{--<p>Nulla vitae elit libero, a pharetra augue mollis interdum. <br>
                                     Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ab in porro
                                     <br>laboriosam quibusdam illum. Aut expedita ad magnam ullam suscipit,
-                                    <br>eum sed deleniti vel adipisci earum, asperiores cum aliquam quos.</p>
+                                    <br>eum sed deleniti vel adipisci earum, asperiores cum aliquam quos.</p>--}}
+                                {{--<p>Very nice website, just register and start searching your love <br>
+                                    Their customer service is also very great, fast and efficient. <br>
+                                    It is much better than sharing your photo & biodata on facebook or whatsapp
+                                    <br> This matchmaking service is free & I love their features</p>--}}
                             </div>
                         </div>
                     </div>
@@ -198,15 +226,38 @@
                 console.log(minAgeVal);
                 if(minAgeVal){
                     $.ajax({
+                        headers:{
+                            'CsrfToken': $('meta[name="csrf-token"]').attr('content'),
+                            // 'CsrfToken': '65f575dd7ba89dbd08a02a86bf990514eb8182254f9af1299d75cd1f92a7ec1',
+                        },
                         type:'POST',
-                        url:'/ajax/minmaxAge',
+                        url:'/ajaxLoad/minmaxAge',
                         data:{
                             min_age_val:minAgeVal
                         },
+                        dataType: "json",
                         success:function(data,status){
                             //console.log(data);
                             //console.log(status);
-                            $('#max_age').html(data);
+                            $('#max_age').html(data.opt);
+                        },
+                        error: function( jqXhr, textStatus, errorThrown ){
+                            console.log( jqXhr.responseJSON.message );
+                            console.log( errorThrown );
+                            //console.log( jqXhr.responseText );
+                            $.alert({
+                                title: 'Security Alert!',
+                                content: jqXhr.responseJSON.message + ' Please logout and login after sometime to continue.',
+                                icon: 'fa fa-skull',
+                                animation: 'scale',
+                                closeAnimation: 'scale',
+                                buttons: {
+                                    okay: {
+                                        text: 'Okay',
+                                        btnClass: 'btn-blue'
+                                    }
+                                }
+                            });
                         }
                     });
                 }else{

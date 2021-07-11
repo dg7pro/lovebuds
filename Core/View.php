@@ -101,28 +101,12 @@ class View
         if($blade === null){
             $blade = new Blade(dirname(__DIR__) . '/App/Views',dirname(__DIR__) . '/App/Views/cache');
         }
-        /*$user =Auth::getUser();
-        $displayName = $user->name==''?$user->pid:$user->name;
-
-        $blade->share('authUser',$user);
-        $blade->share('displayName',$displayName);*/
 
         $user = Auth::getUser();
 
         $blade->share('authUser',$user);
-        $blade->share('displayName',Auth::displayName());
         $blade->share('flash_messages',Flash::getMessage());
 
-       /* if($user) {
-            $blade->share('user_likes_array', $user->likesArr());
-            $blade->share('user_shorts_array', $user->shortsArr());
-            $blade->share('user_hides_array', $user->hidesArr());
-        }
-        else{
-            $blade->share('user_likes_array', []);
-            $blade->share('user_shorts_array', []);
-            $blade->share('user_hides_array', []);
-        }*/
         return $blade;
     }
 

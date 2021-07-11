@@ -8,7 +8,6 @@
         <h3 class="text-blue">
             Change Avatar
         </h3>
-        {{--<p>Select the new avatar image for the user as the avatar image was disapproved.</p>--}}
 
         <div class="row mt-3">
             <div class="col-md-12">

@@ -3,6 +3,7 @@
 
 namespace App\Controllers;
 
+use App\Csrf;
 use App\Flash;
 use App\Models\User;
 use App\Models\UserVariables;
@@ -32,6 +33,12 @@ class Register extends Controller
     {
         /*var_dump($_POST);
         exit();*/
+        $csrf = new Csrf($_POST['token']);
+        if(!$csrf->validate()){
+            unset($_SESSION["csrf_token"]);
+            die("CSRF token validation failed");
+        }
+
         $user = new User($_POST);
         if($user->save()){
 

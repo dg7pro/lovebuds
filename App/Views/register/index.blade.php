@@ -10,12 +10,19 @@
 
     <!-- registration section -->
     <section class="main">
+
+        @include('layouts.partials.alert')
+
         <h1 class="large text-heading">
             Sign Up
         </h1>
         <p class="lead"><i class="fas fa-user"> </i> Create Your Account</p>
 
         <form action="{{'/register/create'}}" class="form" method="post" autocomplete="off">
+
+            <div>
+                <input type="hidden" name="token" value="{{$_SESSION['csrf_token']}}" />
+            </div>
             <div class="form-group inputWithIcon">
                 <select id="cFor" name="cFor" required>
                     <option value='' style="color:gray">Creating profile for</option>
@@ -38,19 +45,14 @@
             </div>
 
             <div class="form-group inputWithIcon">
-               {{-- <label for="email" style="margin-bottom: 0; padding-left: 0.25rem">Email:
-                    <span id="email_msg" class="text-red"></span>
-                </label>--}}
+
                 <input type="email" id="email" name="email" placeholder="Email Address" required autocomplete="off" >
                 <i id="email_ok" class="fas fa-check-circle text-green" hidden=""></i>
                 <i id="email_not_ok" class="fas fa-times-circle text-red" hidden></i>
 
-               {{-- <small id="email_msg" class="text-red" hidden></small>--}}
             </div>
             <div class="form-group inputWithIcon">
-                {{--<label for="mobile" style="margin-bottom: 0; padding-left: 0.25rem">Mobile:
-                    <span id="mb_msg" class="form-text"></span>
-                </label>--}}
+
                 <input type="text" id="mobile" name="mobile" placeholder="Mobile no (10 digits)" required autocomplete="off">
                 <i id="mb_ok" class="fas fa-check-circle text-green" hidden=""></i>
                 <i id="mb_not_ok" class="fas fa-times-circle text-red" hidden></i>
@@ -59,18 +61,14 @@
                 </small>
             </div>
             <div class="form-group inputWithIcon">
-                {{--<label for="newPassword" style="margin-bottom: 0; padding-left: 0.25rem">Password:
-                    <span id="pw_msg" class="form-text"></span>
-                </label>--}}
+
                 <input type="password" id="newPassword" name="password" placeholder="New Password" minlength="6" required autocomplete="new-password">
                 <i id="pw_ok" class="fas fa-check-circle text-green" hidden=""></i>
                 <i id="pw_not_ok" class="fas fa-times-circle text-red" hidden></i>
             </div>
 
             <div class="form-group inputWithIcon">
-               {{-- <label for="cPassword" style="margin-bottom: 0; padding-left: 0.25rem">Confirm Password:
-                    <span id="cpw_msg" class="form-text"></span>
-                </label>--}}
+
                 <input type="password" id="cPassword" name="cPassword" placeholder="Retype Password" minlength="6" required >
                 {{--<i id="cpw_not_ok" class="fas fa-times-circle text-red" hidden ></i>--}}
                 <i id="cpw_ok" class="fas fa-check-circle text-green" hidden ></i>
@@ -79,7 +77,7 @@
 
             <input type="submit" value="Register" class="btn btn-green">
         </form>
-        <p class="may-2">Already have an account? <a href="login.html">Sign In</a></p>
+        <p class="may-2">Already have an account? <a href="{{'/login/index'}}">Sign In</a></p>
 
     </section>
     <!-- registration ends -->
@@ -90,10 +88,11 @@
     <script>
         $(document).ready(function() {
             $('#cFor').on('blur', function () {
-                if ($('#newPassword').val() === '') {
-                    $('#cfor_ok').attr('hidden',false);
-                } else
+                if ($('#cFor').val() === '') {
                     $('#cfor_ok').attr('hidden',true);
+                } else{
+                    $('#cfor_ok').attr('hidden',false);
+                }
             });
 
             $('#newPassword, #cPassword').on('keyup', function () {
@@ -108,6 +107,7 @@
             });
         });
     </script>
+
     <script>
         var password = document.getElementById("newPassword")
             , confirm_password = document.getElementById("cPassword");
@@ -138,45 +138,9 @@
         });
     </script>
 
-    <script>
-        $(document).ready(function(){
-
-            // ==================================
-            // Getting Gender
-            // Toggle Block to select gender
-            // ==================================
-            $('#cFor').change(function(){
-                var cfor = $(this).children("option:selected").val();
-                //alert("You have selected  - " + cfor);
-                //console.log(cfor);
-                $.ajax({
-                    url:"/Ajax/selectGender",
-                    method:'POST',
-                    data:{cfor:cfor},
-                    dataType:"json",
-                    success:function (data) {
-                        console.log(data);
-                        if(data.gender==='ambiguous'){
-                            $('#genderDiv').show('slow');
-                            $('input[name=gender]').attr('checked', false);
-                        }
-                        else{
-
-                            $('input[name=gender][value='+data.val+']').attr('checked', true);
-                            $('#genderDiv').hide('slow');
-                        }
-
-                    }
-                });
-            });
-
-        });
-    </script>
-
-    @include('request.check_email')
-    @include('request.check_mobile')
-    @include('request.check_password')
-{{--    @include('request.check_confirm_password')--}}
-
+    @include('request.register.select_gender')
+    @include('request.register.check_email')
+    @include('request.register.check_mobile')
+    @include('request.register.check_password')
 
 @endsection

@@ -1,6 +1,5 @@
 @extends('layouts.app')
 
-
 @section('page_css')
     <link rel="stylesheet" href="/css/select2.min.css">
     <style>
@@ -42,9 +41,8 @@
                     </a>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <a class="btn btn-blue nav-item my_notification" id="pills-contact-tab" data-toggle="pill" href="#pills-contact"
+                    <a class="btn btn-orange nav-item my_notification" id="pills-contact-tab" data-toggle="pill" href="#pills-contact"
                        role="tab" aria-controls="pills-contact" aria-selected="false">
-                       {{-- <i class="fas fa-graduation-cap text-white"></i>--}}
                         <i class="fas fa-bell text-white"></i>
                         Notification
                     </a>
@@ -56,38 +54,16 @@
                         <i class="fab fa-facebook text-white"></i>
                         Share
                     </a>
-                    {{--<a href="create-profile.html" class="btn btn-orange" data-toggle="modal" data-target="#settingsModal">
-                        <i class="fas fa-cog text-white"></i>
-                        Setting
-                    </a>--}}
                 </li>
                 <li class="nav-item" role="presentation">
-                    <a class="btn btn-blue  nav-item" id="pills-contact-tab" data-toggle="pill" href="#pills-partner-preference"
+                    <a class="btn btn-green  nav-item" id="pills-contact-tab" data-toggle="pill" href="#pills-partner-preference"
                        role="tab" aria-controls="pills-contact" aria-selected="false">
                         <i class="fas fa-heart text-white"></i>
                         Partner Preference
                     </a>
-                    {{--<a href="" class="btn btn-green" data-toggle="modal" data-target="#partnerPreferenceModal">
-                        <i class="fas fa-graduation-cap text-white"></i>
-                        Partner Preference
-                    </a>--}}
+
                 </li>
             </ul>
-            {{-- <a href="{{'/account/my-album'}}" class="btn btn-yellow">
-                <i class="fab fa-black-tie text-white"></i>
-                Manage Album
-            </a>--}}
-            {{--<a href="create-profile.html" class="btn btn-coco">
-                <i class="fas fa-graduation-cap text-white"></i>
-                Family
-            </a>--}}
-           {{-- <a href="create-profile.html" class="btn btn-green">
-                <i class="fas fa-graduation-cap text-white"></i>
-                Kundli
-            </a>--}}
-
-
-
         </div>
 
         <div class="tab-content" id="pills-tabContent">
@@ -95,14 +71,10 @@
             <!-- My Profile tab -->
             <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
 
-{{--                <h3 class="may-2">Basic Information--}}
-{{--                    <button class="btn btn-blue btn-sm">Edit</button>--}}
-{{--                </h3>--}}
                 <table class="ju-table">
                     <thead>
                     <tr>
                         <th colspan="2">Basic Info
-                            {{--<span class="badge badge-info"><a href="#" style="text-decoration: none; color: white">Edit</a></span>--}}
                             <a href="{{'/account/edit-profile#basic-info-card'}}" class="btn btn-blue btn-sm" role="button">Edit</a>
                         </th>
                     </tr>
@@ -111,12 +83,10 @@
                     <tr>
                         <td>Profile Id:</td>
                         <td class="hide-sm text-primary"><b>{{$authUser->pid}}</b></td>
-                        {{--<td><button class="btn btn-blue">Edit</button></td>--}}
                     </tr>
                     <tr>
                         <td>Full name:</td>
                         <td class="hide-sm">{{ucfirst($authUser->first_name).' '.ucfirst($authUser->last_name)}}{{$authUser->gender==1? ' (Male)': ' (Female)' }}</td>
-                        {{--<td><button class="btn btn-blue">Edit</button></td>--}}
                     </tr>
                     <tr>
                         <td>Date of Birth</td>
@@ -124,7 +94,14 @@
                             {{ucfirst($authUser->dob)}}
                             {{' ('.Carbon\Carbon::createFromDate($authUser->dob)->age.'yrs)'}}
                         </td>
-                       {{-- <td><button class="btn btn-blue">Edit</button></td>--}}
+                    </tr>
+                    <tr>
+                        <td>Caste</td>
+                        <td class="hide-sm">{!! ($authUser->caste)?$authUser->caste:$pf !!}</td>
+                    </tr>
+                    <tr>
+                        <td>Status</td>
+                        <td class="hide-sm">{!! ($authUser->manglik)?$authUser->manglik:$pf !!}</td>
                     </tr>
 
                     </tbody>
@@ -134,28 +111,25 @@
                     <thead>
                     <tr>
                         <th colspan="2">Education & Career
-                            {{--<span class="badge badge-info"><a href="#" style="text-decoration: none; color: white">Edit</a></span>--}}
-                            <button class="btn btn-yellow btn-sm">Edit</button>
+                            {{--<button class="btn btn-yellow btn-sm">Edit</button>--}}
+                            <a href="{{'/account/edit-profile#edu-career-card'}}" class="btn btn-yellow btn-sm" role="button">Edit</a>
                         </th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr>
                         <td>Education:</td>
-                        <td class="hide-sm">{{$authUser->edu}}</td>
-                        {{--<td><button class="btn btn-blue">Edit</button></td>--}}
+                        <td class="hide-sm">{!! ($authUser->edu)?$authUser->edu:$pf !!}</td>
                     </tr>
                     <tr>
                         <td>Profession:</td>
-                        <td class="hide-sm">{{$authUser->occ.' ('.$authUser->sector.') '}}</td>
-                        {{--<td><button class="btn btn-blue">Edit</button></td>--}}
+                        <td class="hide-sm">{!! ($authUser->occ)?$authUser->occ:$pf !!}</td>
                     </tr>
                     <tr>
                         <td>Income:</td>
                         <td class="hide-sm">
-                            {{$authUser->income.' / year'}}
+                            {!! ($authUser->income)?$authUser->income.' / year':$pf !!}
                         </td>
-                        {{-- <td><button class="btn btn-blue">Edit</button></td>--}}
                     </tr>
 
                     </tbody>
@@ -165,21 +139,19 @@
                     <thead>
                     <tr>
                         <th colspan="2">Family Details
-                            {{--<span class="badge badge-info"><a href="#" style="text-decoration: none; color: white">Edit</a></span>--}}
-                            <button class="btn btn-yellow btn-sm">Edit</button>
+                            {{--<button class="btn btn-yellow btn-sm">Edit</button>--}}
+                            <a href="{{'/account/edit-profile#family_details'}}" class="btn btn-yellow btn-sm" role="button">Edit</a>
                         </th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr>
                         <td>Father:</td>
-                        <td class="hide-sm">{{$authUser->fname.' ('.$authUser->faa. ')'}}</td>
-                        {{--<td><button class="btn btn-blue">Edit</button></td>--}}
+                        <td class="hide-sm">{!! ($authUser->father_name) ? $authUser->father_name : $pf  !!}</td>
                     </tr>
                     <tr>
                         <td>Mother:</td>
-                        <td class="hide-sm">{{$authUser->mname.' ('.$authUser->maa. ')'}}</td>
-                        {{--<td><button class="btn btn-blue">Edit</button></td>--}}
+                        <td class="hide-sm">{!! ($authUser-> father_name) ? $authUser->father_name : $pf  !!}</td>
                     </tr>
 
                     </tbody>
@@ -189,55 +161,26 @@
                     <thead>
                     <tr>
                         <th colspan="2">Contact Details
-                            {{--<span class="badge badge-info"><a href="#" style="text-decoration: none; color: white">Edit</a></span>--}}
-                            <button class="btn btn-pink btn-sm">Edit</button>
+                            <a class="btn btn-pink btn-sm" role="button" data-toggle="modal" data-target="#contactsModal">Edit</a>
                         </th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr>
                         <td>Mobile:</td>
-                        <td class="hide-sm">{{$authUser->mobile}}</td>
-                        {{--<td><button class="btn btn-blue">Edit</button></td>--}}
+                        <td class="hide-sm" id="mb-field">{{$authUser->mobile}}</td>
                     </tr>
                     <tr>
-                        <td>Whatsaap:</td>
-                        <td class="hide-sm">{{$authUser->whatsaap}}</td>
-                        {{--<td><button class="btn btn-blue">Edit</button></td>--}}
+                        <td>Whatsapp:</td>
+                        <td class="hide-sm" id="wa-field">{{$authUser->whatsapp}}</td>
                     </tr>
                     <tr>
                         <td>Email:</td>
                         <td class="hide-sm">{{$authUser->email}}</td>
-                        {{--<td><button class="btn btn-blue">Edit</button></td>--}}
                     </tr>
 
                     </tbody>
                 </table>
-
-                {{--<h3 class="may-2">Education & Career</h3>
-                <table class="ju-table">
-                    <thead>
-                    <tr>
-                        <th>Parameter</th>
-                        <th class="hide-sm">Value</th>
-                        <th>Change</th>
-
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td>Qualification</td>
-                        <td class="hide-sm">B.Tech(CS)</td>
-                        <td><button class="btn btn-danger">Delete</button></td>
-                    </tr>
-                    <tr>
-                        <td>Income</td>
-                        <td class="hide-sm">30k/month</td>
-                        <td><button class="btn btn-danger">Delete</button></td>
-                    </tr>
-
-                    </tbody>
-                </table>--}}
             </div>
             <!-- My Profile end -->
 
@@ -246,29 +189,34 @@
 
                 <div>
                     @if($image!=null)
-{{--                        <img src="{{'/uploaded/tmb/tn_'.$image->filename}}" class="img-thumbnail" alt="User Image" width="225px" height="auto"/><br>--}}
                         <img src="{{'/uploaded/pics/'.$image->filename}}" class="img-thumbnail" alt="User Image" width="225px" height="auto"/><br>
                     @else
                         <img src="{{'/img/'.($authUser->gender==1?'groom-grayscale.jpg':'bride-grayscale.jpg')}}" class="img-thumbnail" alt="User Image" width="225px" height="auto"/>
                     @endif
                 </div>
-
-
                 <div class="my-3">You can upload maximum of 3 photos. Your images should be single (no group images are allowed),
                     clear, sharp and front facing.</div>
-
-
                 <div>
-                    <div><span class=""><i class="fa fa-camera text-blue" aria-hidden="true"> </i> You can upload maximum of 3 photos</span></div>
-                    <div><span class=""><i class="fa fa-check text-green" aria-hidden="true"> </i> The photo has been approved and visible to others</span></div>
+                    {{--<div><span class=""><i class="fa fa-camera text-blue" aria-hidden="true"> </i> You can upload maximum of 3 photos</span></div>--}}
+                    <div><span class=""><i class="fa fa-upload text-blue" aria-hidden="true"></i> Upload and save your photo on server</span></div>
+                    <div><span class=""><i class="fa fa-crop text-orange" aria-hidden="true"></i> Crop and adjust your photo with photo edit tool before final uploading</span></div>
+                    <div><span class=""><i class="fa fa-trash text-red" aria-hidden="true"></i> Replace photo with better one  </span></div>
+                    {{--<div><span class=""><i class="fa fa-check text-green" aria-hidden="true"> </i> The photo has been approved and visible to others</span></div>
                     <div><span class=""><i class="fa fa-clock text-orange" aria-hidden="true"> </i> The photo has been submitted for screening, It is pending approval</span></div>
-                    <div><span class=""><i class="fa fa-window-close text-red" aria-hidden="true"> </i> The photo has been rejected by our moderation team</span></div>
+                    <div><span class=""><i class="fa fa-window-close text-red" aria-hidden="true"> </i> The photo has been rejected by our moderation team</span></div>--}}
                 </div>
 
-                <div class="buttons mt-3">
-                    <a href="{{'/account/my-album'}}" class="btn btn-blue">Upload Image</a>
-                    <a href="{{'/account/manage-photo'}}" class="btn btn-yellow">Manage Album</a>
-                </div>
+                @if($image!=null)
+                    <div class="buttons mt-3">
+                        <a href="{{'/account/my-album'}}" class="btn btn-blue">Upload Image</a>
+                        <a href="{{'/account/manage-photo'}}" class="btn btn-yellow">Manage Album</a>
+                    </div>
+                @else
+                    <div class="buttons mt-3">
+                        <a href="{{'/account/my-album'}}" class="btn btn-blue">Proceed to upload..</a>
+                    </div>
+                @endif
+
 
 
             </div>
@@ -277,24 +225,29 @@
             <!-- Notifications tab -->
             <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
                 <h4 class="text-center text-secondary">-- Notifications -- </h4>
-
                 <div id="records_content">
 
                 </div>
-                {{--@foreach($notifications as $notify)
-                    <div data-id="{{$notify->id}}" class="alert alert-info alert-dismissible fade show" role="alert">
-                        {!! $notify->message !!}
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                @endforeach--}}
-
             </div>
 
             <!-- Share tab -->
             <div class="tab-pane fade" id="pills-share" role="tabpanel" aria-labelledby="pills-contact-tab">
                 <h4 class="text-center text-secondary">-- Sharing is Caring -- </h4>
+
+                <div>
+                    <p>This is your website (build for the community) and it's services are also free
+                    ( & will remain so forever), so what you can do for this - free matrimonial service ?
+                        <br><b class="text-blue"><i>The answer is: Just a single share on facebook, is what we expect from you.</i></b></p>
+
+                    <p>Click the button below to share it on facebook and also help your friends in finding their perfect match too.
+                    In return of this simple word of mouth we will credit your JU-Matrimony account with <b class="text-blue"><i>100 contacts</i></b>
+                        (view contact numbers of 100 profiles). And it does not stops here:
+                        <br><b class="text-blue"><i>Share more no. of times to earn more credits</i></b></p>
+                </div>
+                <a class="btn btn-blue" id="shareBtn">
+                    <i class="fab fa-facebook text-white"></i>
+                    Share on Facebook
+                </a>
 
 
             </div>
@@ -308,16 +261,10 @@
 
                         <h4 class="text-blue mt-4">Select your caste preferences</h4>
                         <div class="form-group">
-                            <select multiple id="my-preferred-caste" class="js-example-basic-multiple select-multiple">
+                            <select multiple id="my-preferred-caste" class="js-example-basic-multiple select-multiple" required>
                                 @foreach($allCastes as $caste)
                                     <option value="{{$caste->value}}" {{in_array($caste->value,json_decode($authUser->mycastes))?'Selected':''}}>{{$caste->text}}</option>
                                 @endforeach
-{{--                                <option value="AL">Alabama</option>--}}
-{{--                                <option value="AL">UP</option>--}}
-{{--                                <option value="AL">Bihar</option>--}}
-{{--                                <option value="AL">WB</option>--}}
-{{--                                <option value="AL">MP</option>--}}
-{{--                                <option value="WY">Wyoming</option>--}}
                             </select>
                         </div>
 
@@ -334,20 +281,15 @@
                                 <label for="min_age">Age min:</label>
                                 <select id="min_age" name="min_age">
                                     <option value="" selected>Select</option>
-                                    {{--<option value=1>Hindu</option>
-                                    <option value=1>Muslim</option>--}}
                                     @foreach($age_rows as $row)
                                         <option value="{{$row}}" {{($authUser->min_age==$row)?'Selected':''}}>{{$row}}</option>
                                     @endforeach
-
                                 </select>
                             </div>
                             <div class="flex-field-2">
                                 <label for="max_age">Age max:</label>
                                 <select id="max_age" name="max_age">
                                     <option value="" selected>Select</option>
-                                    {{--<option value=1>Hindi</option>
-                                    <option value=1>English</option>--}}
                                     @foreach($age_rows as $row)
                                         <option value="{{$row}}" {{($authUser->max_age==$row)?'Selected':''}}>{{$row}}</option>
                                     @endforeach
@@ -363,8 +305,6 @@
                                     @foreach($heights as $ht)
                                         <option value="{{$ht->id}}" {{($authUser->min_ht==$ht->id)?'Selected':''}}>{{$ht->feet}}</option>
                                     @endforeach
-{{--                                    <option value=1>Hindu</option>--}}
-{{--                                    <option value=1>Muslim</option>--}}
                                 </select>
                             </div>
                             <div class="flex-field-2">
@@ -386,166 +326,40 @@
                         <button type="submit" class="btn btn-green" id="save-partner-preference" value="update_pp">Save Partner Preferences</button>
                     </div>
                 </div>
-
-
             </div>
-
-
         </div>
-
-
-
     </section>
     <!-- profiles section ends -->
 
     <!-- modals included -->
-{{--    @include('modal.settings')--}}
-{{--    @include('modal.partner-preference')--}}
+    @include('modal.contacts')
 
 @endsection
 
-
 @section('js')
 
-
-    <script>
-        //====================
-        // Partner Preference
-        //====================
-        $(document).ready(function(){
-            $('#min_age').on('change', function(){
-                var minAgeVal = $(this).val();
-                console.log(minAgeVal);
-                if(minAgeVal){
-                    $.ajax({
-                        type:'POST',
-                        url:'/ajax/minmaxAge',
-                        data:{
-                            min_age_val:minAgeVal
-                        },
-                        success:function(data,status){
-                            //console.log(data);
-                            //console.log(status);
-                            $('#max_age').html(data);
-                        }
-                    });
-                }else{
-                    $('#max_age').html('<option value="">min-age first</option>');
-                }
-            });
+<script>
+    $(document).ready(function(){
+        $('a[data-toggle="pill"]').on('show.bs.tab', function(e) {
+            localStorage.setItem('activeTab', $(e.target).attr('href'));
         });
-
-        $(document).ready(function(){
-            $('#min_ht').on('change', function(){
-                var minHtVal = $(this).val();
-                console.log(minHtVal);
-                if(minHtVal){
-                    $.ajax({
-                        type:'POST',
-                        url:'/ajax/minmaxHt',
-                        data:{
-                            min_ht_val:minHtVal
-                        },
-                        success:function(data,status){
-                            //console.log(data);
-                            //console.log(status);
-                            $('#max_ht').html(data);
-                        }
-                    });
-                }else{
-                    $('#max_ht').html('<option value="">min-ht first</option>');
-                }
-            });
-        });
-
-        $(document).ready(function (){
-            $('#save-partner-preference').on('click', function () {
-
-                var pp = $('#save-partner-preference').val();
-                var myCastes = $('#my-preferred-caste').val();
-                var cnb = ($('#cnb').is(':checked'))?1:0;
-                var minHt = $('#min_ht').val();
-                var maxHt = $('#max_ht').val();
-                var minAge = $('#min_age').val();
-                var maxAge = $('#max_age').val();
-                var pm = ($('#pm').is(':checked'))?1:0;
-
-                console.log(myCastes);
-                console.log(cnb);
-
-                $.ajax({
-                    url: "/ajax/updatePartnerPreference",
-                    method: 'post',
-                    data: {
-                        pp:pp,
-                        mycastes:myCastes,
-                        cnb:cnb,
-                        min_ht:minHt,
-                        max_ht:maxHt,
-                        min_age:minAge,
-                        max_age:maxAge,
-                        pm:pm
-                    },
-                    dataType: "json",
-                    success: function (data, status) {
-                        //var message = data.msg;
-                        setTimeout(function(){
-                            toastr.success(data.msg);
-                        }, 500);
-                        console.log(data);
-                        console.log(status);
-                    }
-                });
-            });
-
-        });
-    </script>
-
-    <script>
-        //====================
-        // Notifications
-        //====================
-        function marNotification(id){
-            console.log(id);
-            $.ajax({
-                url: "/ajax/mar-notification",
-                method: 'post',
-                data: {
-                    aid: id
-                },
-                dataType: "text",
-                success: function (data, status) {
-                    console.log(data);
-                    console.log(status);
-                }
-            });
+        var activeTab = localStorage.getItem('activeTab');
+        if(activeTab){
+            $('#pills-tab a[href="' + activeTab + '"]').tab('show');
         }
+    });
+</script>
 
-        function readNotifications() {
-            var readrecord = "readrecord";
-            $.ajax({
-                url: "/ajax/unreadNotifications",
-                type: "POST",
-                data: {
-                    readrecord:readrecord
-                },
-                success: function(data,status){
-                    //console.log(data);
-                    $('#records_content').html(data);
-                }
-            })
-        }
+@include('request.dashboard.facebook')
+@include('request.dashboard.contact_info')
+@include('request.dashboard.partner_preference')
+@include('request.dashboard.notification')
 
-        $('.my_notification').on('click', function(){
-            readNotifications();
-            console.log('my current notifications');
-        });
-    </script>
+<script src="/js/select2.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('.js-example-basic-multiple').select2();
+    });
+</script>
 
-    <script src="/js/select2.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $('.js-example-basic-multiple').select2();
-        });
-    </script>
 @endsection

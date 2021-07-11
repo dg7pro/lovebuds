@@ -3,6 +3,10 @@
 namespace App\Controllers;
 
 
+use App\Flash;
+use App\Lib\Helpers;
+use App\Models\Setting;
+use App\Models\User;
 use App\Models\UserVariables;
 use Core\Controller;
 use \Core\View;
@@ -22,7 +26,6 @@ class Home extends Controller
      */
     public function indexAction()
     {
-        //$this->requireGuest();
 
         View::renderBlade('home/index',[
             'languages'=>UserVariables::languages(),
@@ -30,6 +33,82 @@ class Home extends Controller
             'age_rows'=>UserVariables::getAgeRows()
         ]);
 
+    }
+
+    /*
+     * Testing Functions
+     * Just for reference and testing
+     * tobe deleted
+     * */
+
+    public function wrongAction(){
+
+        View::renderBlade('home/wrong');
+
+    }
+
+    public function session(){
+        var_dump($_SESSION);
+    }
+
+    public function whatsappAction(){
+
+        $self1 = 918887610230;
+        $self2 = 917565097233;
+        $other = 919335333717;
+        View::renderBlade('home/whatsapp',[
+            'self1'=>$self1,
+            'self2'=>$self2,
+            'other'=>$other
+        ]);
+    }
+
+    public function secureAction(){
+
+        /*$e = 'geeksforgeeks@gmail.com ';
+        $e_san = filter_var($e,FILTER_SANITIZE_EMAIL);
+        echo $e_san;
+        echo "<br>";
+        $flag = filter_var($e,FILTER_VALIDATE_EMAIL);
+        echo $flag;*/
+
+        /*$profiles = User::newlist(1503);
+        var_dump($profiles);*/
+
+        $s = new Setting();
+        echo $s->get_partner_preference_search();
+
+    }
+
+    public function testAction(){
+
+        $cUser = User::findByID(1);
+        //var_dump($cUser->langs);
+        echo $cUser->langs == "[]"? json_encode($cUser->langs):'false';
+
+    }
+
+    public function fbImgAction(){
+
+        echo '<img src="/img/showcase.jpg">';
+
+    }
+
+    public function font(){
+        View::renderBlade('home/font');
+    }
+
+    public function short(){
+        $results = User::testQuery($_SESSION['user_id'],0,10);
+        //var_dump($results);
+        Helpers::dnd($results);
+        exit();
+    }
+    public function shortNew(){
+        $results = User::testQuery2($_SESSION['user_id'],0,10);
+        //var_dump($results);
+        Helpers::dnd($results);
+        exit();
     }
 
 }

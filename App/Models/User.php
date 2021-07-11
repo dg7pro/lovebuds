@@ -3,7 +3,6 @@
 namespace App\Models;
 
 
-use App\Lib\Helpers;
 use App\Mail;
 use App\Token;
 use Core\Model;
@@ -11,10 +10,10 @@ use Core\View;
 use PDO;
 use Faker;
 
+
 /**
- * Example user model
- *
- * PHP version 7.0
+ * Class User
+ * @package App\Models
  */
 class User extends \Core\Model
 {
@@ -34,7 +33,7 @@ class User extends \Core\Model
      * User constructor.
      * @param array $data
      */
-    public function __construct($data=[])
+    public function __construct(array $data=[])
     {
         foreach ($data as $key => $value){
             $this->$key=$value;
@@ -52,7 +51,8 @@ class User extends \Core\Model
      *
      * @return bool|false
      */
-    public function save(){
+    public function save(): bool
+    {
 
         $this->validate();
 
@@ -132,24 +132,70 @@ class User extends \Core\Model
             $this->errors[] = 'Mobile already exists';
         }
 
-        if (strlen($this->password) < 5) {
-            $this->errors[] = 'Please enter at least 6 characters for the password';
+        $pattern = '/^[0-9A-Za-z!@#$%^&*?]{8,32}$/';
+        if (preg_match($pattern, $this->password) == 0) {
+            $this->errors[] = 'Minimum 8 digits alphabet, number and special character !@#$%^&*? ';
         }
 
-        if (preg_match('/.*[a-z]+.*/i', $this->password) == 0) {
-            $this->errors[] = 'Password needs at least one letter';
+//        if (strlen($this->password) < 5) {
+//            $this->errors[] = 'Please enter at least 6 characters for the password';
+//        }
+//
+//        if (preg_match('/.*[a-z]+.*/i', $this->password) == 0) {
+//            $this->errors[] = 'Password needs at least one letter';
+//        }
+//
+//        if (preg_match('/.*\d+.*/i', $this->password) == 0) {
+//            $this->errors[] = 'Password needs at least one number';
+//        }
+    }
+
+    /**
+     * Validate Mobile
+     */
+    public function validateMobile(){
+
+        // mobile address
+        if (!preg_match("/^[6-9]\d{9}$/",$this->mobile)) {
+            $this->errors[] = 'Invalid mobile number';
         }
 
-        if (preg_match('/.*\d+.*/i', $this->password) == 0) {
-            $this->errors[] = 'Password needs at least one number';
+        // whatsapp address
+        if (!preg_match("/^[6-9]\d{9}$/",$this->whatsapp)) {
+            $this->errors[] = 'Invalid whatsapp number';
         }
+
+    }
+
+
+    /**
+     * Validate name
+     */
+    public function validateName(){
+
+        $f_name = filter_var($this->first_name, FILTER_SANITIZE_STRING);
+        if (!preg_match("/^[A-Za-z]{3,}+([\ A-Za-z]+)*$/",$f_name)) {
+            $this->errors[] = 'Invalid first name';
+        }
+
+        $l_name = filter_var($this->last_name, FILTER_SANITIZE_STRING);
+        if (!preg_match("/^[A-Za-z]{3,}$/",$l_name)) {
+            $this->errors[] = 'Invalid last name';
+        }
+
+        // whatsapp address
+        if (!preg_match("/^[6-9]\d{9}$/",$this->whatsapp)) {
+            $this->errors[] = 'Invalid whatsapp number';
+        }
+
     }
 
     /**
      * @param $size
      * @return string
      */
-    public static function generateProfileId($size){
+    public static function generateProfileId($size): string
+    {
 
         $alpha_key = '';
         $keys = range('A', 'Z');
@@ -175,7 +221,8 @@ class User extends \Core\Model
      * @param $gender
      * @return string
      */
-    public static function getDefaultAvatar($gender){
+    public static function getDefaultAvatar($gender): string
+    {
 
         return $gender==1?'avatar_groom.jpg':'avatar_bride.jpg';
     }
@@ -206,7 +253,8 @@ class User extends \Core\Model
      * Used to remember user at database level
      * @return bool
      */
-    public function rememberLogin(){
+    public function rememberLogin(): bool
+    {
 
         $token = new Token();
         $hashed_token = $token->getHash();
@@ -226,6 +274,7 @@ class User extends \Core\Model
         return $stmt->execute();
     }
 
+
     /* **************************************
       * Section - 3
       * Find User Functions
@@ -237,7 +286,8 @@ class User extends \Core\Model
      * @param null $ignore_id
      * @return bool
      */
-    public function emailExists($email, $ignore_id=null){
+    public function emailExists($email, $ignore_id=null): bool
+    {
 
         $user = static::findByEmail($email);
 
@@ -255,7 +305,8 @@ class User extends \Core\Model
      * @param string $ignore_id
      * @return bool
      */
-    public function mobileExists($mobile, $ignore_id=''){
+    public function mobileExists($mobile, $ignore_id=''): bool
+    {
 
         $user = static::findByMobile($mobile);
 
@@ -308,69 +359,9 @@ class User extends \Core\Model
      */
     public static function findByID($id){
 
-        //$sql = "SELECT * FROM users WHERE id= :id";
+        $sql = self::majorDotSql();
+        $sql .= "WHERE users.id= :id";
 
-        $sql = "SELECT users.*,
-            heights.feet as ht, 
-            religions.name as religion,
-            languages.text as lang,
-            maritals.status as mstatus,
-            educations.name as edu,
-            degrees.name as deg,
-            universities.name as university,
-            occupations.name as occ,
-            sectors.name as sector,
-            incomes.level as income,
-            fathers.status as faa,
-            mothers.status as maa,
-            fam_affluence.status as fama,
-            fam_values.name as famv,
-            fam_types.name as famt,
-            fam_incomes.level as fami,
-            diets.type as diet,
-            smokes.status as smoke,
-            drinks.status as drink,
-            bodies.type as body,
-            complexions.type as complexion,
-            blood_groups.type as bg,
-            thalassemia.status as thal,
-            challenged.status as chal,
-            citizenship.status as res,
-            signs.text as sun,
-            rashis.text as rashi,
-            nakshatras.text as nak,
-            mangliks.status as manglik
-            FROM users
-            LEFT JOIN heights ON heights.id = users.height_id
-            LEFT JOIN religions ON religions.id = users.religion_id
-            LEFT JOIN languages ON languages.value = users.community_id
-            LEFT JOIN maritals ON maritals.id = users.marital_id    
-            LEFT JOIN educations ON educations.id = users.education_id
-            LEFT JOIN degrees ON degrees.id = users.degree_id
-            LEFT JOIN universities ON universities.id = users.university_id
-            LEFT JOIN occupations ON occupations.id = users.occupation_id
-            LEFT JOIN sectors ON sectors.id = users.sector_id
-            LEFT JOIN incomes ON incomes.id = users.income_id
-            LEFT JOIN fathers ON fathers.id = users.father_id
-            LEFT JOIN mothers ON mothers.id = users.mother_id
-            LEFT JOIN fam_affluence ON fam_affluence.id = users.famAffluence_id
-            LEFT JOIN fam_values ON fam_values.id = users.famValue_id
-            LEFT JOIN fam_types ON fam_types.id = users.famType_id
-            LEFT JOIN fam_incomes ON fam_incomes.id = users.famIncome_id
-            LEFT JOIN diets ON diets.id = users.diet_id
-            LEFT JOIN smokes ON smokes.id = users.smoke_id
-            LEFT JOIN drinks ON drinks.id = users.drink_id
-            LEFT JOIN bodies ON bodies.id = users.body_id
-            LEFT JOIN complexions ON complexions.id = users.complexion_id
-            LEFT JOIN blood_groups ON blood_groups.id = users.bGroup_id
-            LEFT JOIN thalassemia On thalassemia.id = users.thalassemia_id
-            LEFT JOIN challenged ON challenged.id = users.challenged_id
-            LEFT JOIN citizenship ON citizenship.id = users.citizenship_id
-            LEFT JOIN signs ON signs.id = users.sun_id
-            LEFT JOIN rashis ON rashis.id = users.moon_id
-            LEFT JOIN nakshatras ON nakshatras.id = users.nakshatra_id
-            LEFT JOIN mangliks ON mangliks.id = users.manglik_id
-            WHERE users.id= :id";
         $db = static::getDB();
 
         $stmt=$db->prepare($sql);
@@ -388,10 +379,28 @@ class User extends \Core\Model
      */
     public static function findByProfileId($pid){
 
-        $sql = "SELECT users.*,
+        $sql = self::majorDotSql();
+        $sql .= "WHERE pid=?";
+
+        $pdo = static::getDB();
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$pid]);
+
+        return $stmt->fetch(PDO::FETCH_OBJ);
+    }
+
+    /**
+     * @return string
+     */
+    protected static function majorDotSql(): string
+    {
+
+        return $sql = "SELECT users.*,
             heights.feet as ht, 
             religions.name as religion,
-            languages.text as lang,
+            communities.name as lang,
+            countries.name as country,
+            castes.text as caste,
             maritals.status as mstatus,
             educations.name as edu,
             degrees.name as deg,
@@ -421,7 +430,9 @@ class User extends \Core\Model
             FROM users
             LEFT JOIN heights ON heights.id = users.height_id
             LEFT JOIN religions ON religions.id = users.religion_id
-            LEFT JOIN languages ON languages.value = users.community_id
+            LEFT JOIN communities ON communities.id = users.community_id    
+            LEFT JOIN countries ON countries.id = users.country_id    
+            LEFT JOIN castes ON castes.value = users.caste_id     
             LEFT JOIN maritals ON maritals.id = users.marital_id    
             LEFT JOIN educations ON educations.id = users.education_id
             LEFT JOIN degrees ON degrees.id = users.degree_id
@@ -448,13 +459,151 @@ class User extends \Core\Model
             LEFT JOIN rashis ON rashis.id = users.moon_id
             LEFT JOIN nakshatras ON nakshatras.id = users.nakshatra_id
             LEFT JOIN mangliks ON mangliks.id = users.manglik_id
-            WHERE pid=?";
+        ";
+    }
 
-        $pdo = static::getDB();
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute([$pid]);
+    /**
+     * @return string
+     */
+    protected static function minorDotSql(): string
+    {
 
-        return $stmt->fetch(PDO::FETCH_OBJ);
+        return "SELECT   
+            users.id,
+            users.pid,
+            users.email,
+            users.first_name,
+            users.last_name,
+            users.gender,
+            users.dob,
+            users.mobile,
+            users.height_id,
+            users.manglik_id,
+            users.state,
+            users.district,
+            
+            images.user_id as iuid,
+            images.filename,
+            images.pp,
+            images.linked,
+            images.approved,
+            
+            heights.ft as ht, 
+            religions.name as religion,
+            communities.name as lang,
+            countries.name as country,
+            incomes.level as income,
+            maritals.status as mstatus,
+            mangliks.status as manglik,
+            castes.text as caste,
+            
+            users.horoscope, 
+            educations.name as edu,
+            occupations.name as occ,
+            diets.type as diet,
+            smokes.status as smoke,
+            drinks.status as drink,
+            challenged.status as challeng,    
+            move_profile.num as mov, 
+                        
+            users.hiv,
+            users.rsa
+            
+            FROM users
+            
+            LEFT JOIN images ON images.user_id = users.id
+            
+            LEFT JOIN heights ON heights.id = users.height_id
+            LEFT JOIN religions ON religions.id = users.religion_id
+            LEFT JOIN communities ON communities.id = users.community_id
+            LEFT JOIN countries ON countries.id = users.country_id
+            LEFT JOIN incomes ON incomes.id = users.income_id
+            LEFT JOIN maritals ON maritals.id = users.marital_id
+            LEFT JOIN mangliks ON mangliks.id = users.manglik_id
+            LEFT JOIN castes ON castes.value = users.caste_id    
+            
+            LEFT JOIN educations ON educations.id = users.education_id
+            LEFT JOIN occupations ON occupations.id = users.occupation_id
+            
+            LEFT JOIN diets ON diets.id = users.diet_id
+            LEFT JOIN smokes ON smokes.id = users.smoke_id
+            LEFT JOIN drinks ON drinks.id = users.drink_id
+            LEFT JOIN challenged ON challenged.id = users.challenged_id
+            LEFT JOIN move_profile ON move_profile.receiver = users.id
+
+            ";
+    }
+
+    /**
+     * @return string
+     */
+    protected static function minorDotSql2(): string
+    {
+
+        return "SELECT    
+            users.id,
+            users.pid,
+            users.email,
+            users.first_name,
+            users.last_name,
+            users.gender,
+            users.dob,
+            users.mobile,
+            users.height_id,
+            users.manglik_id,
+            users.state,
+            users.district,
+            
+            images.user_id as iuid,
+            images.filename,
+            images.pp,
+            images.linked,
+            images.approved,
+            
+            heights.ft as ht, 
+            religions.name as religion,
+            communities.name as lang,
+            countries.name as country,
+            incomes.level as income,
+            maritals.status as mstatus,
+            mangliks.status as manglik,
+            castes.text as caste,
+            
+            users.horoscope, 
+            educations.name as edu,
+            occupations.name as occ,
+            diets.type as diet,
+            smokes.status as smoke,
+            drinks.status as drink,
+            challenged.status as challeng,    
+            visit_profile.sender as visitor,   
+                        
+            users.hiv,
+            users.rsa
+            
+            FROM users
+            
+            LEFT JOIN images ON images.user_id = users.id
+            
+            LEFT JOIN heights ON heights.id = users.height_id
+            LEFT JOIN religions ON religions.id = users.religion_id
+            LEFT JOIN communities ON communities.id = users.community_id
+            LEFT JOIN countries ON countries.id = users.country_id
+            LEFT JOIN incomes ON incomes.id = users.income_id
+            LEFT JOIN maritals ON maritals.id = users.marital_id
+            LEFT JOIN mangliks ON mangliks.id = users.manglik_id
+            LEFT JOIN castes ON castes.value = users.caste_id    
+            
+            LEFT JOIN educations ON educations.id = users.education_id
+            LEFT JOIN occupations ON occupations.id = users.occupation_id
+            
+            LEFT JOIN diets ON diets.id = users.diet_id
+            LEFT JOIN smokes ON smokes.id = users.smoke_id
+            LEFT JOIN drinks ON drinks.id = users.drink_id
+            LEFT JOIN challenged ON challenged.id = users.challenged_id
+            LEFT JOIN visit_profile ON visit_profile.sender = users.id
+
+            ";
     }
 
     /* **************************************
@@ -467,7 +616,8 @@ class User extends \Core\Model
      * @param $time
      * @return bool
      */
-    public function updateLastUserActivity($time){
+    public function updateLastUserActivity($time): bool
+    {
 
         $id = $this->id;
         $sql = "UPDATE users SET last_activity=? WHERE id=?";
@@ -482,7 +632,8 @@ class User extends \Core\Model
      * @param $mobile
      * @return bool
      */
-    public static function updateMobile($userId, $mobile){
+    public static function updateMobile($userId, $mobile): bool
+    {
 
         $query = "UPDATE users SET mobile=? WHERE id=?";
         $pdo = Model::getDB();
@@ -492,7 +643,7 @@ class User extends \Core\Model
 
 
     /* **************************************
-     *  Section 7
+     *  Section 5
      *  Password Reset Functions
      * ***************************************
      * */
@@ -523,7 +674,7 @@ class User extends \Core\Model
      *
      * @return bool
      */
-    protected function startPasswordReset()
+    protected function startPasswordReset(): bool
     {
         $token = new Token();
         $hashed_token = $token->getHash();
@@ -605,7 +756,7 @@ class User extends \Core\Model
      *
      * @return boolean  True if the password was updated successfully, false otherwise
      */
-    public function resetPassword($password)
+    public function resetPassword(string $password): bool
     {
         $this->password = $password;
 
@@ -638,22 +789,15 @@ class User extends \Core\Model
      */
     protected function validateResetPassword(){
 
-        if (strlen($this->password) < 6) {
-            $this->errors[] = 'Please enter at least 6 characters for the password';
-        }
-
-        if (preg_match('/.*[a-z]+.*/i', $this->password) == 0) {
-            $this->errors[] = 'Password needs at least one letter';
-        }
-
-        if (preg_match('/.*\d+.*/i', $this->password) == 0) {
-            $this->errors[] = 'Password needs at least one number';
+        $pattern = '/^[0-9A-Za-z!@#$%^&*?]{8,32}$/';
+        if (preg_match($pattern, $this->password) == 0) {
+            $this->errors[] = 'Minimum 8 digits, can have alphabet, number and special character !@#$%^&*? ';
         }
 
     }
 
     /* *********************************
-     * Section 8
+     * Section 6
      * Account Activation Functions
      * **********************************
      * */
@@ -662,6 +806,7 @@ class User extends \Core\Model
      * Send an email to the user containing the activation link
      *
      * @return void
+     *
      */
     public function sendActivationEmail()
     {
@@ -699,180 +844,42 @@ class User extends \Core\Model
         $stmt->execute();
     }
 
+    /**
+     * @param $uid
+     * @return bool
+     */
+    public static function markFB($uid): bool
+    {
+
+        $sql = 'UPDATE users
+                SET fb_add = 1 
+                WHERE id = :uid';
+
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+
+        $stmt->bindValue(':uid', $uid, PDO::PARAM_INT);
+
+        return $stmt->execute();
+    }
 
     /* *********************************
-     *  Section 9
-     *  Advance Search
+     *  Section 7
+     *  Shortlist and visitors
+     * 8 functions
      * **********************************
      * */
 
     /**
      * @param $uid
+     * @param $pps
      * @return array
      */
-    public static function recentVisitor($uid): array
-    {
-
-        $sql = "SELECT
-    
-            users.id,
-            users.pid,
-            users.first_name,
-            users.last_name,
-            users.gender,
-            users.dob,
-            
-            images.user_id as iuid,
-            images.filename,
-            images.pp,
-            
-            heights.ft as ht, 
-            religions.name as religen,
-            languages.text as lang,
-            countries.name as country,
-            incomes.level as income,
-            maritals.status as mstatus,
-            mangliks.status as manglik,
-            districts.text as town,
-            
-            users.horoscope, 
-            educations.name as edu,
-            occupations.name as occ,
-            diets.type as diet,
-            smokes.status as smoke,
-            drinks.status as drink,
-            challenged.status as challeng,    
-            move_profile.num as mov,
-            visit_profile.sender as visitor,       
-            
-            users.hiv,
-            users.rsa
-            
-            FROM users
-            
-            LEFT JOIN images ON images.user_id = users.id
-            
-            LEFT JOIN heights ON heights.id = users.height_id
-            LEFT JOIN religions ON religions.id = users.religion_id
-            LEFT JOIN languages ON languages.value = users.language_id
-            LEFT JOIN countries ON countries.id = users.country_id
-            LEFT JOIN incomes ON incomes.id = users.income_id
-            LEFT JOIN maritals ON maritals.id = users.marital_id
-            LEFT JOIN mangliks ON mangliks.id = users.manglik_id
-            LEFT JOIN districts ON districts.id = users.district_id
-            
-            LEFT JOIN educations ON educations.id = users.education_id
-            LEFT JOIN occupations ON occupations.id = users.occupation_id
-            
-            LEFT JOIN diets ON diets.id = users.diet_id
-            LEFT JOIN smokes ON smokes.id = users.smoke_id
-            LEFT JOIN drinks ON drinks.id = users.drink_id
-            LEFT JOIN challenged ON challenged.id = users.challenged_id
-            LEFT JOIN move_profile ON move_profile.receiver = users.id
-            LEFT JOIN visit_profile ON visit_profile.sender = users.id
-            
-            WHERE visit_profile.sender IS NOT NULL AND users.is_active = 1
-       
-        ";
-
-        $sql .= " ORDER BY visit_profile.created_at DESC";
-        $sql .= " LIMIT 10";
-
-        $pdo = Model::getDB();
-        $stmt=$pdo->prepare($sql);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    }
-
-
-    /**
-     * @param $uid
-     * @return array
-     */
-    public static function shortlist($uid): array
-    {
-
-        $sql = "SELECT
-    
-            users.id,
-            users.pid,
-            users.first_name,
-            users.last_name,
-            users.gender,
-            users.dob,
-          
-            
-            images.user_id as iuid,
-            images.filename,
-            images.pp,
-            
-            heights.ft as ht, 
-            religions.name as religen,
-            languages.text as lang,
-            countries.name as country,
-            incomes.level as income,
-            maritals.status as mstatus,
-            mangliks.status as manglik,
-            districts.text as town,
-            
-            users.horoscope, 
-            educations.name as edu,
-            occupations.name as occ,
-            diets.type as diet,
-            smokes.status as smoke,
-            drinks.status as drink,
-            challenged.status as challeng,    
-            move_profile.num as mov, 
-            
-            users.hiv,
-            users.rsa
-            
-            FROM users
-            
-            LEFT JOIN images ON images.user_id = users.id
-            
-            LEFT JOIN heights ON heights.id = users.height_id
-            LEFT JOIN religions ON religions.id = users.religion_id
-            LEFT JOIN languages ON languages.value = users.language_id
-            LEFT JOIN countries ON countries.id = users.country_id
-            LEFT JOIN incomes ON incomes.id = users.income_id
-            LEFT JOIN maritals ON maritals.id = users.marital_id
-            LEFT JOIN mangliks ON mangliks.id = users.manglik_id
-            LEFT JOIN districts ON districts.id = users.district_id
-            
-            LEFT JOIN educations ON educations.id = users.education_id
-            LEFT JOIN occupations ON occupations.id = users.occupation_id
-            
-            LEFT JOIN diets ON diets.id = users.diet_id
-            LEFT JOIN smokes ON smokes.id = users.smoke_id
-            LEFT JOIN drinks ON drinks.id = users.drink_id
-            LEFT JOIN challenged ON challenged.id = users.challenged_id
-            LEFT JOIN move_profile ON move_profile.receiver = users.id            
-            
-            WHERE move_profile.sender= :id AND move_profile.num = 2 AND users.is_active=1
-       
-        ";
-
-        $sql .= " ORDER BY move_profile.created_at DESC";
-        $sql .= " LIMIT 10";
-
-        $pdo = Model::getDB();
-        $stmt=$pdo->prepare($sql);
-        $stmt->bindParam(':id',$uid,PDO::PARAM_INT);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    }
-
-    /**
-     * @param $uid
-     * @return array
-     */
-    public static function newlist($uid): array
+    public static function newlist($uid,$pps): array
     {
         $cUser = self::findByID($uid);
         $cg = $cUser->gender;
+        $rel = $cUser->religion_id;
         $min_ht = $cUser->min_ht;
         $max_ht = $cUser->max_ht;
         $min_age = $cUser->min_age;
@@ -882,166 +889,351 @@ class User extends \Core\Model
         $casteAry = implode(',',json_decode($cUser->mycastes));
         //$casteAry = array_values($cUser->mycastes);
 
-        $sql = "SELECT
-    
-            users.id,
-            users.pid,
-            users.first_name,
-            users.last_name,
-            users.gender,
-            users.dob,
-            users.height_id,
-            users.manglik_id,
-            
-            images.user_id as iuid,
-            images.filename,
-            images.pp,
-            
-            heights.ft as ht, 
-            religions.name as religen,
-            languages.text as lang,
-            countries.name as country,
-            incomes.level as income,
-            maritals.status as mstatus,
-            mangliks.status as manglik,
-            districts.text as town,
-            
-            users.horoscope, 
-            educations.name as edu,
-            occupations.name as occ,
-            diets.type as diet,
-            smokes.status as smoke,
-            drinks.status as drink,
-            challenged.status as challeng,    
-            move_profile.num as mov, 
-            
-            users.hiv,
-            users.rsa
-            
-            FROM users
-            
-            LEFT JOIN images ON images.user_id = users.id
-            
-            LEFT JOIN heights ON heights.id = users.height_id
-            LEFT JOIN religions ON religions.id = users.religion_id
-            LEFT JOIN languages ON languages.value = users.language_id
-            LEFT JOIN countries ON countries.id = users.country_id
-            LEFT JOIN incomes ON incomes.id = users.income_id
-            LEFT JOIN maritals ON maritals.id = users.marital_id
-            LEFT JOIN mangliks ON mangliks.id = users.manglik_id
-            LEFT JOIN districts ON districts.id = users.district_id
-            
-            LEFT JOIN educations ON educations.id = users.education_id
-            LEFT JOIN occupations ON occupations.id = users.occupation_id
-            
-            LEFT JOIN diets ON diets.id = users.diet_id
-            LEFT JOIN smokes ON smokes.id = users.smoke_id
-            LEFT JOIN drinks ON drinks.id = users.drink_id
-            LEFT JOIN challenged ON challenged.id = users.challenged_id
-            LEFT JOIN move_profile ON move_profile.receiver = users.id            
-            
-            WHERE move_profile.num IS NULL
-            AND users.is_active = 1
+
+        $sql= self::minorDotSql();
+        $sql.="WHERE move_profile.num IS NULL
+            AND users.is_active = 1            
             AND users.gender != :cg
-            AND users.height_id >= :min_ht
-            AND users.height_id <= :max_ht
-            AND users.dob <= CAST('$maxDate' AS DATE)
-            AND users.dob >= CAST('$minDate' AS DATE)
+            AND users.religion_id = :rel
+            
                
         ";
-        if($cUser->cnb == 0){
-            $sql .= "AND (users.caste_id IN ($casteAry) OR users.caste_id IS NULL)";
+
+        if($pps){
+
+            $sql .= "AND users.height_id >= :min_ht
+            AND users.height_id <= :max_ht
+            AND users.dob <= CAST(:max_dt AS DATE)
+            AND users.dob >= CAST(:min_dt AS DATE)";
+
+            if($cUser->cnb == 0){
+                $sql .= "AND (users.caste_id IN ($casteAry) OR users.caste_id IS NULL)";
+            }else{
+                $sql .= "AND (users.caste_id IN ($casteAry) OR users.caste_id IS NULL OR users.cnb=1)";
+            }
+
+            if($cUser->pm==0){
+                $sql .= "AND (users.manglik_id <> 1 OR users.manglik_id IS NULL)";
+            }else{
+                $sql .= "AND (users.manglik_id <> 2 OR users.manglik_id IS NULL)";
+            }
+
+            $sql .= " ORDER BY users.id DESC";
+            $sql .= " LIMIT 10";
+
+            $pdo = Model::getDB();
+            $stmt=$pdo->prepare($sql);
+            $stmt->bindParam(':cg',$cg,PDO::PARAM_INT);
+
+            $stmt->bindParam(':min_ht',$min_ht,PDO::PARAM_INT);
+            $stmt->bindParam(':max_ht',$max_ht,PDO::PARAM_INT);
+
+            $stmt->bindParam(':max_dt',$maxDate);
+            $stmt->bindParam(':min_dt',$minDate);
+
         }else{
-            $sql .= "AND (users.caste_id IN ($casteAry) OR users.caste_id IS NULL OR users.cnb=1)";
+            $sql .= " ORDER BY users.id DESC";
+            $sql .= " LIMIT 10";
+
+            $pdo = Model::getDB();
+            $stmt=$pdo->prepare($sql);
+            $stmt->bindParam(':cg',$cg,PDO::PARAM_INT);
+            $stmt->bindParam(':rel',$rel,PDO::PARAM_INT);
         }
 
-        if($cUser->pm==0){
-            $sql .= "AND (users.manglik_id <> 1 OR users.manglik_id IS NULL)";
-        }else{
-            $sql .= "AND (users.manglik_id <> 2 OR users.manglik_id IS NULL)";
-        }
-
-        $sql .= " ORDER BY users.id DESC";
-        $sql .= " LIMIT 10";
-
-        $pdo = Model::getDB();
-        $stmt=$pdo->prepare($sql);
-        $stmt->bindParam(':cg',$cg,PDO::PARAM_INT);
-        $stmt->bindParam(':min_ht',$min_ht,PDO::PARAM_INT);
-        $stmt->bindParam(':max_ht',$max_ht,PDO::PARAM_INT);
-//        $stmt->bindParam(':min_age',$min_age,PDO::PARAM_INT);
-//        $stmt->bindParam(':max_age',$max_age,PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     }
 
-    public static function customSearchResults($advQuery=''): array
+    /**
+     * @param $uid
+     * @return int
+     */
+    public static function countShortlisted($uid): int
     {
-
-        /*
-         * Build query ----- 1
-         * */
-        $sql = "SELECT
-    
-            users.id,
-            users.pid,
-            users.first_name,
-            users.last_name,
-            users.gender,
-            users.dob,
+        $sql = "SELECT * FROM users LEFT JOIN move_profile ON move_profile.receiver = users.id            
             
-            images.user_id as iuid,
-            images.filename,
-            images.pp,
+            WHERE move_profile.sender= :id AND move_profile.num = 2 AND users.is_active=1";
+
+        $pdo = Model::getDB();
+        $stmt=$pdo->prepare($sql);
+        $stmt->bindParam(':id',$uid,PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->rowCount();
+
+    }
+
+    /**
+     * @param $uid
+     * @return int
+     */
+    public static function countRecentVisitor($uid): int
+    {
+        $sql = "SELECT * FROM users LEFT JOIN visit_profile ON visit_profile.sender = users.id            
+            
+            WHERE visit_profile.receiver= :id AND users.is_active=1";
+
+        $pdo = Model::getDB();
+        $stmt=$pdo->prepare($sql);
+        $stmt->bindParam(':id',$uid,PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->rowCount();
+
+    }
+
+    /**
+     * Kept for refernece
+     * @param $uid
+     * @param int $offset
+     * @param int $limit
+     * @return array
+     */
+    public static function testQuery($uid, int $offset=0, int $limit=10): array
+    {
+        $sql = "SELECT u.id, u.pid, i.user_id, i.img_id, i.filename
+        FROM
+        (SELECT sender, receiver, num FROM move_profile WHERE sender= :id AND num = 2 ORDER BY created_at DESC LIMIT :offset, :limit) AS k
+        LEFT JOIN users as u ON (k.receiver = u.id)
+        LEFT JOIN images as i ON (k.receiver = i.user_id)
+        WHERE u.is_active=1
+        ";
+
+        //$sql .= "WHERE move_profile.sender= :id AND move_profile.num = 2 AND u.is_active=1";
+
+        $pdo = Model::getDB();
+        $stmt=$pdo->prepare($sql);
+        $stmt->bindParam(':id',$uid,PDO::PARAM_INT);
+        $stmt->bindParam(':offset',$offset,PDO::PARAM_INT);
+        $stmt->bindParam(':limit',$limit,PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * @param $uid
+     * @param int $offset
+     * @param int $limit
+     * @return array
+     */
+    public static function shortlistPagination($uid, int $offset=0, int $limit=10): array
+    {
+        $sql = "SELECT
+            u.id,
+            u.pid,
+            u.email,
+            u.first_name,
+            u.last_name,
+            u.gender,
+            u.dob,
+            u.mobile,
+            u.height_id,
+            u.manglik_id,
+            u.state,
+            u.district,
+            u.hiv,
+            u.rsa,
+            u.horoscope, 
+       
+            i.user_id as iuid,
+            i.filename,
+            i.pp,
+            i.linked,
+            i.approved,
             
             heights.ft as ht, 
-            religions.name as religen,
-            languages.text as lang,
+            religions.name as religion,
+            communities.name as lang,
             countries.name as country,
             incomes.level as income,
             maritals.status as mstatus,
             mangliks.status as manglik,
-            districts.text as town,
-            
-            users.horoscope, 
+            castes.text as caste,
             educations.name as edu,
             occupations.name as occ,
             diets.type as diet,
             smokes.status as smoke,
             drinks.status as drink,
-            challenged.status as challeng,    
-            move_profile.num as mov,
-            
-            users.hiv,
-            users.rsa
-            
-            FROM users
-            
-            LEFT JOIN images ON images.user_id = users.id
-            
-            LEFT JOIN heights ON heights.id = users.height_id
-            LEFT JOIN religions ON religions.id = users.religion_id
-            LEFT JOIN languages ON languages.value = users.language_id
-            LEFT JOIN countries ON countries.id = users.country_id
-            LEFT JOIN incomes ON incomes.id = users.income_id
-            LEFT JOIN maritals ON maritals.id = users.marital_id
-            LEFT JOIN mangliks ON mangliks.id = users.manglik_id
-            LEFT JOIN districts ON districts.id = users.district_id
-            
-            LEFT JOIN educations ON educations.id = users.education_id
-            LEFT JOIN occupations ON occupations.id = users.occupation_id
-            
-            LEFT JOIN diets ON diets.id = users.diet_id
-            LEFT JOIN smokes ON smokes.id = users.smoke_id
-            LEFT JOIN drinks ON drinks.id = users.drink_id
-            LEFT JOIN challenged ON challenged.id = users.challenged_id
-            LEFT JOIN move_profile ON move_profile.receiver = users.id
-            
-            WHERE users.id <=20 AND move_profile.num IS NULL 
+            challenged.status as challeng,
        
+            k.num as mov
+        FROM
+             
+        (SELECT sender, receiver, num FROM move_profile WHERE sender= :id AND num = 2 ORDER BY created_at DESC LIMIT :offset, :limit) AS k
+            
+        LEFT JOIN users as u ON (k.receiver = u.id)
+        LEFT JOIN images as i ON (k.receiver = i.user_id)
+            
+        LEFT JOIN heights ON heights.id = u.height_id
+        LEFT JOIN religions ON religions.id = u.religion_id
+        LEFT JOIN communities ON communities.id = u.community_id
+        LEFT JOIN countries ON countries.id = u.country_id
+        LEFT JOIN incomes ON incomes.id = u.income_id
+        LEFT JOIN maritals ON maritals.id = u.marital_id
+        LEFT JOIN mangliks ON mangliks.id = u.manglik_id
+        LEFT JOIN castes ON castes.value = u.caste_id    
+        LEFT JOIN educations ON educations.id = u.education_id
+        LEFT JOIN occupations ON occupations.id = u.occupation_id  
+        LEFT JOIN diets ON diets.id = u.diet_id
+        LEFT JOIN smokes ON smokes.id = u.smoke_id
+        LEFT JOIN drinks ON drinks.id = u.drink_id
+        LEFT JOIN challenged ON challenged.id = u.challenged_id
+        WHERE u.is_active=1
         ";
 
+        //$sql .= "WHERE move_profile.sender= :id AND move_profile.num = 2 AND u.is_active=1";
+
+        $pdo = Model::getDB();
+        $stmt=$pdo->prepare($sql);
+        $stmt->bindParam(':id',$uid,PDO::PARAM_INT);
+        $stmt->bindParam(':offset',$offset,PDO::PARAM_INT);
+        $stmt->bindParam(':limit',$limit,PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * @param $uid
+     * @param int $offset
+     * @param int $limit
+     * @return array
+     */
+    public static function recentVisitorPagination($uid, int $offset=0, int $limit=10): array
+    {
+        $sql = "SELECT
+            u.id,
+            u.pid,
+            u.email,
+            u.first_name,
+            u.last_name,
+            u.gender,
+            u.dob,
+            u.mobile,
+            u.height_id,
+            u.manglik_id,
+            u.state,
+            u.district,
+            u.hiv,
+            u.rsa,
+            u.horoscope, 
+       
+            i.user_id as iuid,
+            i.filename,
+            i.pp,
+            i.linked,
+            i.approved,
+            
+            heights.ft as ht, 
+            religions.name as religion,
+            communities.name as lang,
+            countries.name as country,
+            incomes.level as income,
+            maritals.status as mstatus,
+            mangliks.status as manglik,
+            castes.text as caste,
+            educations.name as edu,
+            occupations.name as occ,
+            diets.type as diet,
+            smokes.status as smoke,
+            drinks.status as drink,
+            challenged.status as challeng
+       
+        FROM
+             
+        (SELECT sender, receiver FROM visit_profile WHERE receiver= :id ORDER BY created_at DESC LIMIT :offset, :limit) AS k
+            
+        LEFT JOIN users as u ON (k.sender = u.id)
+        LEFT JOIN images as i ON (k.sender = i.user_id)
+            
+        LEFT JOIN heights ON heights.id = u.height_id
+        LEFT JOIN religions ON religions.id = u.religion_id
+        LEFT JOIN communities ON communities.id = u.community_id
+        LEFT JOIN countries ON countries.id = u.country_id
+        LEFT JOIN incomes ON incomes.id = u.income_id
+        LEFT JOIN maritals ON maritals.id = u.marital_id
+        LEFT JOIN mangliks ON mangliks.id = u.manglik_id
+        LEFT JOIN castes ON castes.value = u.caste_id    
+        LEFT JOIN educations ON educations.id = u.education_id
+        LEFT JOIN occupations ON occupations.id = u.occupation_id  
+        LEFT JOIN diets ON diets.id = u.diet_id
+        LEFT JOIN smokes ON smokes.id = u.smoke_id
+        LEFT JOIN drinks ON drinks.id = u.drink_id
+        LEFT JOIN challenged ON challenged.id = u.challenged_id
+        WHERE u.is_active=1
+        ";
+
+        $pdo = Model::getDB();
+        $stmt=$pdo->prepare($sql);
+        $stmt->bindParam(':id',$uid,PDO::PARAM_INT);
+        $stmt->bindParam(':offset',$offset,PDO::PARAM_INT);
+        $stmt->bindParam(':limit',$limit,PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Deprecated kept for reference
+     * @param $uid
+     * @param int $offset
+     * @param int $limit
+     * @return array
+     */
+    public static function shortlist($uid, int $offset=0, int $limit=10): array
+    {
+
+        $sql = self::minorDotSql();
+        $sql .= "WHERE move_profile.sender= :id AND move_profile.num = 2 AND users.is_active=1
+        ORDER BY move_profile.created_at DESC LIMIT :offset, :limit";
+
+        $pdo = Model::getDB();
+        $stmt=$pdo->prepare($sql);
+        $stmt->bindParam(':id',$uid,PDO::PARAM_INT);
+        $stmt->bindParam(':offset',$offset,PDO::PARAM_INT);
+        $stmt->bindParam(':limit',$limit,PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    }
+
+    /**
+     * Deprecated kept for reference
+     * @param $uid
+     * @param int $offset
+     * @param int $limit
+     * @return array
+     */
+    public static function recentVisitor($uid, int $offset=0, int $limit=10): array
+    {
+
+        $sql = self::minorDotSql2();
+        $sql .= "WHERE visit_profile.receiver =:id AND users.is_active = 1 ORDER BY visit_profile.created_at DESC";
+        $sql .= " LIMIT :offset, :limit";
+
+        $pdo = Model::getDB();
+        $stmt=$pdo->prepare($sql);
+        $stmt->bindParam(':id',$uid,PDO::PARAM_INT);
+        $stmt->bindParam(':offset',$offset,PDO::PARAM_INT);
+        $stmt->bindParam(':limit',$limit,PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    }
+
+    /* *********************************
+     *  Section 8
+     *  User Search
+     * **********************************
+     * */
+    /**
+     * Kept for reference
+     * @param string $advQuery
+     * @return array
+     */
+    public static function customSearchResults($advQuery=''): array
+    {
+
+        $sql = self::minorDotSql();
+        $sql .= " WHERE users.id <=20 AND move_profile.num IS NULL ";
 
         if(!empty($advQuery)){
             $sql .= " WHERE ";
@@ -1067,71 +1259,16 @@ class User extends \Core\Model
 
     }
 
-    public static function getAdvanceSearchResults($advQuery=''){
+    /**
+     * Kept for reference and testing
+     * @param string $advQuery
+     * @return array
+     */
+    public static function getAdvanceSearchResults($advQuery=''): array
+    {
 
-        /*
-         * Build query ----- 1
-         * */
-        $sql = "SELECT
-    
-            users.id,
-            users.pid,
-            users.first_name,
-            users.last_name,
-            users.gender,
-            users.dob,
-            
-            images.user_id as iuid,
-            images.filename,
-            images.pp,
-            
-            heights.ft as ht, 
-            religions.name as religen,
-            languages.text as lang,
-            countries.name as country,
-            incomes.level as income,
-            maritals.status as mstatus,
-            mangliks.status as manglik,
-            districts.text as town,
-            
-            users.horoscope, 
-            educations.name as edu,
-            occupations.name as occ,
-            diets.type as diet,
-            smokes.status as smoke,
-            drinks.status as drink,
-            challenged.status as challeng,    
-            move_profile.num as mov,
-            
-            users.hiv,
-            users.rsa
-            
-            FROM users
-            
-            LEFT JOIN images ON images.user_id = users.id
-            
-            LEFT JOIN heights ON heights.id = users.height_id
-            LEFT JOIN religions ON religions.id = users.religion_id
-            LEFT JOIN languages ON languages.value = users.language_id
-            LEFT JOIN countries ON countries.id = users.country_id
-            LEFT JOIN incomes ON incomes.id = users.income_id
-            LEFT JOIN maritals ON maritals.id = users.marital_id
-            LEFT JOIN mangliks ON mangliks.id = users.manglik_id
-            LEFT JOIN districts ON districts.id = users.district_id
-            
-            LEFT JOIN educations ON educations.id = users.education_id
-            LEFT JOIN occupations ON occupations.id = users.occupation_id
-            
-            LEFT JOIN diets ON diets.id = users.diet_id
-            LEFT JOIN smokes ON smokes.id = users.smoke_id
-            LEFT JOIN drinks ON drinks.id = users.drink_id
-            LEFT JOIN challenged ON challenged.id = users.challenged_id
-            LEFT JOIN move_profile ON move_profile.receiver = users.id
-            
-            WHERE users.id <=10
-       
-        ";
-
+        $sql = self::minorDotSql();
+        $sql .= " WHERE users.id <=10";
 
         if(!empty($advQuery)){
             $sql .= " WHERE ";
@@ -1157,18 +1294,15 @@ class User extends \Core\Model
 
     }
 
-    /* *********************************
-     *  Section 9
-     *  Quick Search ~
-     * **********************************
-     * */
 
+    /**
+     * Front page quick Search - Login not required
+     * @param string $advQuery
+     * @return array
+     */
     public static function getQuickSearchResults($advQuery=''): array
     {
 
-        /*
-         * Build query ----- 1
-         * */
         $sql = "SELECT
     
             users.id,
@@ -1177,19 +1311,25 @@ class User extends \Core\Model
             users.last_name,
             users.gender,
             users.dob,
+            users.state,
+            users.district,
+            
             
             images.user_id as iuid,
             images.filename,
             images.pp,
+            images.approved,
+            images.linked,
             
             heights.ft as ht, 
-            religions.name as religen,
-            languages.text as lang,
+            religions.name as religion,
+            communities.name as lang,
             countries.name as country,
             incomes.level as income,
             maritals.status as mstatus,
             mangliks.status as manglik,
             districts.text as town,
+            castes.text as caste,
             
             users.horoscope, 
             educations.name as edu,
@@ -1208,13 +1348,14 @@ class User extends \Core\Model
             
             LEFT JOIN heights ON heights.id = users.height_id
             LEFT JOIN religions ON religions.id = users.religion_id
-            LEFT JOIN languages ON languages.value = users.language_id
+            LEFT JOIN communities ON communities.id = users.community_id         
             LEFT JOIN countries ON countries.id = users.country_id
             LEFT JOIN incomes ON incomes.id = users.income_id
             LEFT JOIN maritals ON maritals.id = users.marital_id
             LEFT JOIN mangliks ON mangliks.id = users.manglik_id
             LEFT JOIN districts ON districts.id = users.district_id
-            
+            LEFT JOIN castes ON castes.value = users.caste_id
+                
             LEFT JOIN educations ON educations.id = users.education_id
             LEFT JOIN occupations ON occupations.id = users.occupation_id
             
@@ -1226,7 +1367,8 @@ class User extends \Core\Model
             WHERE users.is_active=1
         ";
 
-
+        //$sql = self::minorDotSql();
+        //$sql .= " WHERE users.is_active=1";
         if(!empty($advQuery)){
             //$sql .= " WHERE ";
             $sql .= " AND ";
@@ -1258,10 +1400,24 @@ class User extends \Core\Model
 
     /* *********************************
      *  Section 9
-     *  Advance Search
+     *  Extra Functions
      * **********************************
      * */
 
+    public static function getContact($oid){
+        $sql = 'SELECT whatsapp,email,mobile,one_way FROM users
+                WHERE id=?';
+
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+        $stmt->execute([$oid]);
+        return $stmt->fetch(PDO::FETCH_OBJ);
+    }
+
+    /**
+     * @param $userId
+     * @return bool
+     */
     public static function verifyUser($userId){
 
         $sql = "UPDATE users SET is_verified=1 WHERE id=?";
@@ -1296,10 +1452,10 @@ class User extends \Core\Model
         $faker = Faker\Factory::create();
 
 
-        $sql = "INSERT INTO users( pid, mobile, email, password_hash, first_name, last_name, name, username, gender, 
+        $sql = "INSERT INTO users( pid, mobile, email, is_active, password_hash, first_name, last_name, name, username, gender, 
                 avatar, for_id, height_id, language_id, occupation_id, district_id, education_id, dob, marital_id, 
-                religion_id, degree_id, university_id, community_id) 
-                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                religion_id, degree_id, university_id, community_id, manglik_id, caste_id, myhobbies,mycastes,myinterests,langs) 
+                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         $pdo = Model::getDB();
         $stmt = $pdo->prepare($sql);
@@ -1311,6 +1467,7 @@ class User extends \Core\Model
             $pid = self::generateProfileId(7);
             $mobile = $faker->phoneNumber;
             $email = $faker->email;
+            $ia = 1;
             $fn = $faker->firstName;
             $ln = $faker->lastName;
             $name = $fn . ' ' . $ln;
@@ -1329,14 +1486,24 @@ class User extends \Core\Model
             $deg = array_rand(UserVariables::degrees());
             $uni = array_rand(UserVariables::universities());
             $com = array_rand(UserVariables::communities());
+            $man = rand(1, 3);
+            $caste = array_rand(UserVariables::castes());
+            $hob = '[]';
+            $cas = '[]';
+            $ier = '[]';
+            $lan = '[]';
 
-            $stmt->execute([$pid, $mobile, $email, $hashedPwd, $fn, $ln, $name, $username, $gender,
-                $avatar, $cFor,$ht, $lag, $occ, $dis, $edu, $dob, $ms, $rel, $deg, $uni, $com]);
+            $stmt->execute([$pid, $mobile, $email, $ia, $hashedPwd, $fn, $ln, $name, $username, $gender,
+                $avatar, $cFor,$ht, $lag, $occ, $dis, $edu, $dob, $ms, $rel, $deg, $uni, $com, $man, $caste,$hob,$cas,$ier,$lan]);
 
 
         }
     }
 
+    /**
+     * @param $t
+     * @return array
+     */
     public static function timeQuery($t){
 
         $query = "SELECT * FROM users WHERE created_at > ?";
@@ -1347,30 +1514,9 @@ class User extends \Core\Model
 
     }
 
-    public function likesArr(){
-
-        $user_likes = $this->like_array;
-        return Helpers::emptyStringIntoArray($user_likes);
-
-    }
-
-    public function shortsArr(){
-
-        $user_shorts = $this->short_array;
-        return Helpers::emptyStringIntoArray($user_shorts);
-
-    }
-
-    public function hidesArr(){
-
-        $user_hides = $this->hide_array;
-        return Helpers::emptyStringIntoArray($user_hides);
-
-    }
-
 
     /* **************************************
-     *  Section
+     *  Section 10
      *  Update User Functions
      * ***************************************
      * */
@@ -1379,52 +1525,82 @@ class User extends \Core\Model
      * @param $data
      * @return bool
      */
-    public function saveUserProfile($data){
+    public function saveUserProfile($data): bool
+    {
 
         foreach ($data as $key => $value){
             $this->$key=$value;
         }
 
-        $this->name = $this->first_name.' '.$this->last_name;
-        $this->dob = $this->year.'-'.$this->month.'-'.$this->day;
-        $this->country_id = 77;
+        if($this->country_id == 77){
+            $this->state = $this->st_india;
+            $this->district = $this->ds_india;
+        }else{
+            $this->state = $this->st_other;
+            $this->district = $this->ds_other;
+        }
 
-        $sql = "UPDATE users SET 
+        $this->validateName();
+
+        if(empty($this->errors)){
+
+            $this->name = $this->first_name.' '.$this->last_name;
+            $this->dob = $this->year.'-'.$this->month.'-'.$this->day;
+            $this->country_id = 77;
+
+            $sql = "UPDATE users SET 
                 first_name= :fName,
                 last_name= :lName,
                 name= :name, 
                 dob= :dob,
                 religion_id= :religion,
                 community_id= :community,
-                education_id= :education,
-                occupation_id= :occupation,
-                marital_id= :marital,
+                caste_id= :caste, 
                 manglik_id= :manglik,
+                marital_id= :marital,
                 height_id= :height,
-                country_id= :country
+                whatsapp= :whatsapp,
+                education_id= :education,
+                income_id= :income, 
+                occupation_id= :occupation,                
+                country_id= :country,
+                state= :state,
+                district= :district                
                 WHERE id= :id";
 
-        $pdo = Model::getDB();
-        $stmt=$pdo->prepare($sql);
-        return $stmt->execute([
-            ':fName'=>$this->first_name,
-            ':lName'=>$this->last_name,
-            ':name'=>$this->name,
-            ':dob'=>$this->dob,
-            ':religion'=>$this->religion_id,
-            ':community'=>$this->community_id,
-            ':education'=>$this->education_id,
-            ':occupation'=>$this->occupation_id,
-            ':marital'=>$this->marital_id,
-            ':manglik'=>$this->manglik_id,
-            ':height'=>$this->height_id,
-            ':country'=>$this->country_id,
-            ':id'=>$this->id
-        ]);
+            $pdo = Model::getDB();
+            $stmt=$pdo->prepare($sql);
+            return $stmt->execute([
+                ':fName'=>$this->first_name,
+                ':lName'=>$this->last_name,
+                ':name'=>$this->name,
+                ':dob'=>$this->dob,
+                ':religion'=>$this->religion_id,
+                ':community'=>$this->community_id,
+                ':caste'=>$this->caste_id,
+                ':manglik'=>$this->manglik_id,
+                ':marital'=>$this->marital_id,
+                ':height'=>$this->height_id,
+                ':whatsapp'=>$this->whatsapp,
+                ':education'=>$this->education_id,
+                ':income'=>$this->income_id,
+                ':occupation'=>$this->occupation_id,
+                ':country'=>$this->country_id,
+                ':state'=>$this->state,
+                ':district'=>$this->district,
+                ':id'=>$this->id
+            ]);
+        }
+        return false;
     }
 
 
-    public function updateOtp($otp){
+    /**
+     * @param $otp
+     * @return bool
+     */
+    public function updateOtp($otp): bool
+    {
 
         $this->otp = $otp;
         $sql = "UPDATE users SET otp=? WHERE id=?";
@@ -1437,7 +1613,11 @@ class User extends \Core\Model
         ]);
     }
 
-    public function verifyMobile(){
+    /**
+     * @return bool
+     */
+    public function verifyMobile(): bool
+    {
 
         $sql = "UPDATE users SET mv=?,otp=? WHERE id=?";
 
@@ -1458,23 +1638,29 @@ class User extends \Core\Model
             $this->$key=$val;
         }
 
-        $sql = "UPDATE users SET first_name=?, last_name=?, caste_id=?, language_id=?, marital_id=?, height_id=?, 
-                country_id=?, state_id=?, district_id=? WHERE id=?";
+        $this->validateName();
 
-        $db = Model::getDB();
-        $stmt = $db->prepare($sql);
-        return $stmt->execute([
-            $this->first_name,
-            $this->last_name,
-            $this->caste_id,
-            $this->language_id,
-            $this->marital_id,
-            $this->height_id,
-            $this->country_id,
-            $this->state_id,
-            $this->district_id,
-            $this->id
-        ]);
+        if(empty($this->errors)) {
+
+            $sql = "UPDATE users SET first_name=?, last_name=?, caste_id=?, language_id=?, marital_id=?, height_id=?, 
+                    country_id=?, state=?, district=? WHERE id=?";
+
+            $db = Model::getDB();
+            $stmt = $db->prepare($sql);
+            return $stmt->execute([
+                $this->first_name,
+                $this->last_name,
+                $this->caste_id,
+                $this->language_id,
+                $this->marital_id,
+                $this->height_id,
+                $this->country_id,
+                $this->state,
+                $this->district,
+                $this->id
+            ]);
+        }
+        return false;
     }
 
     /**
@@ -1506,6 +1692,7 @@ class User extends \Core\Model
             $this->$key=$val;
         }
         $mycastes = json_encode($this->mycastes);
+        //$mycastes = ($this->mycastes===[])?ltrim("[]"):json_encode($this->mycastes);
         $cnb = $this->cnb;
         $min_age = $this->min_age;
         $max_age = $this->max_age;
@@ -1531,6 +1718,15 @@ class User extends \Core\Model
             $this->$key=$val;
         }
 
+        $working_in = filter_var($this->working_in, FILTER_SANITIZE_STRING);
+        if (!preg_match("/^[A-Za-z0-9\.]{3,}+([\ A-Za-z0-9\.]+)*$/",$working_in)) {
+            $this->working_in = NUll;
+        }
+        $other_deg = filter_var($this->other_deg, FILTER_SANITIZE_STRING);
+        if (!preg_match("/^[A-Za-z0-9\.]{3,}+([\ A-Za-z0-9\.]+)*$/",$other_deg)) {
+            $this->other_deg = NUll;
+        }
+
         $db = Model::getDB();
         $sql = "UPDATE users SET education_id=?, degree_id=?, university_id=?, other_deg=?, sector_id=?, 
                 occupation_id=?, working_in=?, income_id=? WHERE id=?";
@@ -1549,18 +1745,25 @@ class User extends \Core\Model
         return $result;
     }
 
-    public function updateFamilyInfo($data){
+    /**
+     * @param $data
+     * @return bool
+     */
+    public function updateFamilyInfo($data): bool
+    {
 
         foreach($data as $key=>$val){
             $this->$key=$val;
         }
 
         $db = Model::getDB();
-        $sql = "UPDATE users SET father_id=?, mother_id=?, bros=?, mbros=?, sis=?, msis=?,
+        $sql = "UPDATE users SET father_name=?, mother_name=?, father_id=?, mother_id=?, bros=?, mbros=?, sis=?, msis=?,
                 famAffluence_id=?, famType_id=?, famValue_id=?, famIncome_id=? WHERE id=?";
         $stmt = $db->prepare($sql);
 
         $result = $stmt->execute([
+            $this->father_name,
+            $this->mother_name,
             $this->father_id,
             $this->mother_id,
             $this->bros,
@@ -1578,7 +1781,12 @@ class User extends \Core\Model
 
     }
 
-    public function updateLifestyleInfo($data){
+    /**
+     * @param $data
+     * @return bool
+     */
+    public function updateLifestyleInfo($data): bool
+    {
 
         foreach($data as $key=>$val){
             $this->$key=$val;
@@ -1612,7 +1820,12 @@ class User extends \Core\Model
         return $result;
     }
 
-    public function updateLikesInfo($data){
+    /**
+     * @param $data
+     * @return bool
+     */
+    public function updateLikesInfo($data): bool
+    {
 
         foreach($data as $key=>$val){
             $this->$key=$val;
@@ -1627,25 +1840,58 @@ class User extends \Core\Model
         return $stmt->execute([$myHobbies,$myInterests,$this->id]);
     }
 
-    public function updateAstroDetails($data){
+    /**
+     * @param $data
+     * @return bool
+     */
+    public function updateAstroDetails($data): bool
+    {
 
         foreach($data as $key=>$val){
             $this->$key=$val;
         }
 
         $db = Model::getDB();
-        $sql = "UPDATE users SET sun_id=?, moon_id=?, nakshatra_id=?, horoscope=?, manglik_id=?, hm=?, hp=? WHERE id =?";
+        $sql = "UPDATE users SET sun_id=?, moon_id=?, nakshatra_id=?, horoscope=?, kundli_details=?, manglik_id=?, hm=?, hp=? WHERE id =?";
         $stmt = $db->prepare($sql);
         return $stmt->execute([
             $this->sun_id,
             $this->moon_id,
             $this->nakshatra_id,
             $this->horoscope,
+            $this->kundli_details,
             $this->manglik_id,
             $this->hm,
             $this->hp,
             $this->id
         ]);
+    }
+
+    /**
+     * @param $data
+     * @return bool
+     */
+    public function updateContactInfo($data): bool
+    {
+
+        foreach($data as $key=>$val){
+            $this->$key=$val;
+        }
+
+        $this->validateMobile();
+
+        if(empty($this->errors)){
+
+            $db = Model::getDB();
+            $sql = "UPDATE users SET mobile=?, whatsapp=? WHERE id =?";
+            $stmt = $db->prepare($sql);
+            return $stmt->execute([
+                $this->mobile,
+                $this->whatsapp,
+                $this->id
+            ]);
+        }
+
     }
 
     /*public static function getUsersByTimestamp($t){
@@ -1714,7 +1960,11 @@ class User extends \Core\Model
 
     }
 
-    public function incrementAc(){
+    /**
+     * @return bool
+     */
+    public function incrementAc(): bool
+    {
 
         $rcn = new RecordContact();
 
@@ -1729,6 +1979,5 @@ class User extends \Core\Model
         ]);
 
     }
-
 
 }

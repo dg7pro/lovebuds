@@ -19,7 +19,7 @@ class Admin extends Administered
     public function indexAction(){
 
         View::renderBlade('admin.index');
-
+        // TODO: Proper links at all links
     }
 
     /**
@@ -52,6 +52,14 @@ class Admin extends Administered
         $num = count($images);
         View::renderBlade('admin.make-avatar',['images'=>$images,'num'=>$num]);
 
+    }
+
+    /**
+     * Show Site Settings page
+     */
+    public function siteSettingsAction(){
+
+        View::renderBlade('admin.site-settings');
     }
 
 }

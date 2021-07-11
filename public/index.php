@@ -31,6 +31,14 @@ date_default_timezone_set('Asia/Kolkata');
 
 
 session_start();
+/*if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}*/
+$csrf = new App\Csrf();
+$csrf_token = $csrf->getValue();
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = $csrf_token;
+}
 
 /**
  * Routing

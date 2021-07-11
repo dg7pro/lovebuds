@@ -5,10 +5,6 @@
 @section('content')
     <!-- login section -->
     <section class="main">
-        <!-- Alert -->
-        <!-- <div class="alert alert-danger">
-            Invalid Credentials
-        </div> -->
 
         @include('layouts.partials.alert')
 
@@ -19,6 +15,10 @@
 
         <form action="{{'/password/request-reset'}}" method="post" class="form full-ht">
 
+            <div>
+                <input type="hidden" name="token" value="{{$_SESSION['csrf_token']}}" />
+                {{--<input type="hidden" name="token" value="65f575dd7ba89dbd08a02a86bf990514eb8182254f9af1299d75cd1f92a7ec1" />--}}
+            </div>
             <div class="form-group">
                 <input type="email" name="email" placeholder="Email Address" autofocus required>
             </div>

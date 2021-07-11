@@ -5,26 +5,17 @@ namespace App\Controllers;
 
 
 use App\Models\MoveProfile;
-use App\Models\RecordContact;
 
+/**
+ * Class Connection
+ * @package App\Controllers
+ */
 class Connection extends Authenticated
 {
-    protected static function getRC(){
 
-        static $rc = null;
-        if($rc===null) {
-            $rc = new RecordContact();
-        }
-        return $rc;
-    }
-
-    public static function recordContact($oid): bool
-    {
-        $rc = self::getRC();
-        $uid = $_SESSION['user_id'];
-        return $rc->create($uid,$oid);
-    }
-
+    /**
+     * @return MoveProfile|null
+     */
     protected static function getMP(){
 
         static $mp = null;
@@ -34,6 +25,9 @@ class Connection extends Authenticated
         return $mp;
     }
 
+    /**
+     * @return int[]|string[]
+     */
     public static function currentDownlist(){
 
         $mp = self::getMP();
@@ -41,6 +35,9 @@ class Connection extends Authenticated
         return $mp->getDownlist($id);
     }
 
+    /**
+     * @return int[]|string[]
+     */
     public static function currentShortlist(){
 
         $mp = self::getMP();

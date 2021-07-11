@@ -7,6 +7,10 @@ namespace App\Controllers;
 use App\Models\Image;
 use App\Models\User;
 
+/**
+ * Class Adjax
+ * @package App\Controllers
+ */
 class Adjax extends Administered
 {
     /**

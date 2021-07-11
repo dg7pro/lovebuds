@@ -4,7 +4,11 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JU Matrimony Service</title>
+    <meta name="csrf-token" content="{{$_SESSION['csrf_token']}}">
+    <link rel="icon" type="image/svg+xml" href="/img/favicon.svg" />
+    <title>JuMatrimony Service</title>
+
+    @yield('page_og')
 
     <!-- bootstrap css file -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -14,6 +18,9 @@
 
     <!-- toastr css file -->
     <link href="/css/toastr.min.css" rel="stylesheet"/>
+
+    <!-- custom css file -->
+    <link rel="stylesheet" href="/css/jquery-confirm.min.css">
 
     <!-- custom css file -->
     <link rel="stylesheet" href="/css/style.css">
@@ -36,6 +43,8 @@
 
 <!-- toastr js-->
 <script src="/js/toastr.min.js"></script>
+
+<script src="/js/jquery-confirm.min.js"></script>
 
 <script>
     // Display an info toast with no title

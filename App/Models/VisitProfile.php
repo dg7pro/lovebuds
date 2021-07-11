@@ -4,6 +4,7 @@
 namespace App\Models;
 
 
+use App\Auth;
 use Core\Model;
 
 /**
@@ -14,59 +15,55 @@ class VisitProfile extends Model
 {
 
     /**
-     * @param $userId
      * @param $profileId
      * @return int
      */
-    public static function checkRow($userId, $profileId){
+    public static function checkRow($profileId): int
+    {
+        $user = Auth::getUser();
 
-        $sql = "SELECT * FROM visit_profile WHERE matri_id=? AND profile_id=?";
+        $sql = "SELECT * FROM visit_profile WHERE sender=? AND receiver=?";
         $pdo = Model::getDB();
         $stmt=$pdo->prepare($sql);
-        $stmt->execute([$userId,$profileId]);
+        $stmt->execute([$user->id,$profileId]);
         return $stmt->rowCount();
     }
 
     /**
-     * @param $userId
      * @param $profileId
      * @return bool
      */
-    public static function updateRow($userId, $profileId){
+    public static function updateRow($profileId): bool
+    {
 
-        $sql="UPDATE visit_profile SET updated_at=? WHERE matri_id=? AND profile_id=?";
+        $user = Auth::getUser();
+
+        $sql="UPDATE visit_profile SET updated_at=? WHERE sender=? AND receiver=?";
         $pdo = Model::getDB();
         $stmt=$pdo->prepare($sql);
-        return $stmt->execute([\Carbon\Carbon::now(),$userId,$profileId]);
+        return $stmt->execute([\Carbon\Carbon::now(),$user->id,$profileId]);
 
     }
 
     /**
-     * @param $userId
      * @param $profileId
      * @return bool
      */
-    public static function insertNew($userId, $profileId){
+    public static function insertRow($profileId): bool
+    {
+        $user = Auth::getUser();
 
-        $sql = "INSERT INTO visit_profile (matri_id,profile_id) VALUES (?,?)";
+        $sql = "INSERT INTO visit_profile (sender,receiver) VALUES (?,?)";
         $pdo = Model::getDB();
         $stmt = $pdo->prepare($sql);
-        $result = $stmt->execute([$userId,$profileId]);
+        $result = $stmt->execute([$user->id,$profileId]);
 
         if($result){
-            Notification::save('profile_visited',$profileId);
+            $message = '<a href="/profile/'.$user->pid.'" ><strong> '.$user->first_name.' </strong></a> visited your profile';
+            Notify::save($profileId,$message,$user->id,$user->pid);
         }
         return $result;
 
     }
-
-   /* public static function fetchAll($uid){
-        $sql = "SELECT * FROM visit_profile WHERE matri_id=?";
-        $pdo = Model::getDB();
-        $stmt=$pdo->prepare($sql);
-        $stmt->execute([$uid]);
-        return $stmt->rowCount();
-
-    }*/
 
 }

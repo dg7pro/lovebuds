@@ -18,9 +18,33 @@ class Search extends Controller
      */
     public function indexAction()
     {
+        $this->requireLogin();
+        $s_num = User::countShortlisted($_SESSION['user_id']);
+        $r_num = User::countRecentVisitor($_SESSION['user_id']);
+        View::renderBlade('search.profiles2',['s_num' => $s_num,'r_num'=>$r_num]);
 
-        View::renderBlade('search.profiles2',['num' => 10]);
+    }
 
+    /**
+     * Show shortlisted profiles
+     * with pagination
+     */
+    public function shortlistedAction(){
+
+        $this->requireLogin();
+
+        View::renderBlade('search.shortlisted');
+    }
+
+    /**
+     * Show recent visitor profiles
+     * with pagination
+     */
+    public function recentVisitorsAction(){
+
+        $this->requireLogin();
+
+        View::renderBlade('search.visitors');
     }
 
     /**

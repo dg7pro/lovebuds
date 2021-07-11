@@ -8,6 +8,10 @@ use App\Token;
 use Core\Model;
 use PDO;
 
+/**
+ * Class RememberedLogin
+ * @package App\Models
+ */
 class RememberedLogin extends  Model
 {
 
@@ -18,7 +22,7 @@ class RememberedLogin extends  Model
      *
      * @return mixed Remembered login object if found, false otherwise
      */
-    public static function findByToken($token)
+    public static function findByToken(string $token)
     {
         $token = new Token($token);
         $token_hash = $token->getHash();
@@ -42,7 +46,7 @@ class RememberedLogin extends  Model
      *
      * @return User The user model
      */
-    public function getUser()
+    public function getUser(): User
     {
         return User::findByID($this->user_id);
     }
@@ -52,7 +56,7 @@ class RememberedLogin extends  Model
      *
      * @return boolean True if the token has expired, false otherwise
      */
-    public function hasExpired()
+    public function hasExpired(): bool
     {
         return strtotime($this->expires_at) < time();
     }

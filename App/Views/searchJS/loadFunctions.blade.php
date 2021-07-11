@@ -5,6 +5,7 @@
     //====================
     $(document).ready(function(){
         loadNewProfiles();
+        console.log('new profiles clicked');
     });
 
     //=================

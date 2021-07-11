@@ -7,6 +7,10 @@ namespace App\Models;
 use Core\Model;
 use PDO;
 
+/**
+ * Class MoveProfile
+ * @package App\Models
+ */
 class MoveProfile extends Model
 {
     /**
@@ -24,6 +28,10 @@ class MoveProfile extends Model
 
     }
 
+    /**
+     * @param $id
+     * @return int[]|string[]
+     */
     public function getDownlist($id){
 
         $sql = "SELECT receiver FROM move_profile WHERE sender=? AND num=?";
@@ -35,6 +43,10 @@ class MoveProfile extends Model
 
     }
 
+    /**
+     * @param $id
+     * @return int[]|string[]
+     */
     public function getShortlist($id){
 
         $sql = "SELECT receiver FROM move_profile WHERE sender=? AND num=?";
@@ -45,7 +57,5 @@ class MoveProfile extends Model
         return array_keys($stmt->fetchAll(PDO::FETCH_GROUP|PDO::FETCH_ASSOC));
 
     }
-
-
 
 }

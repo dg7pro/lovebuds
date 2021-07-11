@@ -4,3 +4,11 @@
     font-family: "Roboto";
     src: url(../fonts/Roboto/Roboto-Regular.ttf);
 }
+@font-face{
+    font-family: "BalooH";
+    src: url(../fonts/Baloo_2/Baloo2-Medium.ttf);
+}
+@font-face{
+    font-family: "Baloo";
+    src: url(../fonts/Baloo_2/Baloo2-regular.ttf);
+}

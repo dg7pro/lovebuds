@@ -1,5 +1,12 @@
 @extends('layouts.app')
 
+{{--@section('page_og')
+    <meta name="description" content="JU free matrimonial services shaadi, jeevansathi for Indians Bharati">
+    <meta property="og:title" content="Profile Page jumatrimony.com free matrimonial services" />
+    <meta property="og:url" content="http://www.jumatrimony.com/profile/{{$profile->pid}}" />
+    <meta property="og:description" content="JU free matrimonial services shaadi, jeevansathi for Indians Bharati">
+    <meta property="og:image" content="http://jumatrimony.com/uploaded/tmb/{{'tn_'.$profile->avatar}}">
+@endsection--}}
 
 @section('page_css')
 
@@ -39,44 +46,49 @@
                             @endforeach
                         </div>
                     @endif
-                    <p class="up-bio">27 yrs, 5'7"<br>Varanasi</p>
-
+                   {{-- <p class="up-bio">27 yrs, 5'7"<br>Varanasi</p>--}}
+                    <p class="up-bio">{{\Carbon\Carbon::parse($profile->dob)->age.' yrs, '.$profile->ht}}<br>{{$profile->district}}</p>
                 </div>
 
                 <div class="up-main">
-                    <h2 class="profile-name">{{ucfirst($authUser->first_name).' '.ucfirst($authUser->last_name)}}</h2>
-                    <p class="profile-position">B.Tech, Software Developer</p>
-                    <p class="profile-body">Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+                    <h2 class="profile-name">{{ucfirst($profile->first_name)}}</h2>
+                    <p class="profile-position">{{$profile->edu.', '.$profile->occ}}</p>
+                   {{-- <p class="profile-body">Lorem ipsum, dolor sit amet consectetur adipisicing elit.
                         Perspiciatis inventore eos ipsam debitis.
+                    </p>--}}
+                    <p class="profile-body">{{$profile->religion.', '.$profile->lang.', '.$profile->mstatus.', '.$profile->caste.', '.$profile->manglik.', Income: '.$profile->income.'/annum, Location: '.$profile->district.', '.$profile->state.', '.$profile->country}}
                     </p>
                     <div>
-                        <button class="btn btn-pink">Album</button>
-                        <button id="contact-btn" class="btn btn-orange">Contact</button>
+                        @if($authUser)
+                            <a href="https://wa.me/{{'91'.$profile->whatsapp}}?text=Hi I am interested, here is my profile: http://www.jumatrimony.com/profile/{{$profile->pid}}" target="_blank" class="btn btn-pink" role="button" onclick="recordWhatsappInterest({{$profile->id}}); return true;">Wa Interest</a>
+                            <button id="contact-btn" class="btn btn-orange contact" onclick="viewContactAdd({{$profile->id}})">Contact</button>
+                        @else
+                            <button type="button" class="btn btn-pink" data-toggle="modal" data-target="#exampleModal">Wa Interest</button>
+                            <button type="button" class="btn btn-orange" data-toggle="modal" data-target="#exampleModal">Contact</button>
+                        @endif
+
                     </div>
                 </div>
-            </div>
-
-            <!-- Handler Bar -->
-            <div class="up-neck">
+                <!-- Handler Bar -->
                 <div class="up-handler">
-                    <a title="Share on whatsapp" class="handle" href="#"><i class="fas fa-share sun"></i></a>
-                    <a title="Shortlist and Like" class="handle" href="#"><i class="fas fa-heart sun"></i></a>
-                    <a title="Downlist and Hide" class="handle" href="#"><i class="fas fa-arrow-circle-down sun"></i></a>
+                    <a title="Share on whatsapp" class="handle" href="https://wa.me/?text=This profile seems to be the perfect match - http://www.jumatrimony.com/profile/{{$profile->pid}}" target="_blank"><i class="fas fa-share sun"></i></a>
+                    <a title="Shortlist and Like" class="handle"  href="javascript:void(0)" onclick="shortlistProfile({{$profile->id}})"><i class="fas fa-heart sun"></i></a>
+                    <a title="Downlist and Hide" class="handle" href="javascript:void(0)"  onclick="hidelistProfile({{$profile->id}})"><i class="fas fa-arrow-circle-down sun"></i></a>
                 </div>
 
+            </div>
+
+            <div class="up-neck">
                 <!-- Address Bar -->
                 <div class="up-address">
-                    <span><i class="fab fa-whatsapp"></i>  7565097233</span>
-                    <span><i class="fas fa-phone-alt"></i>  7565097233</span>
-                    <span><i class="far fa-envelope"></i> dg7proj@gmail.com</span>
+                    <span><i class="fab fa-whatsapp"></i>  {{$profile->whatsapp}}</span>
+                    <span><i class="fas fa-phone-alt"></i>  {{$profile->mobile}}</span>
+                    <span><i class="far fa-envelope"></i> {{$profile->email}}</span>
 
                     <div id="contact-address-overlay" class="address-overlay">
                         <div class="text">Contact Address</div>
                     </div>
                 </div>
-
-
-
             </div>
 
             <div class="up-body">
@@ -114,7 +126,7 @@
                             <div class="bio">
                                 <span class="bio-field">Complexion</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">Wheatish</span>
+                                <span class="bio-value">{{($profile->complexion)?$profile->complexion:'Not Provided'}}</span>
                             </div>
                             <div class="bio">
                                 <span class="bio-field">Religion</span>
@@ -136,42 +148,42 @@
                             <div class="bio">
                                 <span class="bio-field">Highest Education</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">BE/B.Tech</span>
+                                <span class="bio-value">{{($profile->edu)?$profile->edu:'Not Provided'}}</span>
                             </div>
                             <div class="bio">
                                 <span class="bio-field">Degree</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">Not Provided</span>
+                                <span class="bio-value">{{($profile->deg)?$profile->deg:'Not Provided'}}</span>
                             </div>
                             <div class="bio">
                                 <span class="bio-field">University</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">Not Provided</span>
+                                <span class="bio-value">{{($profile->university)?$profile->university:'Not Provided'}}</span>
                             </div>
                             <div class="bio">
                                 <span class="bio-field">Other Degrees</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">Not Provided</span>
+                                <span class="bio-value">{{($profile->other_deg)?$profile->other_deg:'Not Provided'}}</span>
                             </div>
                             <div class="bio">
                                 <span class="bio-field">Occupation</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">Sports Person</span>
+                                <span class="bio-value">{{($profile->occ)?$profile->occ:'Not Provided'}}</span>
                             </div>
                             <div class="bio">
                                 <span class="bio-field">Working In</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">Not Provided</span>
+                                <span class="bio-value">{{($profile->working_in)?$profile->working_in:'Not Provided'}}</span>
                             </div>
                             <div class="bio">
                                 <span class="bio-field">Annual Income</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">Not Provided</span>
+                                <span class="bio-value">{{($profile->income)?$profile->income.' / yr':'Not Provided'}}</span>
                             </div>
                             <div class="bio">
                                 <span class="bio-field">Sector</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">Not Provided</span>
+                                <span class="bio-value">{{($profile->sector)?$profile->sector:'Not Provided'}}</span>
                             </div>
                         </div>
                     </div>
@@ -182,47 +194,57 @@
                             <div class="bio">
                                 <span class="bio-field">Father</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">Service-Govt./PSU</span>
+                                <span class="bio-value">{{($profile->father_name)?$profile->father_name:'Not Provided'}}</span>
+                            </div>
+                            <div class="bio">
+                                <span class="bio-field">Work as</span>
+                                <span class="bio-colon">:</span>
+                                <span class="bio-value">{{($profile->faa)?$profile->faa:'Not Provided'}}</span>
                             </div>
                             <div class="bio">
                                 <span class="bio-field">Mother</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">Teacher</span>
+                                <span class="bio-value">{{($profile->mother_name)?$profile->mother_name:'Not Provided'}}</span>
+                            </div>
+                            <div class="bio">
+                                <span class="bio-field">Work as</span>
+                                <span class="bio-colon">:</span>
+                                <span class="bio-value">{{($profile->maa)?$profile->maa:'Not Provided'}}</span>
                             </div>
                             <div class="bio">
                                 <span class="bio-field">Brother</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">2 of which married 1</span>
+                                <span class="bio-value">{!! ($profile->bros && $profile->mbros)?$profile->bros.' of which married '.$profile->mbros:'<em>no info</em>'!!}</span>
                             </div>
                             <div class="bio">
                                 <span class="bio-field">Sister</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">3 of which married 2</span>
+                                <span class="bio-value">{!! ($profile->sis && $profile->msis)?$profile->sis.' of which married '.$profile->msis:'<em>no info</em>'!!}</span>
                             </div>
-                            <div class="bio">
+                            {{--<div class="bio">
                                 <span class="bio-field">Origin</span>
                                 <span class="bio-colon">:</span>
                                 <span class="bio-value">Indian UP</span>
-                            </div>
+                            </div>--}}
                             <div class="bio">
                                 <span class="bio-field">Family Status</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">Upper Middle</span>
+                                <span class="bio-value">{{($profile->fama)?$profile->fama:'Not Provided'}}</span>
                             </div>
                             <div class="bio">
                                 <span class="bio-field">Family Income</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">Rs. 20-25 lakh</span>
+                                <span class="bio-value">{{($profile->fami)?$profile->fami.' / yr':'Not Provided'}}</span>
                             </div>
                             <div class="bio">
                                 <span class="bio-field">Family Type</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">Nuclear Family</span>
+                                <span class="bio-value">{{($profile->famt)?$profile->famt:'Not Provided'}}</span>
                             </div>
                             <div class="bio">
                                 <span class="bio-field">Family Values</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">Liberal</span>
+                                <span class="bio-value">{{($profile->famv)?$profile->famv:'Not Provided'}}</span>
                             </div>
 
                         </div>
@@ -234,48 +256,48 @@
                             <div class="bio">
                                 <span class="bio-field">Diet</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">Vegetarian</span>
+                                <span class="bio-value">{{($profile->diet)?$profile->diet:'Not Provided'}}</span>
                             </div>
 
                             <div class="bio">
                                 <span class="bio-field">Smoke</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">No</span>
+                                <span class="bio-value">{{($profile->smoke)?$profile->smoke:'Not Provided'}}</span>
                             </div>
                             <div class="bio">
                                 <span class="bio-field">Drink</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">No</span>
+                                <span class="bio-value">{{($profile->drink)?$profile->drink:'Not Provided'}}</span>
                             </div>
                             <div class="bio">
                                 <span class="bio-field">Body Type</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">Average</span>
+                                <span class="bio-value">{{($profile->body)?$profile->body:'Not Provided'}}</span>
                             </div>
                             <div class="bio">
                                 <span class="bio-field">Weight</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">59kg</span>
+                                <span class="bio-value">{{($profile->weight_id)?$profile->weight_id.' kgs':'Not Provided'}}</span>
                             </div>
                             <div class="bio">
                                 <span class="bio-field">Blood</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">B+</span>
+                                <span class="bio-value">{{($profile->bg)?$profile->bg:'Not Provided'}}</span>
                             </div>
                             <div class="bio">
                                 <span class="bio-field">Hiv+</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">No</span>
+                                <span class="bio-value">{{($profile->hiv)?($profile->hiv==1?'Yes':'No'):'Not Provided'}}</span>
                             </div>
                             <div class="bio">
                                 <span class="bio-field">Thalassemia</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">No</span>
+                                <span class="bio-value">{{($profile->thal)?$profile->thal:'Not Provided'}}</span>
                             </div>
                             <div class="bio">
                                 <span class="bio-field">Challenged</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">No</span>
+                                <span class="bio-value">{{($profile->chal)?$profile->chal:'Not Provided'}}</span>
                             </div>
                         </div>
                     </div>
@@ -287,27 +309,27 @@
                             <div class="bio">
                                 <span class="bio-field">Manglik Status</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">Manglik</span>
+                                <span class="bio-value">{{($profile->manglik)?$profile->manglik:'Not Provided'}}</span>
                             </div>
                             <div class="bio">
                                 <span class="bio-field">Rashi(Moon sign)</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">Sagitarus</span>
+                                <span class="bio-value">{{($profile->rashi)?$profile->rashi:'Not Provided'}}</span>
                             </div>
                             <div class="bio">
                                 <span class="bio-field">Sun Sign</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">Leo</span>
+                                <span class="bio-value">{{($profile->sun)?$profile->sun:'Not Provided'}}</span>
                             </div>
                             <div class="bio">
                                 <span class="bio-field">Nakshatra</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">Aswain</span>
+                                <span class="bio-value">{{($profile->nak)?$profile->nak:'Not Provided'}}</span>
                             </div>
                             <div class="bio">
                                 <span class="bio-field">Birth Details</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">17-Dec-1982 10:20pm Varanasi</span>
+                                <span class="bio-value">{{$profile->kundli_details}}</span>
                             </div>
 
                         </div>
@@ -324,70 +346,12 @@
     </section>
     <!-- profiles section ends -->
 
-
-    <!-- Root element of PhotoSwipe. Must have class pswp. -->
-    <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
-        <!-- Background of PhotoSwipe.
-                 It's a separate element as animating opacity is faster than rgba(). -->
-        <div class="pswp__bg"></div>
-        <!-- Slides wrapper with overflow:hidden. -->
-        <div class="pswp__scroll-wrap">
-            <!-- Container that holds slides.
-                      PhotoSwipe keeps only 3 of them in the DOM to save memory.
-                      Don't modify these 3 pswp__item elements, data is added later on. -->
-            <div class="pswp__container">
-                <div class="pswp__item"></div>
-                <div class="pswp__item"></div>
-                <div class="pswp__item"></div>
-            </div>
-            <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
-            <div class="pswp__ui pswp__ui--hidden">
-                <div class="pswp__top-bar">
-                    <!--  Controls are self-explanatory. Order can be changed. -->
-                    <div class="pswp__counter"></div>
-                    <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
-                    <button class="pswp__button pswp__button--share" title="Share"></button>
-                    <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
-                    <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
-                    <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
-                    <!-- element will get class pswp__preloader--active when preloader is running -->
-                    <div class="pswp__preloader">
-                        <div class="pswp__preloader__icn">
-                            <div class="pswp__preloader__cut">
-                                <div class="pswp__preloader__donut"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
-                    <div class="pswp__share-tooltip"></div>
-                </div>
-                <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
-                </button>
-                <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
-                </button>
-                <div class="pswp__caption">
-                    <div class="pswp__caption__center"></div>
-                </div>
-            </div>
-        </div>
-    </div>
+    @include('modal.signup-login')
+    @include('modal.photoswipe')
 
 @endsection
 
 @section('js')
-    <!-- custom js code -->
-    <script>
-        var btn1 = document.getElementById("contact-btn");
-        var addr = document.getElementById("contact-address-overlay")
-
-        // When the user clicks the button, open the modal
-        btn1.onclick = function() {
-            addr.style.width= 0;
-            addr.style.left= 100;
-            btn1.setAttribute('disabled','disabled');
-        }
-    </script>
 
     <!-- Core JS file -->
     <script src="/pswipe/photoswipe.min.js"></script>
@@ -443,5 +407,243 @@
 
         }(jQuery));
     </script>
+
+    <script>
+        @if($authUser)
+        $(document).ready(function(){
+            recordProfileVisitor();
+        });
+        function recordProfileVisitor(){
+
+            var uid = '{{$authUser->id}}';
+            var pid = '{{$profile->id}}';
+
+            // console.log(uid);
+            // console.log(pid);
+            $.ajax({
+                headers:{
+                    'CsrfToken': $('meta[name="csrf-token"]').attr('content'),
+                },
+                url: "/AjaxActivity/recordVisitor",
+                method: 'post',
+                data: {
+                    uid: uid,
+                    pid: pid
+                },
+                dataType: "json",
+                success: function (data, status) {
+                    console.log(data);
+                    console.log(status);
+                    //$('#fav-profile').addClass('disabled');
+                },
+                error: function( jqXhr, textStatus, errorThrown ){
+                    console.log( jqXhr.responseJSON.message );
+                    console.log( errorThrown );
+                    //console.log( jqXhr.responseText );
+                    $.alert({
+                        title: 'Security Alert!',
+                        content: jqXhr.responseJSON.message + ' Please logout and login after sometime to continue.',
+                        icon: 'fa fa-skull',
+                        animation: 'scale',
+                        closeAnimation: 'scale',
+                        buttons: {
+                            okay: {
+                                text: 'Okay',
+                                btnClass: 'btn-blue'
+                            }
+                        }
+                    });
+                }
+            });
+        }
+        @endif
+    </script>
+
+    <script>
+        // Move profile either to shortlist or hide list
+        function moveProfile(receiver,i){
+            console.log(receiver);
+            console.log(i);
+            $.ajax({
+                headers:{
+                    'CsrfToken': $('meta[name="csrf-token"]').attr('content'),
+                },
+                url: "/ajaxActivity/move-profile-to",
+                method: 'post',
+                data: {
+                    receiver: receiver,
+                    i:i
+                },
+                dataType: "json",
+                success: function (data, status) {
+                    console.log(data);
+                    console.log(status);
+                    setTimeout(function(){
+                        toastr.success(data.msg);
+                    }, 250);
+                    //$('#hide-profile').addClass('disabled');
+                },
+                error: function( jqXhr, textStatus, errorThrown ){
+                    console.log( jqXhr.responseJSON.message );
+                    console.log( errorThrown );
+                    //console.log( jqXhr.responseText );
+                    $.alert({
+                        title: 'Security Alert!',
+                        content: jqXhr.responseJSON.message + ' Please logout and login after sometime to continue.',
+                        icon: 'fa fa-skull',
+                        animation: 'scale',
+                        closeAnimation: 'scale',
+                        buttons: {
+                            okay: {
+                                text: 'Okay',
+                                btnClass: 'btn-blue'
+                            }
+                        }
+                    });
+                }
+            });
+        }
+
+        function shortlistProfile(id){
+            console.log('trying to shortlist profile');
+            //Confirm before shortlisting
+            $.confirm({
+                title: 'It will shortlist this profile',
+                content: 'Shortlist favourites profile and then deal one by one',
+                icon: 'fa fa-heart',
+                animation: 'scale',
+                closeAnimation: 'scale',
+                opacity: 0.5,
+                buttons: {
+                    'confirm': {
+                        text: 'Shortlist',
+                        btnClass: 'btn-blue',
+                        action: function(){
+                            moveProfile(id,2);
+                        }
+                    },
+                    cancel: function(){},
+                }
+            });
+        }
+
+        function hidelistProfile(id){
+
+            //Confirm before hiding
+            $.confirm({
+                title: 'It will hide this profile',
+                content: 'If this profile don\'t match your criteria, you can hide it permanently',
+                icon: 'fa fa-question-circle',
+                animation: 'scale',
+                closeAnimation: 'scale',
+                opacity: 0.5,
+                buttons: {
+                    'confirm': {
+                        text: 'Hide',
+                        btnClass: 'btn-blue',
+                        action: function(){
+                            moveProfile(id,1);
+                        }
+                    },
+                    cancel: function(){},
+                }
+            });
+        }
+
+        function viewContactAdd(id){
+            console.log('contact clicked');
+            console.log(id);
+            //alert("The data-id of clicked item is: " + id);
+            $.confirm({
+                title: 'View Contact details ',
+                content: 'The number of contacts viewed by you is counted and recorded to fight <strong>spam</strong>',
+                icon: 'fa fa-question-circle',
+                animation: 'scale',
+                closeAnimation: 'scale',
+                opacity: 0.5,
+                buttons: {
+                    'confirm': {
+                        text: 'Proceed',
+                        btnClass: 'btn-blue',
+                        action: function(){
+                            $.ajax({
+                                headers:{
+                                    //'CsrfToken': $('meta[name="csrf-token"]').attr('content'),
+                                },
+                                url: "/AjaxActivity/show-contact",
+                                method: 'post',
+                                data: {
+                                    other_id:id
+                                },
+                                dataType: "json",
+                                success: function (data, status) {
+                                    console.log(data);
+                                    console.log(status);
+                                    setTimeout(function(){
+                                        toastr.success(data.msg);
+                                    }, 1000);
+                                    //$('#hide-profile').addClass('disabled');
+                                },
+                                error: function( jqXhr, textStatus, errorThrown ){
+                                    console.log( jqXhr.responseJSON.message );
+                                    console.log( errorThrown );
+                                    //console.log( jqXhr.responseText );
+                                    $.alert({
+                                        title: 'Security Alert!',
+                                        content: jqXhr.responseJSON.message + ' Please logout and login after sometime to continue.',
+                                        icon: 'fa fa-skull',
+                                        animation: 'scale',
+                                        closeAnimation: 'scale',
+                                        buttons: {
+                                            okay: {
+                                                text: 'Okay',
+                                                btnClass: 'btn-blue'
+                                            }
+                                        }
+                                    });
+                                }
+
+                            });
+
+                            var btn1 = document.getElementById("contact-btn");
+                            var addr = document.getElementById("contact-address-overlay");
+                            addr.style.width= 0;
+                            addr.style.left= 100;
+                            btn1.setAttribute('disabled','disabled');
+
+                        }
+                    },
+                    cancel: function(){
+                        $.alert('You clicked <strong>cancel</strong>. Thanx we can\'t continue.');
+                    },
+
+                }
+            });
+
+        }
+
+        function recordWhatsappInterest(id){
+            console.log('send whatsapp clicked');
+            console.log(id);
+            //alert("The data-id of clicked item is: " + id);
+
+            $.ajax({
+                url: "/AjaxActivity/show-contact",
+                method: 'post',
+                data: {
+                    other_id:id
+                },
+                success: function (data, status) {
+                    console.log(data);
+                    console.log(status);
+                }
+            });
+
+        }
+
+
+
+    </script>
+
 @endsection
 

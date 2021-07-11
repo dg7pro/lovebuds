@@ -2,14 +2,15 @@
 
 namespace App\Controllers;
 
+use App\Csrf;
 use App\Flash;
 use \Core\View;
 use \App\Models\User;
 
+
 /**
- * Password controller -- To do
- *
- * PHP version 7.0
+ * Class Password
+ * @package App\Controllers
  */
 class Password extends \Core\Controller
 {
@@ -39,13 +40,20 @@ class Password extends \Core\Controller
      */
     public function requestResetAction()
     {
+        $csrf = new Csrf($_POST['token']);
+        if(!$csrf->validate()){
+            unset($_SESSION["csrf_token"]);
+            die("CSRF token validation failed");
+        }
+
+        $this->validateEmail($_POST);
         $user = User::findByEmail($_POST['email']);
         if(!$user){
             Flash::addMessage('No such email exist in our database', Flash::DANGER);
             $this->redirect('/password/forgot');
         }
 
-        User::sendPasswordReset($_POST['email']);
+        //User::sendPasswordReset($_POST['email']);
 
         View::renderBlade('Password/reset-requested');
     }
@@ -95,7 +103,8 @@ class Password extends \Core\Controller
     }
 
     /**
-     * Find the user model associated with the password reset token, or end the request with a message
+     * Find the user model associated with the password reset token,
+     * or end the request with a message
      *
      * @param string $token Password reset token sent to user
      *
@@ -117,6 +126,16 @@ class Password extends \Core\Controller
         }
     }
 
-    // TODO: Make Email Template
-    // TODO: Hide and show password + validate new password
+    /**
+     * @param $arr
+     */
+    protected function validateEmail($arr){
+
+        $email = filter_var($arr['email'],FILTER_SANITIZE_EMAIL);
+        if(!filter_var($email,FILTER_VALIDATE_EMAIL)){
+            Flash::addMessage('Invalid Email. Please enter a valid email', Flash::DANGER);
+            View::renderBlade('password/forgot');
+        }
+
+    }
 }

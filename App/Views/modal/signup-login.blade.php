@@ -48,6 +48,9 @@
                         </div>
 
                         <form action="{{'/login/authenticate'}}" method="post">
+                            <div>
+                                <input type="hidden" name="token" value="{{$_SESSION['csrf_token']}}" />
+                            </div>
                             <div class="form-group">
                                 <!-- <label for="exampleInputEmail1">Email address</label> -->
                                 <input type="email" id="uid" name="uid" class="form-control" aria-describedby="emailHelp" placeholder="Email">
@@ -69,7 +72,9 @@
                     <!-- Tab Content 2 -->
                     <div class="tab-pane fade" id="signup" role="tabpanel" aria-labelledby="profile-tab">
                         <form action="{{'/register/create'}}" method="post" autocomplete="off">
-
+                            <div>
+                                <input type="hidden" name="token" value="{{$_SESSION['csrf_token']}}" />
+                            </div>
                             <div class="form-row">
                                 <div class="form-group col-md-6">
                                     <select id="for_popup" class="form-control" name="cFor" required>

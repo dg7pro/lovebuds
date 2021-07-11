@@ -74,6 +74,6 @@ class Error
 
         error_log($message);
 
-        //View::renderBlade("$code");
+        View::renderBlade("$code",['msg'=>$exception->getMessage()]);
     }
 }

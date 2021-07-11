@@ -7,7 +7,21 @@
 
 @section('content')
 
-    <h5>This is new 2</h5>
+    <section class="profiles-buttons">
+        <div class="btn-group">
+           <a class="btn btn-pink beautiful_brides" id="pills-home-tab">
+               <i class="fas fa-user-circle text-white"></i>
+               Beautiful Brides
+           </a>
+
+           <a class="btn btn-blue smart_grooms" id="pills-contact-tab" >
+               <i class="fas fa-graduation-cap text-white"></i>
+               Smart Grooms
+           </a>
+
+       </div>
+
+   </section>
 
     <!-- profiles section starts -->
     <section class="profiles" id="quick-search-profiles">
@@ -37,7 +51,7 @@
                 if(forID){
                     $.ajax({
                         type:'POST',
-                        url:'/ajax/select-gender-popup',
+                        url:'/ajaxRegistration/select-gender-popup',
                         data:{
                             for_id:forID
                         },
@@ -86,19 +100,17 @@
 
     <script>
 
-        //====================
-        // For first time load
-        //====================
+        /* For first time load */
         $(document).ready(function(){
             loadQuickSearchResults();
         });
 
-        //=====================
-        // New Profiles
-        //=====================
-        function loadQuickSearchResults(){
+        /* New Profiles */
+        function loadQuickSearchResults(sex=''){
 
             //console.log(jsonString);
+            console.log('hello shakti');
+            console.log(sex);
 
             var gender = "{{$_GET['gender'] ??''}}";
             var minAge = "{{$_GET['minAge'] ??''}}";
@@ -106,6 +118,9 @@
             var rel = "{{$_GET['rel'] ??''}}";
             var lan = "{{$_GET['lan'] ??''}}";
 
+            if(sex!==''){
+                gender = '';
+            }
             console.log(gender);
             console.log(minAge);
             console.log(maxAge);
@@ -116,6 +131,7 @@
                 url: "/quick/ajax-search-profiles",
                 method: "POST",
                 data:{
+                    sex:sex,
                     gender:gender,
                     minAge:minAge,
                     maxAge:maxAge,
@@ -128,13 +144,15 @@
             });
         }
 
-        /*$('.new-profiles').on('click', function(){
-            loadQuickSearchResults();
-            console.log('brides button clicked');
-        });*/
+        $('.smart_grooms').on('click', function(){
+            loadQuickSearchResults(1);
+            console.log('grooms clicked');
+        });
+
+        $('.beautiful_brides').on('click', function(){
+            loadQuickSearchResults(2);
+            console.log('brides clicked');
+        });
     </script>
-
-
-
 
 @endsection

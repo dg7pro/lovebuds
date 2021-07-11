@@ -6,7 +6,6 @@
     <section class="main">
         <h3>Account Activated</h3>
         <p class="lead"><i class="fas fa-user text-green"> </i> Your account is active now, please <a href="{{'/login/index'}}">login to continue</a></p>
-        {{--<p class="lead"><i class="fas fa-user"> </i> Sign Into Your Account</p>--}}
     </section>
 
 @endsection
