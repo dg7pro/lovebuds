@@ -23,7 +23,7 @@
     <link rel="stylesheet" href="/css/jquery-confirm.min.css">
 
     <!-- custom css file -->
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/main.css">
 
     @yield('page_css')
 </head>
@@ -66,6 +66,8 @@
         "hideMethod": "fadeOut"
     }
 </script>
+
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
 
 <!-- bootstrap js file -->
 <script src="/js/bootstrap.min.js"></script>

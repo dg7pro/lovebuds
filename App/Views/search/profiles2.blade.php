@@ -363,7 +363,10 @@
                                     setTimeout(function(){
                                         toastr.success(data.msg);
                                     }, 1000);
-                                    $('#addr-'+id).html(data.addr);
+                                    if(data.cc){
+                                        $('#addr-'+id).html(data.addr);
+                                    }
+
                                     //$('#hide-profile').addClass('disabled');
                                 },
                                 error: function( jqXhr, textStatus, errorThrown ){

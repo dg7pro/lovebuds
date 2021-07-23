@@ -5,7 +5,7 @@ namespace App\Controllers;
 
 
 use App\Auth;
-use App\Models\Notify;
+use App\Models\Notification;
 use App\Models\RecordContact;
 use Core\Controller;
 
@@ -97,7 +97,7 @@ class Ajax extends Controller
         if(isset($_POST['readrecord'])){
 
             $data = '';
-            $results = Notify::fetchAll($_SESSION['user_id']);
+            $results = Notification::fetchAll($_SESSION['user_id']);
             $num = count($results);
 
             if($num>0){
@@ -130,7 +130,7 @@ class Ajax extends Controller
 
         $msg ='';
         if(isset($_POST['aid'])){
-            $result = Notify::markAsRead($_POST['aid']);
+            $result = Notification::markAsRead($_POST['aid']);
             if($result){
                 $msg = 'Marked as read, will be automatically deleted in 30days ';
             }else{

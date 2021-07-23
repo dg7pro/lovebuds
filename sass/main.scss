@@ -1,0 +1,51 @@
+@import url(./fonts.css);
+@import 'config';
+@import 'utilities';
+@import 'form';
+
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+.x-large{
+    font-size: 3rem;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+}
+.large{
+    font-size: 2.5rem;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+}
+.lead{
+    // color: #000;
+    // text-align: center;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+@import 'partials/header';
+@import 'partials/index';
+@import 'partials/footer';
+
+@import 'partials/admin';
+@import 'partials/album';
+@import 'partials/dashboard';
+@import 'partials/profile';
+@import 'partials/profiles';
+@import 'partials/popup';
+
+.logo-heading{
+    font-family: BalooH,cursive;
+    font-size: 1.25rem;
+}
+
+.blink{
+    font-family: BalooH,cursive;
+    font-size: 1.125rem;
+}
+
+.baloo{
+    font-family: Baloo, cursive;
+}

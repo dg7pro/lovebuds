@@ -1,0 +1,68 @@
+.form {
+    &-group{
+        margin: 1.2rem 0;
+    }
+
+    &-text{
+        display: block;
+        margin-top: 0.3rem;
+        color: #888;
+    }
+
+    input[type='text'],
+    input[type='email'],
+    input[type='password'],
+    input[type='date'],
+    select,
+    textarea {
+        display: block;
+        width: 100%;
+        padding: 0.4rem;
+        font-size: 1.2rem;
+        border: 1px solid #ccc;
+    }
+
+    // .select-multiple{
+    //     padding: 0.4rem !important;
+    //     height: 50px;
+    //     font-size: 1.2rem !important;
+    // }
+}
+
+
+.inputWithIcon{
+    position: relative;
+}
+
+.inputWithIcon i {
+    position: absolute;
+    right: 0;
+    top: 8px;
+    padding: 7px 8px;
+    //color: #aaa;
+    //color: $color-green;
+    transition: 0.3s;
+}
+
+.flex-row{
+    display: flex;
+    justify-content: space-between;
+}
+
+.flex-row-stretch{
+    display: flex;
+    justify-content: stretch;
+}
+
+.flex-field-1 {
+    width: 100%;
+}
+
+.flex-field-2{
+    width: 49%;
+}
+
+.flex-field-3{
+    width: 32%;
+}
+

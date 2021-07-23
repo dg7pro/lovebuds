@@ -12,7 +12,7 @@ use PDO;
  * Class Notify
  * @package App\Models
  */
-class Notify extends Model
+class Notification extends Model
 {
 
     /**
@@ -21,7 +21,7 @@ class Notify extends Model
      */
     public static function fetchAll($userId): array
     {
-        $sql = "SELECT * FROM notify where receiver=? AND status=? ORDER BY created_at";
+        $sql = "SELECT * FROM notifications where receiver=? AND status=? ORDER BY created_at";
         $pdo = Model::getDB();
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$userId,0]);
@@ -36,7 +36,7 @@ class Notify extends Model
     {
 
         $pdo=Model::getDB();
-        $sql="UPDATE notify SET status=? WHERE id=?";
+        $sql="UPDATE notifications SET status=? WHERE id=?";
         $stmt=$pdo->prepare($sql);
         return $stmt->execute([1,$id]);
 
@@ -52,7 +52,7 @@ class Notify extends Model
 
         $user = Auth::getUser();
 
-        $sql = "INSERT INTO notify (sender, receiver, message, pid) 
+        $sql = "INSERT INTO notification (sender, receiver, message, pid) 
                 VALUES(:sender, :receiver, :message, :pid)";
 
         $db = static::getDB();

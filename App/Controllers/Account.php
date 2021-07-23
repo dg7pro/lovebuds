@@ -8,7 +8,7 @@ use App\Auth;
 use App\Csrf;
 use App\Flash;
 use App\Models\Image;
-use App\Models\Notify;
+use App\Models\Notification;
 use App\Models\UserVariables;
 use Core\View;
 
@@ -37,7 +37,7 @@ class Account extends Authenticated
      */
     public function dashboardAction()
     {
-        if(Auth::getUser()->name==''){
+        if(Auth::getUser()->first_name==''){
             $this->redirect('/account/create-profile');
         }
         // Unset done to remove errors
@@ -49,7 +49,7 @@ class Account extends Authenticated
         // Fetch Images
         $image = Image::getUserImages($_SESSION['user_id']);
 
-        $notifications = Notify::fetchAll($_SESSION['user_id']);
+        $notifications = Notification::fetchAll($_SESSION['user_id']);
         $pf = '<em>Please fill</em>';
 
         // Render view
@@ -139,7 +139,7 @@ class Account extends Authenticated
      */
     public function createProfileAction(){
 
-        if (Auth::getUser()->name == '') {
+        if (Auth::getUser()->first_name == '') {
 
             $arr = isset($_GET['arr'])?json_decode($_GET['arr'],true):'';
             $date_rows = UserVariables::dates();

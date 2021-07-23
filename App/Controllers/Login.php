@@ -56,7 +56,7 @@ class Login extends Controller
 
             Auth::login($user,$remember_me);
 
-            if($user->name==''){
+            if($user->first_name==''){
                 Flash::addMessage('Login Successful. Please complete the form');
                 $this->redirect('/account/create-profile');
             }

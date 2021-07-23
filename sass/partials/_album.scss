@@ -1,0 +1,70 @@
+// ========================
+// Upload image
+// ========================
+
+.album-card{
+    width: 90%;
+    //margin: 5rem 0 0;
+    //box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    padding: 2rem 3rem 1rem;/* top, left-right, bottom */
+   
+}
+
+.album-heading{
+    margin-bottom: 1rem;
+}
+
+.image-area{
+    display: flex;
+    flex-direction: row;
+    // align-items: center;
+    justify-content:flex-start;
+    flex-wrap: wrap;
+}
+
+.my-images{
+    width: 20rem;
+    height: 25rem;
+    background-color: bisque;
+    margin-bottom: 2em;
+    margin-right: 1em;
+    position: relative;
+}
+
+.imgWithIcon{
+    position: relative;
+
+    i{
+        position: absolute;
+        right: 1rem;
+        top: 0.5rem;
+        padding: 7px 8px;
+        transition: 0.3s;
+    }
+}
+
+@media only screen and (max-width:460px){
+
+    .album-card{
+        padding: 1.5rem 2rem;
+       
+    }
+    .my-images{
+        width: 16rem;
+        height: 20rem;
+    }
+}
+@media only screen and (max-width:350px){
+
+    .album-card{
+        padding: 1.5rem;
+       
+    }
+}
+
+
+.photo-status{
+    position: absolute;
+    top: 0.65em;
+    left:0.5em
+}

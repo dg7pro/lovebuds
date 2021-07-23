@@ -76,9 +76,12 @@ class AjaxSearch extends Controller
 
             $output .= '<div class="ups-ab">
                             <div id="addr-'.$profile['id'].'">
-                                <span><i class="fab fa-whatsapp"></i> xxxx xxxx xx</span>
+                                <!--<span><i class="fab fa-whatsapp"></i> xxxx xxxx xx</span>
                                 <span class="mr-1"><i class="fas fa-phone-alt"></i>  xxxx xxxx xx</span>
-                                <span class="ml-3"><i class="far fa-envelope"></i> user@jumatrimony.com</span>
+                                <span class="ml-3"><i class="far fa-envelope"></i> user@jumatrimony.com</span>-->
+                                <span><i class="fab fa-whatsapp"></i> '.$profile['mobile'].'</span>
+                                <span class="mr-1"><i class="fas fa-phone-alt"></i> '.$profile['mobile'].'</span>
+                                <span class="ml-3"><i class="far fa-envelope"></i> '.$profile['email'].'</span>
                             </div>
                             <div id="ups-ab-overlay-'.$profile['id'].'" class="ups-ab-overlay">
                                 <!--user profiles address bar-->

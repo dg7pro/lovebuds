@@ -1,0 +1,75 @@
+.social_login {
+    text-align: center;
+    p{
+        color: #8c8c8c;
+    }
+}
+    
+.social_log {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+
+    li{
+        margin: 0 6px;
+
+        img {
+            width: 40px;
+        }
+    }
+} 
+  
+.signin-modal .nav-tabs {
+    border-bottom: none;
+
+    .nav-link {
+        border-radius: 0;
+        background-color: #FFD384;
+        border: none !important;
+        font-weight: 600;
+        padding: 1.2rem 0;
+
+    }
+
+    .nav-link.active {
+        background-color: #fff8f0;
+    }
+
+    .nav-item {
+        width: 50%;
+        margin-bottom: 1rem;
+        text-align: center;
+    }
+}   
+  
+.signin-tab {
+    padding: 0 3rem;
+
+    input.form-control select.form-control{
+        font-size: 16px;
+        color: #8c8c8c;
+        height: 40px;
+        border-radius: 0;
+    }
+    
+    .form-row .form-group{
+        margin-bottom: 0;
+    }
+
+}
+  
+.signin-link {
+    text-align: center;
+    color: #8c8c8c;
+    margin-top: 0.5rem;
+}
+  
+.forgot-link {
+    text-align: right;
+    font-size: 12px;
+}
+  
+.signin-dialog .modal-body {
+    background-color: #fff8f0;
+    padding: 0;
+}

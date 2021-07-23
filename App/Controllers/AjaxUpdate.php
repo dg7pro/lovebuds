@@ -25,6 +25,18 @@ class AjaxUpdate extends Ajax
 
             $mb= $_POST['mobile'];
             $wa= $_POST['whatsapp'];
+            if($_POST['one_way']==1){
+                $ow = '<em class="text-muted">Oneway Communication</em>
+                        <span class="text-blue text-sm-left"><i>
+                            <a id="one-way" data-toggle="tooltip" data-placement="top"
+                               title=" Oneway Communication: Others will not be able to see your contact, but you will receive notification
+                              that other member is Interested. Specially designed for female members who are self
+                              managing their profile"><i class="fa fa-info-circle" aria-hidden="true"></i>
+                            </a>
+                        </i></span>';
+            }else{
+                $ow = '<em class="text-muted">Contact details are visible</em>';
+            }
             if($result){
                 $msg = 'Contact details updated successfully';
                 $uok = true;
@@ -32,7 +44,7 @@ class AjaxUpdate extends Ajax
                 $msg = 'Something is wrong with your number or server is busy';
                 $uok = false;
             }
-            $re = ['uok'=>$uok,'msg'=>$msg,'mb'=>$mb,'wa'=>$wa];
+            $re = ['uok'=>$uok,'msg'=>$msg,'mb'=>$mb,'wa'=>$wa,'ow'=>$ow];
             echo json_encode($re);
         }
 

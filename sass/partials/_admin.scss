@@ -1,0 +1,24 @@
+// ========================
+// Admin Section
+// ========================
+
+.admin{
+    display: flex;    
+    flex-wrap: wrap;
+    
+}
+
+.admin-box{
+    width: 20rem;
+    min-height: 10rem;
+    background-color: #fff;
+    border: 1px solid #dfdfdf;
+    margin-bottom: 1.25em;
+    margin-right: 1.25em;
+    padding: 1.25rem;
+
+}
+
+.admin-title{
+    margin-bottom: 0.75rem;
+}

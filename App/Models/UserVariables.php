@@ -219,6 +219,10 @@ class UserVariables extends Model
     public static function  incomes(){ return $castes = self::fetch('incomes');}
     public static function  states(){ return $states = self::fetch('states');}
 
+    public static function  educations(){ return $educations = self::fetch('educations');}
+    public static function  occupations(){ return $occupations = self::fetch('occupations');}
+
+
     /**
      * @return array
      */

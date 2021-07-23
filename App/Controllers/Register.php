@@ -70,7 +70,10 @@ class Register extends Controller
      */
     public function activateAction()
     {
+        var_dump($this->route_params['token']);
+        //exit();
         User::activate($this->route_params['token']);
+
 
         $this->redirect('/register/activated');
     }

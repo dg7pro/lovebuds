@@ -1,0 +1,175 @@
+// ========================
+// Profiles Section
+// ========================
+
+
+.profiles-buttons{
+    margin-top: 6rem;
+    margin-left: 5%;
+    margin-right: 5%;
+    display: grid;
+    place-items: center;
+}
+
+.profiles{
+    display: grid;
+    place-items: center;
+    line-height: 1.6;
+    min-height: 100vh; 
+    margin: 3rem 0;   
+    // font-family: "Fira Sans", sans-serif;
+}
+
+.profiles-card{
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  max-width: 600px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.2);
+  margin: 2rem 0;
+//   background: $color-lime;
+//   color: $color-coco;
+
+}
+
+.main-card{
+  display: flex;
+  flex-direction: row;
+  background: $color-lime;
+  color: $color-coco;
+}
+
+/* ************* */
+.profile-sidebar{
+  padding: 1em;
+}
+.profile-image {
+  border-radius: 50%;
+  border: 5px solid $color-orange;
+}
+.profile-bio{
+  text-align: center;
+}
+/* ************* */
+
+// card middle part
+.profile-main{
+    padding: 1em;
+}
+
+.profile-name{
+    text-decoration: none;
+    color: $color-blue;
+
+    :hover{
+        color: $color-blue;
+    }
+}
+
+// card process buttons
+.profile-handler{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;  
+    align-items: center; 
+    a{
+        text-decoration: none;
+        color: $color-yellow;
+    }   
+    a:hover{
+        background: rgba(255,171,115, 0.3);
+        color: $color-pink;
+    }
+}
+.share{
+    position: relative;
+    width: auto;
+    height: 100%;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.3);
+}
+.shortlist{
+    position: relative;
+    padding:1rem;
+    width: auto;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.3);
+}
+.downlist{
+    position: relative;
+    padding: 1rem;
+    width: auto;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.3);
+}
+.san{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+.ups-ab{
+    background: rgba(0,175,145, 0.3);
+    padding: 0.125rem;
+    position: relative;
+        
+    span{            
+        padding: 0 0.5rem;
+    }
+   
+}
+
+.ups-ab-overlay{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 100px;
+    //background-color: #008CBA;
+    background-color: bisque;
+
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    transition: 1s ease;
+
+}
+
+@media (max-width:640px){
+    .profiles{
+        margin: 3rem 0;
+    }
+    .main-card{
+        flex-direction: column;
+    }
+    .profile-sidebar{
+        text-align: center;
+    }
+    .profile-main{
+        text-align: center;
+        padding-bottom: 3rem;
+    }
+    .profile-handler{
+
+        flex-direction: row;
+        width: 100%;
+    }
+    .share{
+        width: 100%;
+    }
+    .shortlist{
+        width: 100%;
+    }
+    .downlist{
+        width: 100%;
+    }
+    .address-bar{
+        white-space: nowrap;
+        display: inline-block;
+        overflow: auto;
+        span{
+            padding: 0 0.125rem;
+        }
+        
+    }
+}
+

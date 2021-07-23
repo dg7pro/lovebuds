@@ -26,11 +26,17 @@ class AjaxLoad extends Ajax
             $num = $bros_id;
             // Generate HTML of city options list
             if($num > 0){
-                $opt = '<option value="">Brothers Married</option>';
-                for ($x = 1; $x <= $num; $x++) {
-                    $opt .= '<option value="'.$x.'">'.$x.'</option>';
+                if($num == 100){
+                    $opt = '<option value="">Sorry!</option>';
+                    $flag = true;
+                }else{
+                    $opt = '<option value="">Brothers Married</option>';
+                    for ($x = 1; $x <= $num; $x++) {
+                        $opt .= '<option value="'.$x.'">'.$x.'</option>';
+                    }
+                    $flag = true;
                 }
-                $flag = true;
+
             }else{
                 $opt = '<option value="">Select Brothers</option>';
                 $flag = false;
@@ -53,11 +59,16 @@ class AjaxLoad extends Ajax
             $num = $sis_id;
             // Generate HTML of city options list
             if($num > 0){
-                $opt = '<option value="">Sisters Married</option>';
-                for ($x = 1; $x <= $num; $x++) {
-                    $opt .= '<option value="'.$x.'">'.$x.'</option>';
+                if($num == 100){
+                    $opt = '<option value="">Sorry!</option>';
+                    $flag = true;
+                }else{
+                    $opt = '<option value="">Sisters Married</option>';
+                    for ($x = 1; $x <= $num; $x++) {
+                        $opt .= '<option value="'.$x.'">'.$x.'</option>';
+                    }
+                    $flag = true;
                 }
-                $flag = true;
             }else{
                 $opt = '<option value="">Select Sisters</option>';
                 $flag = false;

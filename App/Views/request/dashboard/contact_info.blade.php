@@ -7,6 +7,18 @@
             var mobile = $('#contactMobile').val();
             var whatsapp = $('#contactWhatsapp').val();
 
+            if($('#one_way_cb').prop("checked") == true){
+                var one_way = 1;
+                console.log("Checkbox is checked.");
+            }
+            else if($('#one_way_cb').prop("checked") == false){
+                var one_way = 0;
+                console.log("Checkbox is unchecked.");
+            }
+            console.log(one_way);
+
+
+
             $.ajax({
                 headers:{
                     'CsrfToken': $('meta[name="csrf-token"]').attr('content'),
@@ -18,7 +30,8 @@
                 data: {
                     ciu:ciu,
                     mobile:mobile,
-                    whatsapp:whatsapp
+                    whatsapp:whatsapp,
+                    one_way:one_way
                 },
                 dataType: "json",
                 success: function (data, status) {
@@ -27,6 +40,7 @@
                     if(data.uok){
                         $('#mb-field').html(data.mb);
                         $('#wa-field').html(data.wa);
+                        $('#ow-field').html(data.ow);
                         var message = data.msg;
                         setTimeout(function(){
                             toastr.success(data.msg);

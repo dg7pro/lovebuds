@@ -170,7 +170,7 @@ class Image extends Model
 
         if($status){
             $message = 'Photo approved by moderator <a href="/account/manage-photo"><strong> View </strong></a>';
-            Notify::save($userId,$message,$_SESSION['user_id']);
+            Notification::save($userId,$message,$_SESSION['user_id']);
         }
         return $status;
     }

@@ -705,7 +705,7 @@ class User extends \Core\Model
      */
     protected function sendPasswordResetEmail()
     {
-        $url = 'http://' . $_SERVER['HTTP_HOST'] . '/password/reset/' . $this->password_reset_token;
+        $url = 'https://' . $_SERVER['HTTP_HOST'] . '/password/reset/' . $this->password_reset_token;
 
         $text = View::getTemplate('Password/reset_email.txt', ['url' => $url]);
         $html = View::getTemplate('Password/reset_email.html', ['url' => $url]);
@@ -810,7 +810,7 @@ class User extends \Core\Model
      */
     public function sendActivationEmail()
     {
-        $url = 'http://' . $_SERVER['HTTP_HOST'] . '/register/activate/' . $this->activation_token;
+        $url = 'https://' . $_SERVER['HTTP_HOST'] . '/register/activate/' . $this->activation_token;
 
         $text = View::getTemplate('register/activation_email.txt', ['url' => $url]);
         $html = View::getTemplate('register/activation_email.html', ['url' => $url]);
@@ -1312,8 +1312,7 @@ class User extends \Core\Model
             users.gender,
             users.dob,
             users.state,
-            users.district,
-            
+            users.district,            
             
             images.user_id as iuid,
             images.filename,
@@ -1327,8 +1326,7 @@ class User extends \Core\Model
             countries.name as country,
             incomes.level as income,
             maritals.status as mstatus,
-            mangliks.status as manglik,
-            districts.text as town,
+            mangliks.status as manglik,        
             castes.text as caste,
             
             users.horoscope, 
@@ -1352,8 +1350,7 @@ class User extends \Core\Model
             LEFT JOIN countries ON countries.id = users.country_id
             LEFT JOIN incomes ON incomes.id = users.income_id
             LEFT JOIN maritals ON maritals.id = users.marital_id
-            LEFT JOIN mangliks ON mangliks.id = users.manglik_id
-            LEFT JOIN districts ON districts.id = users.district_id
+            LEFT JOIN mangliks ON mangliks.id = users.manglik_id            
             LEFT JOIN castes ON castes.value = users.caste_id
                 
             LEFT JOIN educations ON educations.id = users.education_id
@@ -1452,10 +1449,10 @@ class User extends \Core\Model
         $faker = Faker\Factory::create();
 
 
-        $sql = "INSERT INTO users( pid, mobile, email, is_active, password_hash, first_name, last_name, name, username, gender, 
+        $sql = "INSERT INTO users( pid, mobile, email, is_active, password_hash, first_name, last_name, gender, 
                 avatar, for_id, height_id, language_id, occupation_id, district_id, education_id, dob, marital_id, 
                 religion_id, degree_id, university_id, community_id, manglik_id, caste_id, myhobbies,mycastes,myinterests,langs) 
-                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         $pdo = Model::getDB();
         $stmt = $pdo->prepare($sql);
@@ -1470,8 +1467,8 @@ class User extends \Core\Model
             $ia = 1;
             $fn = $faker->firstName;
             $ln = $faker->lastName;
-            $name = $fn . ' ' . $ln;
-            $username = $faker->userName;
+            //$name = $fn . ' ' . $ln;
+            //$username = $faker->userName;
             $gender = rand(1, 2);
             $avatar = $gender == 1 ? 'avatar_groom.jpg' : 'avatar_bride.jpg';
             $cFor = rand(1, 7);
@@ -1493,7 +1490,7 @@ class User extends \Core\Model
             $ier = '[]';
             $lan = '[]';
 
-            $stmt->execute([$pid, $mobile, $email, $ia, $hashedPwd, $fn, $ln, $name, $username, $gender,
+            $stmt->execute([$pid, $mobile, $email, $ia, $hashedPwd, $fn, $ln, $gender,
                 $avatar, $cFor,$ht, $lag, $occ, $dis, $edu, $dob, $ms, $rel, $deg, $uni, $com, $man, $caste,$hob,$cas,$ier,$lan]);
 
 
@@ -1544,14 +1541,13 @@ class User extends \Core\Model
 
         if(empty($this->errors)){
 
-            $this->name = $this->first_name.' '.$this->last_name;
+            //$this->name = $this->first_name.' '.$this->last_name;
             $this->dob = $this->year.'-'.$this->month.'-'.$this->day;
             $this->country_id = 77;
 
             $sql = "UPDATE users SET 
                 first_name= :fName,
-                last_name= :lName,
-                name= :name, 
+                last_name= :lName,            
                 dob= :dob,
                 religion_id= :religion,
                 community_id= :community,
@@ -1573,7 +1569,6 @@ class User extends \Core\Model
             return $stmt->execute([
                 ':fName'=>$this->first_name,
                 ':lName'=>$this->last_name,
-                ':name'=>$this->name,
                 ':dob'=>$this->dob,
                 ':religion'=>$this->religion_id,
                 ':community'=>$this->community_id,
@@ -1883,11 +1878,12 @@ class User extends \Core\Model
         if(empty($this->errors)){
 
             $db = Model::getDB();
-            $sql = "UPDATE users SET mobile=?, whatsapp=? WHERE id =?";
+            $sql = "UPDATE users SET mobile=?, whatsapp=?, one_way=? WHERE id =?";
             $stmt = $db->prepare($sql);
             return $stmt->execute([
                 $this->mobile,
                 $this->whatsapp,
+                $this->one_way,
                 $this->id
             ]);
         }

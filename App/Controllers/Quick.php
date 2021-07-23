@@ -294,7 +294,7 @@ class Quick extends Controller
                 $newProfilesInfo[$newKey]["edu"] = $profileValue["edu"];
                 $newProfilesInfo[$newKey]["occ"] = $profileValue["occ"];
                 $newProfilesInfo[$newKey]["ht"] = $profileValue["ht"];
-                $newProfilesInfo[$newKey]["town"] = $profileValue["town"];
+                $newProfilesInfo[$newKey]["town"] = $profileValue["district"];
                 $newProfilesInfo[$newKey]["manglik"] = $profileValue["manglik"];
                 $newProfilesInfo[$newKey]["religion"] = $profileValue["religion"];
                 $newProfilesInfo[$newKey]["caste"] = $profileValue["caste"];

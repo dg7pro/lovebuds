@@ -77,7 +77,7 @@
                                     @foreach($tongues as $tongue)
                                         <optgroup label="{{$tongue['direction']}}">
                                             @foreach($tongue['lang'] as $lang)
-                                                <option value="{{$lang["id"]}}" {{($authUser->language_id==$lang["id"])?'Selected':''}}>{{$lang["name"]}}</option>
+                                                <option value="{{$lang["id"]}}" {{($authUser->tongue_id==$lang["id"])?'Selected':''}}>{{$lang["name"]}}</option>
                                             @endforeach
                                         </optgroup>
                                     @endforeach
@@ -332,16 +332,21 @@
 
                                 <div class="input-group mb-2">
                                     <select class="custom-select" style="margin-left: 0; background: none" id="bros">
-                                        <option selected>Brothers</option>
+                                        <option selected >Brothers</option>
                                         @for($b=1;$b<=7;$b++)
                                             <option value="{{$b}}" {{($authUser->bros==$b)?'Selected':''}}>{{$b}}</option>
                                         @endfor
+                                        <option value=100 {{($authUser->bros==100)?'Selected':''}}>No Brother</option>
                                     </select>
                                     <select class="custom-select" style="background: none" id="mbros">
-                                        <option selected>Married ones</option>
-                                        @for($mb=1;$mb<=$authUser->bros;$mb++)
-                                            <option value="{{$mb}}" {{($authUser->mbros==$mb)?'Selected':''}}>{{$mb}}</option>
-                                        @endfor
+                                        @if($authUser->bros != 100)
+                                            <option selected>Married ones</option>
+                                            @for($mb=1;$mb<=$authUser->bros;$mb++)
+                                                <option value="{{$mb}}" {{($authUser->mbros==$mb)?'Selected':''}}>{{$mb}}</option>
+                                            @endfor
+                                        @else
+                                            <option value="" selected>Sorry!</option>
+                                        @endif
                                     </select>
                                 </div>
                             </div>
@@ -351,16 +356,21 @@
 
                                 <div class="input-group mb-2">
                                     <select class="custom-select" style="margin-left: 0; background: none" id="sis">
-                                        <option selected>Sisters</option>
+                                        <option selected value=null>Sisters</option>
                                         @for($s=1;$s<=7;$s++)
                                             <option value="{{$s}}" {{($authUser->sis==$s)?'Selected':''}}>{{$s}}</option>
                                         @endfor
+                                        <option value=100 {{($authUser->sis==100)?'Selected':''}}>No Sister</option>
                                     </select>
                                     <select class="custom-select" style="background: none" id="msis">
-                                        <option selected>Married ones</option>
-                                        @for($ms=1;$ms<=$authUser->sis;$ms++)
-                                            <option value="{{$ms}}" {{($ms==$authUser->msis)?'Selected':''}}>{{$ms}}</option>
-                                        @endfor
+                                        @if($authUser->sis != 100)
+                                            <option selected>Married ones</option>
+                                            @for($ms=1;$ms<=$authUser->sis;$ms++)
+                                                <option value="{{$ms}}" {{($ms==$authUser->msis)?'Selected':''}}>{{$ms}}</option>
+                                            @endfor
+                                        @else
+                                            <option value="" selected>Sorry!</option>
+                                        @endif
                                     </select>
                                 </div>
                             </div>

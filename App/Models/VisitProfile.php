@@ -60,7 +60,7 @@ class VisitProfile extends Model
 
         if($result){
             $message = '<a href="/profile/'.$user->pid.'" ><strong> '.$user->first_name.' </strong></a> visited your profile';
-            Notify::save($profileId,$message,$user->id,$user->pid);
+            Notification::save($profileId,$message,$user->id,$user->pid);
         }
         return $result;
 

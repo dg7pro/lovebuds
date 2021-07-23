@@ -51,7 +51,7 @@ class View
 
     /**
      * Get the contents of a view template using Twig
-     *
+     * Kept for reference
      * @param string $template  The template file
      * @param array $args  Associative array of data to display in the view (optional)
      *
@@ -75,24 +75,24 @@ class View
     }
 
 
-    public static function renderView(){
-
-        static $blade = null;
-
-        if($blade === null){
-            $blade = new Blade(dirname(__DIR__) . '/App/Views',dirname(__DIR__) . '/App/Views/cache');
-        }
-        /*$user =Auth::getUser();
-        $displayName = $user->name==''?$user->pid:$user->name;
-
-        $blade->share('authUser',$user);
-        $blade->share('displayName',$displayName);*/
-
-        $blade->share('authUser',Auth::getUser());
-        $blade->share('displayName',Auth::displayName());
-
-        return $blade;
-    }
+//    public static function renderView(){
+//
+//        static $blade = null;
+//
+//        if($blade === null){
+//            $blade = new Blade(dirname(__DIR__) . '/App/Views',dirname(__DIR__) . '/App/Views/cache');
+//        }
+//        /*$user =Auth::getUser();
+//        $displayName = $user->name==''?$user->pid:$user->name;
+//
+//        $blade->share('authUser',$user);
+//        $blade->share('displayName',$displayName);*/
+//
+//        $blade->share('authUser',Auth::getUser());
+//        $blade->share('displayName',Auth::displayName());
+//
+//        return $blade;
+//    }
 
     public static function createBlade(){
 
@@ -102,9 +102,7 @@ class View
             $blade = new Blade(dirname(__DIR__) . '/App/Views',dirname(__DIR__) . '/App/Views/cache');
         }
 
-        $user = Auth::getUser();
-
-        $blade->share('authUser',$user);
+        $blade->share('authUser',Auth::getUser());
         $blade->share('flash_messages',Flash::getMessage());
 
         return $blade;

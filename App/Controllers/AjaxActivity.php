@@ -277,9 +277,10 @@ class AjaxActivity extends Ajax
         if($info->one_way){
             $output = '<span><i class="fab fa-info-circle"></i> Member has been informed that you are interested</span>';
         }else {
-            $output = '<span><i class="fab fa-whatsapp"></i> ' . $info->whatsapp . '</span>
+           /* $output = '<span><i class="fab fa-whatsapp"></i> ' . $info->whatsapp . '</span>
                                 <span class="mr-1"><i class="fas fa-phone-alt"></i>  ' . $info->mobile . '</span>
-                                <span class="ml-3"><i class="far fa-envelope"></i> ' . $info->email . '</span>';
+                                <span class="ml-3"><i class="far fa-envelope"></i> ' . $info->email . '</span>';*/
+            $output = '';
         }
         return $output;
     }
@@ -298,7 +299,16 @@ class AjaxActivity extends Ajax
             $oid = $_POST['other_id'];
             $flag = '';
 
-            $addr = self::createContact($oid);
+            $cc = false;
+            $info = User::getContact($oid);
+            if($info->one_way){
+                $addr = '<span><i class="fab fa-info-circle"></i> Member has been informed that you are interested</span>';
+                $cc = true;
+            }else {
+                $addr = '';
+                $cc = false;
+            }
+            //$addr = self::createContact($oid);
 
             if($uid != $oid){
                 $rc = new RecordContact();
@@ -317,8 +327,9 @@ class AjaxActivity extends Ajax
         }else{
             $msg = 'Please Login';
             $addr = 'Please login to see address';
+            $cc = true;
         }
-        $_data_arr = ['flag'=>$flag,'msg'=>$msg, 'addr'=>$addr];
+        $_data_arr = ['flag'=>$flag, 'msg'=>$msg, 'addr'=>$addr, 'cc'=>$cc];
         echo json_encode($_data_arr);
 
     }

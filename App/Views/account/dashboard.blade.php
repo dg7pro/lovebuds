@@ -178,6 +178,26 @@
                         <td>Email:</td>
                         <td class="hide-sm">{{$authUser->email}}</td>
                     </tr>
+                    <tr>
+                        <td>Privacy:</td>
+                        <td class="hide-sm" id="ow-field">
+                            @if($authUser->one_way)
+                            <em class="text-muted">Oneway Communication</em>
+                            <span class="text-blue text-sm-left"><i>
+                                <a id="one-way" data-toggle="tooltip" data-placement="top"
+                                   title=" Oneway Communication: Others will not be able to see your contact, but you will receive notification
+                                  that other member is Interested. Specially designed for female members who are self
+                                  managing their profile"><i class="fa fa-info-circle" aria-hidden="true"></i>
+                                </a>
+                            </i></span>
+                            @else
+                                <em class="text-muted">Contact details are visible</em>
+                            @endif
+
+                        </td>
+
+                    </tr>
+
 
                     </tbody>
                 </table>
@@ -216,8 +236,6 @@
                         <a href="{{'/account/my-album'}}" class="btn btn-blue">Proceed to upload..</a>
                     </div>
                 @endif
-
-
 
             </div>
 
@@ -339,6 +357,8 @@
 @section('js')
 
 <script>
+    $('#one-way').tooltip();
+
     $(document).ready(function(){
         $('a[data-toggle="pill"]').on('show.bs.tab', function(e) {
             localStorage.setItem('activeTab', $(e.target).attr('href'));

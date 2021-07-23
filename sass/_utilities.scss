@@ -1,0 +1,123 @@
+// Main Section
+.main{
+    max-width: $max-width;
+    min-height: 100vh;
+    margin: auto;
+    overflow: hidden;
+    padding: 0 2rem;
+    margin-top: 6rem;
+    margin-bottom: 3rem;
+
+    a{
+        text-decoration: none;
+    }
+}
+
+
+// Background
+.bg {
+    &-pink {
+        @include set-background($color-pink);
+    }
+    &-orange {
+        @include set-background($color-orange);
+    }
+    &-coco {
+        @include set-background($color-coco);
+    }
+    &-blue {
+        @include set-background($color-blue);
+    }
+    &-green {
+        @include set-background($color-green);
+    }
+}
+
+// Buttons
+.btn {
+    display: inline-block;
+    background: $color-orange;
+    color: #333;
+    padding: 0.4em 1.3em;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-right: 0.5em;
+    margin-bottom: 0.25em;
+    outline: none;
+    transition: all 0.2s ease-in;
+
+    &.btn-pink {
+        @include set-background($color-pink);
+        &:hover {
+            background: lighten($color-pink, 5%)
+        }
+    }
+    &.btn-yellow {
+        @include set-background($color-yellow);
+        &:hover {
+            background: lighten($color-yellow, 5%)
+        }
+    }
+    &.btn-orange {
+        @include set-background($color-orange);
+        &:hover {
+            background: lighten($color-orange, 5%)
+        }
+    }
+    &.btn-coco {
+        @include set-background($color-coco);
+        &:hover {
+            background: lighten($color-coco, 5%)
+        }
+    }
+    &.btn-blue {
+        @include set-background($color-blue);
+        &:hover {
+            background: lighten($color-blue, 5%)
+        }
+    }
+    &.btn-green {
+        @include set-background($color-green);
+        &:hover {
+            background: lighten($color-green, 5%)
+        }
+    }
+
+    &.btn-sm{
+        padding: 0.2em 1.0em;
+        margin: .25em;
+    }
+
+}
+
+// Text Styles
+.text-heading {
+    color: $color-heading;
+}
+.text-white {
+    color: #fff;
+}
+.text-blue {
+    color: $color-blue;
+}
+.text-green {
+    color: $color-green;
+}
+.text-orange {
+    color: $color-orange;
+}
+.text-red {
+    color: crimson;
+}
+
+
+// Margins
+.may-1{
+    margin: 1rem 0;
+}
+.may-2{
+    margin: 2rem 0;
+}
+
+

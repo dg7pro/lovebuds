@@ -111,4 +111,14 @@ class Home extends Controller
         exit();
     }
 
+    public function checkbox(){
+
+        //View::renderBlade('home/checkbox');
+
+//        $countries = UserVariables::getCountries();
+//        Helpers::dnd($countries);
+
+
+    }
+
 }

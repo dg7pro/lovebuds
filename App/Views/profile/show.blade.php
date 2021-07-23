@@ -81,10 +81,11 @@
             <div class="up-neck">
                 <!-- Address Bar -->
                 <div class="up-address">
-                    <span><i class="fab fa-whatsapp"></i>  {{$profile->whatsapp}}</span>
-                    <span><i class="fas fa-phone-alt"></i>  {{$profile->mobile}}</span>
-                    <span><i class="far fa-envelope"></i> {{$profile->email}}</span>
-
+                    <div id="load_contact">
+                        <span><i class="fab fa-whatsapp"></i>  {{$profile->whatsapp}}</span>
+                        <span><i class="fas fa-phone-alt"></i>  {{$profile->mobile}}</span>
+                        <span><i class="far fa-envelope"></i> {{$profile->email}}</span>
+                    </div>
                     <div id="contact-address-overlay" class="address-overlay">
                         <div class="text">Contact Address</div>
                     </div>
@@ -568,7 +569,7 @@
                         action: function(){
                             $.ajax({
                                 headers:{
-                                    //'CsrfToken': $('meta[name="csrf-token"]').attr('content'),
+                                    'CsrfToken': $('meta[name="csrf-token"]').attr('content'),
                                 },
                                 url: "/AjaxActivity/show-contact",
                                 method: 'post',
@@ -583,6 +584,9 @@
                                         toastr.success(data.msg);
                                     }, 1000);
                                     //$('#hide-profile').addClass('disabled');
+                                    if(data.cc){
+                                        $('#load_contact').html(data.addr);
+                                    }
                                 },
                                 error: function( jqXhr, textStatus, errorThrown ){
                                     console.log( jqXhr.responseJSON.message );

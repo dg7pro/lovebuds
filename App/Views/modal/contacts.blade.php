@@ -21,11 +21,11 @@
                     <div class="tab-pane fade show active mb-5" id="signin" role="tabpanel" aria-labelledby="home-tab">
                         {{--<form>--}}
                             <h4 class="text-blue mt-4">Your contact details</h4>
-                            <div class="form-group">
-                                {{--<label for="contactEmail">Email address</label>--}}
+                           {{-- <div class="form-group">
+                                --}}{{--<label for="contactEmail">Email address</label>--}}{{--
                                 <input type="email" id="contactEmail" class="form-control"  aria-describedby="emailHelp" placeholder="Email" value="{{$authUser->email}}" disabled>
                                 <small id="emailHelp" class="form-text text-muted">Email associated with account can't be changed</small>
-                            </div>
+                            </div>--}}
                             <div class="form-group">
                                 {{--<label for="contactMobile">Mobile no.</label>--}}
                                 <input type="text" id="contactMobile" class="form-control"  aria-describedby="mobileHelp" placeholder="Mobile no. (10 digits)" value="{{$authUser->mobile}}" required>
@@ -35,6 +35,15 @@
                                 {{--<label for="contactWhatsapp">Whatsapp no.</label>--}}
                                 <input type="text" id="contactWhatsapp" class="form-control"  aria-describedby="whatsappHelp" placeholder="Enter whatsapp no." value="{{$authUser->whatsapp}}" required>
                                 <small id="whatsappHelp" class="form-text text-muted">For sending & receiving interest</small>
+                            </div>
+
+                            <div class="form-group">
+                                <input type="checkbox" id="one_way_cb" name="one_way" {{$authUser->one_way?'checked':''}}>
+                                <label for="one_way_cb">Enable Oneway Privacy</label>
+                                <div class="form-text">
+                                    Your contact details are not visible, instead you will receive notification when
+                                    interested users tries to view your address. This way only you can contact them.
+                                </div>
                             </div>
 
                             <button type="submit" id="contact-info-update" class="btn btn-blue mt-2">Save Setting</button>

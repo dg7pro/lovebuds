@@ -19,7 +19,7 @@ class District extends \Core\Model
      */
     public static function fetchAll($sid){
 
-        $sql = "SELECT * FROM districts WHERE sid =?";
+        $sql = "SELECT * FROM districts WHERE state_id =?";
 
         $pdo=Model::getDB();
         $stmt = $pdo->prepare($sql);
