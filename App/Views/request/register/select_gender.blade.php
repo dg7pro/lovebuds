@@ -11,7 +11,7 @@
             //console.log(cfor);
             $.ajax({
                 headers:{
-                    'CsrfToken': $('meta[name="csrf-token"]').attr('content'),
+                    'CsrfToken': $('meta[name="photon"]').attr('content'),
                     // For Testing
                     //'CsrfToken': '65f575dd7ba89dbd08a02a86bf990514eb8182254f9af1299d75cd1f92a7ec1',
 

@@ -9,7 +9,7 @@
             var mobile = $(this).val();
             $.ajax({
                 headers:{
-                    'CsrfToken': $('meta[name="csrf-token"]').attr('content'),
+                    'CsrfToken': $('meta[name="photon"]').attr('content'),
                 },
                 url:"/AjaxRegistration/checkMobile",
                 method:'POST',
