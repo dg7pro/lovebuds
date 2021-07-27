@@ -14,10 +14,6 @@
         console.log(i);
         el
         $.ajax({
-            headers:{
-                'CsrfToken': $('meta[name="csrf-token"]').attr('content'),
-                // 'CsrfToken': '65f575dd7ba89dbd08a02a86bf990514eb8182254f9af1299d75cd1f92a7ec1',
-            },
             url: "/ajaxActivity/move-profile-to",
             method: 'post',
             data: {
@@ -35,26 +31,7 @@
                     cuteHide(el);
                 }
                 //$('#hide-profile').addClass('disabled');
-            },
-            error: function( jqXhr, textStatus, errorThrown ){
-                console.log( jqXhr.responseJSON.message );
-                console.log( errorThrown );
-                //console.log( jqXhr.responseText );
-                $.alert({
-                    title: 'Security Alert!',
-                    content: jqXhr.responseJSON.message + ' Please logout and login after sometime to continue.',
-                    icon: 'fa fa-skull',
-                    animation: 'scale',
-                    closeAnimation: 'scale',
-                    buttons: {
-                        okay: {
-                            text: 'Okay',
-                            btnClass: 'btn-blue'
-                        }
-                    }
-                });
             }
-
         });
     }
 

@@ -6,10 +6,6 @@
             console.log(minAgeVal);
             if(minAgeVal){
                 $.ajax({
-                    headers:{
-                        'CsrfToken': $('meta[name="csrf-token"]').attr('content'),
-                        // 'CsrfToken': '65f575dd7ba89dbd08a02a86bf990514eb8182254f9af1299d75cd1f92a7ec1',
-                    },
                     type:'POST',
                     url:'/ajaxLoad/minmaxAge',
                     data:{
@@ -20,24 +16,6 @@
                         //console.log(data);
                         //console.log(status);
                         $('#max_age').html(data.opt);
-                    },
-                    error: function( jqXhr, textStatus, errorThrown ){
-                        console.log( jqXhr.responseJSON.message );
-                        console.log( errorThrown );
-                        //console.log( jqXhr.responseText );
-                        $.alert({
-                            title: 'Security Alert!',
-                            content: jqXhr.responseJSON.message + ' Please logout and login after sometime to continue.',
-                            icon: 'fa fa-skull',
-                            animation: 'scale',
-                            closeAnimation: 'scale',
-                            buttons: {
-                                okay: {
-                                    text: 'Okay',
-                                    btnClass: 'btn-blue'
-                                }
-                            }
-                        });
                     }
                 });
             }else{
@@ -53,10 +31,6 @@
             console.log(minHtVal);
             if(minHtVal){
                 $.ajax({
-                    headers:{
-                        // 'CsrfToken': $('meta[name="csrf-token"]').attr('content'),
-                        // 'CsrfToken': '65f575dd7ba89dbd08a02a86bf990514eb8182254f9af1299d75cd1f92a7ec1',
-                    },
                     type:'POST',
                     url:'/ajaxLoad/minmaxHt',
                     data:{
@@ -67,24 +41,6 @@
                         //console.log(data);
                         //console.log(status);
                         $('#max_ht').html(data.opt);
-                    },
-                    error: function( jqXhr, textStatus, errorThrown ){
-                        console.log( jqXhr.responseJSON.message );
-                        console.log( errorThrown );
-                        //console.log( jqXhr.responseText );
-                        $.alert({
-                            title: 'Security Alert!',
-                            content: jqXhr.responseJSON.message + ' Please logout and login after sometime to continue.',
-                            icon: 'fa fa-skull',
-                            animation: 'scale',
-                            closeAnimation: 'scale',
-                            buttons: {
-                                okay: {
-                                    text: 'Okay',
-                                    btnClass: 'btn-blue'
-                                }
-                            }
-                        });
                     }
                 });
             }else{
@@ -125,10 +81,6 @@
                 });
             }else{
                 $.ajax({
-                    headers: {
-                        'CsrfToken': $('meta[name="csrf-token"]').attr('content'),
-                        //'CsrfToken': '65f575dd7ba89dbd08a02a86bf990514eb8182254f9af1299d75cd1f92a7ec1',
-                    },
                     url: "/ajaxUpdate/updatePartnerPreference",
                     method: 'post',
                     data: {
@@ -149,24 +101,6 @@
                         }, 500);
                         console.log(data);
                         console.log(status);
-                    },
-                    error: function( jqXhr, textStatus, errorThrown ){
-                        console.log( jqXhr.responseJSON.message );
-                        console.log( errorThrown );
-                        //console.log( jqXhr.responseText );
-                        $.alert({
-                            title: 'Security Alert!',
-                            content: jqXhr.responseJSON.message + ' Please logout and login after sometime to continue.',
-                            icon: 'fa fa-skull',
-                            animation: 'scale',
-                            closeAnimation: 'scale',
-                            buttons: {
-                                okay: {
-                                    text: 'Okay',
-                                    btnClass: 'btn-blue'
-                                }
-                            }
-                        });
                     }
                 });
             }

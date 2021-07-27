@@ -17,7 +17,8 @@ class District extends \Core\Model
      * @param $sid
      * @return array
      */
-    public static function fetchAll($sid){
+    public static function fetchAll($sid): array
+    {
 
         $sql = "SELECT * FROM districts WHERE state_id =?";
 

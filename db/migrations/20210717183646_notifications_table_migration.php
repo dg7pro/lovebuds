@@ -18,7 +18,7 @@ final class NotificationsTableMigration extends AbstractMigration
      */
     public function change(): void
     {
-        $users = $this->table('notifications',['id' => false, 'primary_key' => ['id'], 'collation'=>'utf8mb4_unicode_ci']);
+        $users = $this->table('notifications',['id' => false, 'primary_key' => ['id','receiver'], 'collation'=>'utf8mb4_unicode_ci']);
         $users->addColumn('id','integer',['signed'=>false])
             ->addColumn('sender','integer',['signed'=>false, 'null'=>false])
             ->addForeignKey('sender', 'users', 'id', ['delete'=> 'RESTRICT', 'update'=> 'CASCADE'])

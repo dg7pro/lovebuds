@@ -101,6 +101,7 @@ class Account extends Authenticated
             'hobbies'=>UserVariables::fetch('hobbies'),
             'interests'=>UserVariables::fetch('interests'),
             'states'=>UserVariables::fetch('states'),
+            'castes'=>UserVariables::getCastesInOrder($user->religion_id),
             'allCastes'=>UserVariables::getCastes($user->religion_id),
             'mangliks'=>UserVariables::fetch('mangliks'),
             'signs'=>UserVariables::fetch('signs'),
@@ -156,7 +157,7 @@ class Account extends Authenticated
             $communities = UserVariables::communities();
             $countries = UserVariables::getCountries();
             $districts = UserVariables::districts();
-            $castes = UserVariables::getCastes(1);
+            //$castes = UserVariables::getCastes(1);
             $states = UserVariables::states();
 
             View::renderBlade('account/createProfile', [
@@ -175,7 +176,6 @@ class Account extends Authenticated
                 'communities'=>$communities,
                 'countries'=>$countries,
                 'districts'=>$districts,
-                'castes'=>$castes,
                 'states'=>$states
 
             ]);
@@ -204,7 +204,10 @@ class Account extends Authenticated
 
             if($result){
                 Flash::addMessage('Profile created successfully', Flash::SUCCESS);
-                // TODO: Notify user on profile creation
+
+                // Notify user
+                $message = 'Your profile created & ready to use <a href="/profile/'.$user->pid.'" ><strong> View Profile </strong></a>';
+                Notification::save($user->id,$message);
 
                 $this->redirect('/account/dashboard');
             }else{

@@ -194,9 +194,7 @@
                         btnClass: 'btn-blue',
                         action: function(){
                             $.ajax({
-                                headers:{
-                                    'CsrfToken': $('meta[name="csrf-token"]').attr('content'),
-                                },
+
                                 url: "/AjaxActivity/show-contact",
                                 method: 'post',
                                 data: {
@@ -210,24 +208,6 @@
                                         toastr.success(data.msg);
                                     }, 1000);
                                     //$('#hide-profile').addClass('disabled');
-                                },
-                                error: function( jqXhr, textStatus, errorThrown ){
-                                    console.log( jqXhr.responseJSON.message );
-                                    console.log( errorThrown );
-                                    //console.log( jqXhr.responseText );
-                                    $.alert({
-                                        title: 'Security Alert!',
-                                        content: jqXhr.responseJSON.message + ' Please logout and login after sometime to continue.',
-                                        icon: 'fa fa-skull',
-                                        animation: 'scale',
-                                        closeAnimation: 'scale',
-                                        buttons: {
-                                            okay: {
-                                                text: 'Okay',
-                                                btnClass: 'btn-blue'
-                                            }
-                                        }
-                                    });
                                 }
                             });
 
@@ -253,9 +233,7 @@
             //alert("The data-id of clicked item is: " + id);
 
             $.ajax({
-                headers:{
-                    'CsrfToken': $('meta[name="csrf-token"]').attr('content'),
-                },
+
                 url: "/AjaxActivity/show-contact",
                 method: 'post',
                 data: {
@@ -265,24 +243,6 @@
                 success: function (data, status) {
                     console.log(data);
                     console.log(status);
-                },
-                error: function( jqXhr, textStatus, errorThrown ){
-                    console.log( jqXhr.responseJSON.message );
-                    console.log( errorThrown );
-                    //console.log( jqXhr.responseText );
-                    $.alert({
-                        title: 'Security Alert!',
-                        content: jqXhr.responseJSON.message + ' Please logout and login after sometime to continue.',
-                        icon: 'fa fa-skull',
-                        animation: 'scale',
-                        closeAnimation: 'scale',
-                        buttons: {
-                            okay: {
-                                text: 'Okay',
-                                btnClass: 'btn-blue'
-                            }
-                        }
-                    });
                 }
             });
 

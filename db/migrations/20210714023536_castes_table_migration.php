@@ -23,7 +23,9 @@ final class CastesTableMigration extends AbstractMigration
         $tbl->addColumn('value', 'smallinteger', ['signed'=>false,'identity'=>true])
             ->addColumn('text', 'string', ['limit'=>100, 'null'=>false])
             ->addColumn('religion_id', 'integer', ['limit'=>MysqlAdapter::INT_TINY,'signed'=>false, 'null'=>false])
+            ->addColumn('alphabet_id', 'integer', ['limit'=>MysqlAdapter::INT_TINY,'signed'=>false, 'null'=>false])
             ->addForeignKey('religion_id', 'religions', 'id', ['delete'=> 'RESTRICT', 'update'=> 'CASCADE'])
+            ->addForeignKey('alphabet_id', 'alphabets', 'id', ['delete'=> 'RESTRICT', 'update'=> 'CASCADE'])
             ->addIndex(['value'])
             ->create();
 

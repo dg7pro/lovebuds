@@ -7,6 +7,7 @@ namespace App\Controllers;
 use App\Auth;
 use App\Models\Image;
 use App\Models\MoveProfile;
+use App\Models\Notification;
 use App\Models\RecordContact;
 use App\Models\User;
 use App\Models\VisitProfile;
@@ -22,7 +23,6 @@ class AjaxActivity extends Ajax
      */
     public function moveProfileToAction(){
 
-        $this->includeCheck();
         if(isset($_SESSION['user_id']) && isset($_POST['receiver'])) {
 
             $sender = $_SESSION['user_id'];
@@ -94,7 +94,6 @@ class AjaxActivity extends Ajax
      */
     public function moveProfileAction(){
 
-        $this->includeCheck();
         if(isset($_SESSION['user_id']) && isset($_POST['receiver'])) {
 
             $sender = $_SESSION['user_id'];
@@ -150,7 +149,6 @@ class AjaxActivity extends Ajax
      */
     public function deleteImage(){
 
-        $this->includeCheck();
         if(isset($_SESSION['user_id'])) {
 
             $userId = $_SESSION['user_id'];
@@ -191,7 +189,6 @@ class AjaxActivity extends Ajax
      */
     public function changeAvatar(){
 
-        $this->includeCheck();
         $userId = $_SESSION['user_id'];
 
         if(isset($_POST['fn']) && isset($_POST['iid'])) {
@@ -218,7 +215,6 @@ class AjaxActivity extends Ajax
      */
     public function recordVisitorAction(){
 
-        $this->includeCheck();
         $msg='';
         $flag=false;
         if(isset($_POST['uid']) && isset($_POST['pid'])){
@@ -255,8 +251,6 @@ class AjaxActivity extends Ajax
      */
     public function setFBAdd(){
 
-        $this->includeCheck();
-
         //$usr = Auth::getUser();
         $uid = $_SESSION['user_id'];
         if(isset($_POST['fb'])){
@@ -291,8 +285,6 @@ class AjaxActivity extends Ajax
      */
     public function showContact(){
 
-        $this->includeCheck();
-
         if(isset($_SESSION['user_id']) && isset($_POST['other_id'])){
 
             $uid = $_SESSION['user_id'];
@@ -316,17 +308,17 @@ class AjaxActivity extends Ajax
 
                     $user = Auth::getUser();
                     $flag = $user->incrementAc();
-                    $msg = ($flag)?'Success You viewed the contact info of profile':'Not Increment';
+                    $msg = ($flag)?'Success You viewed the contact info of profile: it\'s counted':'Unable to fetch contact info';
 
                 }else{
-                    $msg = 'Already in record';
+                    $msg = 'You have already viewed the contact info of this profile earlier: not counted';
                 }
             }else{
-                $msg = "This is your profile. Not Counted!";
+                $msg = "This is your profile: not Counted!";
             }
         }else{
             $msg = 'Please Login';
-            $addr = 'Please login to see address';
+            $addr = 'Please login to see contact info';
             $cc = true;
         }
         $_data_arr = ['flag'=>$flag, 'msg'=>$msg, 'addr'=>$addr, 'cc'=>$cc];

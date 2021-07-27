@@ -64,9 +64,20 @@
                                 <label for="cas_update">Your Caste</label>
                                 <select id="cas_update" name="cas_update" class="form-control">
                                     <option>Choose...</option>
-                                    @foreach($allCastes as $caste)
-                                        <option value="{{$caste->value}}" {{($authUser->caste_id==$caste->value)?'Selected':''}}>{{$caste->text}}</option>
-                                    @endforeach
+                                    @if($authUser->religion_id==1)
+                                        @foreach($castes as $caste)
+                                            <optgroup label="{{$caste['ast']}}">
+                                                @foreach($caste['cas'] as $cast)
+                                                    <option value="{{$cast['cid']}}" {{($authUser->caste_id==$cast['cid'])?'Selected':''}}>{{$cast['cst']}}</option>
+                                                @endforeach
+                                            </optgroup>
+                                        @endforeach
+                                    @else
+                                        @foreach($castes as $caste)
+                                            <option value="{{$caste->value}}" {{($authUser->caste_id==$caste->value)?'Selected':''}}>{{$caste->text}}</option>
+                                        @endforeach
+                                    @endif
+
                                 </select>
                             </div>
 
@@ -755,10 +766,6 @@
                 console.log(brosID);
                 if(brosID){
                     $.ajax({
-                        headers:{
-                            'CsrfToken': $('meta[name="csrf-token"]').attr('content'),
-                            // 'CsrfToken': '65f575dd7ba89dbd08a02a86bf990514eb8182254f9af1299d75cd1f92a7ec1',
-                        },
                         type:'POST',
                         url:'/ajaxLoad/brosMarried',
                         data:{
@@ -769,24 +776,6 @@
                             //console.log(data);
                             //console.log(status);
                             $('#mbros').html(data.opt);
-                        },
-                        error: function( jqXhr, textStatus, errorThrown ){
-                            console.log( jqXhr.responseJSON.message );
-                            console.log( errorThrown );
-                            //console.log( jqXhr.responseText );
-                            $.alert({
-                                title: 'Security Alert!',
-                                content: jqXhr.responseJSON.message + ' Please logout and login after sometime to continue.',
-                                icon: 'fa fa-skull',
-                                animation: 'scale',
-                                closeAnimation: 'scale',
-                                buttons: {
-                                    okay: {
-                                        text: 'Okay',
-                                        btnClass: 'btn-blue'
-                                    }
-                                }
-                            });
                         }
                     });
                 }else{
@@ -801,10 +790,6 @@
                 console.log(sisID);
                 if(sisID){
                     $.ajax({
-                        headers:{
-                            'CsrfToken': $('meta[name="csrf-token"]').attr('content'),
-                            // 'CsrfToken': '65f575dd7ba89dbd08a02a86bf990514eb8182254f9af1299d75cd1f92a7ec1',
-                        },
                         type:'POST',
                         url:'/ajaxLoad/sisMarried',
                         data:{
@@ -815,24 +800,6 @@
                             //console.log(data);
                             //console.log(status);
                             $('#msis').html(data.opt);
-                        },
-                        error: function( jqXhr, textStatus, errorThrown ){
-                            console.log( jqXhr.responseJSON.message );
-                            console.log( errorThrown );
-                            //console.log( jqXhr.responseText );
-                            $.alert({
-                                title: 'Security Alert!',
-                                content: jqXhr.responseJSON.message + ' Please logout and login after sometime to continue.',
-                                icon: 'fa fa-skull',
-                                animation: 'scale',
-                                closeAnimation: 'scale',
-                                buttons: {
-                                    okay: {
-                                        text: 'Okay',
-                                        btnClass: 'btn-blue'
-                                    }
-                                }
-                            });
                         }
                     });
                 }else{
@@ -872,10 +839,6 @@
                 console.log(stateID);
                 if(stateID){
                     $.ajax({
-                        headers:{
-                            'CsrfToken': $('meta[name="csrf-token"]').attr('content'),
-                            // 'CsrfToken': '65f575dd7ba89dbd08a02a86bf990514eb8182254f9af1299d75cd1f92a7ec1',
-                        },
                         type:'POST',
                         url:'/ajaxLoad/select-district',
                         data:{
@@ -886,24 +849,6 @@
                             //console.log(data);
                             //console.log(status);
                             $('#ds_update').html(data.opt);
-                        },
-                        error: function( jqXhr, textStatus, errorThrown ){
-                            console.log( jqXhr.responseJSON.message );
-                            console.log( errorThrown );
-                            //console.log( jqXhr.responseText );
-                            $.alert({
-                                title: 'Security Alert!',
-                                content: jqXhr.responseJSON.message + ' Please logout and login after sometime to continue.',
-                                icon: 'fa fa-skull',
-                                animation: 'scale',
-                                closeAnimation: 'scale',
-                                buttons: {
-                                    okay: {
-                                        text: 'Okay',
-                                        btnClass: 'btn-blue'
-                                    }
-                                }
-                            });
                         }
                     });
                 }else{
@@ -938,15 +883,11 @@
                     var st = $('#st_entry').val();
                     var ds = $('#ds_entry').val();
                 }
-                console.log(st);
-                console.log(ds);
+                //console.log(st);
+                //console.log(ds);
 
                 //console.log('reached here');
                 $.ajax({
-                    headers:{
-                        'CsrfToken': $('meta[name="csrf-token"]').attr('content'),
-                        // 'CsrfToken': '65f575dd7ba89dbd08a02a86bf990514eb8182254f9af1299d75cd1f92a7ec1',
-                    },
                     url: "/ajaxUpdate/updateBasicInfo",
                     method: 'post',
                     data: {
@@ -968,26 +909,8 @@
                         setTimeout(function(){
                             toastr.success(data.msg);
                         }, 500);
-                        console.log(data.msg);
-                        console.log(status);
-                    },
-                    error: function( jqXhr, textStatus, errorThrown ){
-                        console.log( jqXhr.responseJSON.message );
-                        console.log( errorThrown );
-                        //console.log( jqXhr.responseText );
-                        $.alert({
-                            title: 'Security Alert!',
-                            content: jqXhr.responseJSON.message + ' Please logout and login after sometime to continue.',
-                            icon: 'fa fa-skull',
-                            animation: 'scale',
-                            closeAnimation: 'scale',
-                            buttons: {
-                                okay: {
-                                    text: 'Okay',
-                                    btnClass: 'btn-blue'
-                                }
-                            }
-                        });
+                        //console.log(data.msg);
+                        //console.log(status);
                     }
                 });
             });
@@ -1006,10 +929,7 @@
                 var income = $('#income').val();
 
                 $.ajax({
-                    headers:{
-                        'CsrfToken': $('meta[name="csrf-token"]').attr('content'),
-                        // 'CsrfToken': '65f575dd7ba89dbd08a02a86bf990514eb8182254f9af1299d75cd1f92a7ec1',
-                    },
+
                     url: "/ajaxUpdate/updateEduCareerInfo",
                     method: 'post',
                     data: {
@@ -1031,24 +951,6 @@
                         }, 500);
                         console.log(data);
                         console.log(status);
-                    },
-                    error: function( jqXhr, textStatus, errorThrown ){
-                        console.log( jqXhr.responseJSON.message );
-                        console.log( errorThrown );
-                        //console.log( jqXhr.responseText );
-                        $.alert({
-                            title: 'Security Alert!',
-                            content: jqXhr.responseJSON.message + ' Please logout and login after sometime to continue.',
-                            icon: 'fa fa-skull',
-                            animation: 'scale',
-                            closeAnimation: 'scale',
-                            buttons: {
-                                okay: {
-                                    text: 'Okay',
-                                    btnClass: 'btn-blue'
-                                }
-                            }
-                        });
                     }
                 });
             });
@@ -1071,10 +973,7 @@
                 var famIncome = $('#famIncome').val();
 
                 $.ajax({
-                    headers:{
-                        'CsrfToken': $('meta[name="csrf-token"]').attr('content'),
-                        // 'CsrfToken': '65f575dd7ba89dbd08a02a86bf990514eb8182254f9af1299d75cd1f92a7ec1',
-                    },
+
                     url: "/ajaxUpdate/updateFamilyInfo",
                     method: 'post',
                     data: {
@@ -1098,26 +997,8 @@
                         setTimeout(function(){
                             toastr.success(data.msg);
                         }, 500);
-                        console.log(data);
-                        console.log(status);
-                    },
-                    error: function( jqXhr, textStatus, errorThrown ){
-                        console.log( jqXhr.responseJSON.message );
-                        console.log( errorThrown );
-                        //console.log( jqXhr.responseText );
-                        $.alert({
-                            title: 'Security Alert!',
-                            content: jqXhr.responseJSON.message + ' Please logout and login after sometime to continue.',
-                            icon: 'fa fa-skull',
-                            animation: 'scale',
-                            closeAnimation: 'scale',
-                            buttons: {
-                                okay: {
-                                    text: 'Okay',
-                                    btnClass: 'btn-blue'
-                                }
-                            }
-                        });
+                        //console.log(data);
+                        //console.log(status);
                     }
                 });
             });
@@ -1140,13 +1021,9 @@
                 var challenged = $('#challenged').val();
                 var citizenship = $('#citizenship').val();
                 var langs = $('#langs').val();
-                console.log(langs);
+                //console.log(langs);
 
                 $.ajax({
-                    headers:{
-                        'CsrfToken': $('meta[name="csrf-token"]').attr('content'),
-                        // 'CsrfToken': '65f575dd7ba89dbd08a02a86bf990514eb8182254f9af1299d75cd1f92a7ec1',
-                    },
                     url: "/ajaxUpdate/lifestyleInfo",
                     method: 'post',
                     data: {
@@ -1175,24 +1052,6 @@
                         }, 500);
                         console.log(data.msg);
                         console.log(status);
-                    },
-                    error: function( jqXhr, textStatus, errorThrown ){
-                        console.log( jqXhr.responseJSON.message );
-                        console.log( errorThrown );
-                        //console.log( jqXhr.responseText );
-                        $.alert({
-                            title: 'Security Alert!',
-                            content: jqXhr.responseJSON.message + ' Please logout and login after sometime to continue.',
-                            icon: 'fa fa-skull',
-                            animation: 'scale',
-                            closeAnimation: 'scale',
-                            buttons: {
-                                okay: {
-                                    text: 'Okay',
-                                    btnClass: 'btn-blue'
-                                }
-                            }
-                        });
                     }
                 });
             });
@@ -1205,10 +1064,6 @@
                 console.log(myInterests);
 
                 $.ajax({
-                    headers:{
-                        'CsrfToken': $('meta[name="csrf-token"]').attr('content'),
-                        // 'CsrfToken': '65f575dd7ba89dbd08a02a86bf990514eb8182254f9af1299d75cd1f92a7ec1',
-                    },
                     url: "/ajaxUpdate/likesInfo",
                     method: 'post',
                     data: {
@@ -1224,24 +1079,6 @@
                         }, 500);
                         console.log(data);
                         console.log(status);
-                    },
-                    error: function( jqXhr, textStatus, errorThrown ){
-                        console.log( jqXhr.responseJSON.message );
-                        console.log( errorThrown );
-                        //console.log( jqXhr.responseText );
-                        $.alert({
-                            title: 'Security Alert!',
-                            content: jqXhr.responseJSON.message + ' Please logout and login after sometime to continue.',
-                            icon: 'fa fa-skull',
-                            animation: 'scale',
-                            closeAnimation: 'scale',
-                            buttons: {
-                                okay: {
-                                    text: 'Okay',
-                                    btnClass: 'btn-blue'
-                                }
-                            }
-                        });
                     }
                 });
             });
@@ -1253,10 +1090,7 @@
                 console.log(myCastes);
 
                 $.ajax({
-                    headers:{
-                        'CsrfToken': $('meta[name="csrf-token"]').attr('content'),
-                        // 'CsrfToken': '65f575dd7ba89dbd08a02a86bf990514eb8182254f9af1299d75cd1f92a7ec1',
-                    },
+
                     url: "/ajaxUpdate/updateCasteInfo",
                     method: 'post',
                     data: {
@@ -1271,24 +1105,6 @@
                         }, 500);
                         console.log(data);
                         console.log(status);
-                    },
-                    error: function( jqXhr, textStatus, errorThrown ){
-                        console.log( jqXhr.responseJSON.message );
-                        console.log( errorThrown );
-                        //console.log( jqXhr.responseText );
-                        $.alert({
-                            title: 'Security Alert!',
-                            content: jqXhr.responseJSON.message + ' Please logout and login after sometime to continue.',
-                            icon: 'fa fa-skull',
-                            animation: 'scale',
-                            closeAnimation: 'scale',
-                            buttons: {
-                                okay: {
-                                    text: 'Okay',
-                                    btnClass: 'btn-blue'
-                                }
-                            }
-                        });
                     }
                 });
             });
@@ -1309,10 +1125,6 @@
                 //console.log('Hello');
 
                 $.ajax({
-                    headers:{
-                        'CsrfToken': $('meta[name="csrf-token"]').attr('content'),
-                        // 'CsrfToken': '65f575dd7ba89dbd08a02a86bf990514eb8182254f9af1299d75cd1f92a7ec1',
-                    },
                     url: "/ajaxUpdate/horoscopeInfo",
                     method: 'post',
                     data: {
@@ -1334,24 +1146,6 @@
                         }, 500);
                         console.log(data);
                         console.log(status);
-                    },
-                    error: function( jqXhr, textStatus, errorThrown ){
-                        console.log( jqXhr.responseJSON.message );
-                        console.log( errorThrown );
-                        //console.log( jqXhr.responseText );
-                        $.alert({
-                            title: 'Security Alert!',
-                            content: jqXhr.responseJSON.message + ' Please logout and login after sometime to continue.',
-                            icon: 'fa fa-skull',
-                            animation: 'scale',
-                            closeAnimation: 'scale',
-                            buttons: {
-                                okay: {
-                                    text: 'Okay',
-                                    btnClass: 'btn-blue'
-                                }
-                            }
-                        });
                     }
                 });
             });

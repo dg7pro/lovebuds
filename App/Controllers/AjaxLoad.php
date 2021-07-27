@@ -4,6 +4,7 @@
 namespace App\Controllers;
 
 
+use App\Models\Caste;
 use App\Models\District;
 use App\Models\UserVariables;
 
@@ -19,7 +20,6 @@ class AjaxLoad extends Ajax
      */
     public function brosMarried(){
 
-        $this->includeCheck();
         if(isset($_POST['bros_id'])){
 
             $bros_id = $_POST['bros_id'];
@@ -52,7 +52,6 @@ class AjaxLoad extends Ajax
      */
     public function sisMarried(){
 
-        $this->includeCheck();
         if(isset($_POST['sis_id'])){
 
             $sis_id = $_POST['sis_id'];
@@ -83,7 +82,6 @@ class AjaxLoad extends Ajax
      */
     public function minmaxAgeAction(){
 
-        $this->includeCheck();
         if(isset($_POST['min_age_val'])){
 
             $min_age = $_POST['min_age_val'];
@@ -109,7 +107,6 @@ class AjaxLoad extends Ajax
      */
     public function minmaxHtAction(){
 
-        $this->includeCheck();
         if(isset($_POST['min_ht_val'])){
 
             $heights = UserVariables::fetch('heights');
@@ -140,8 +137,6 @@ class AjaxLoad extends Ajax
      */
     public function selectDistrict(){
 
-        $this->includeCheck();
-
         if(isset($_POST['state_id'])){
 
             $sid = $_POST['state_id'];
@@ -165,5 +160,67 @@ class AjaxLoad extends Ajax
             echo json_encode($re);
         }
     }
+
+    /**
+     *  Select district for any state
+     */
+    public function selectCaste(){
+
+        if(isset($_POST['rel'])){
+
+            $rel = $_POST['rel'];
+            //echo $sid;
+
+            if($rel == 1){
+
+                $castes = UserVariables::getHinduCastes();
+                $num = count($castes);
+
+                // Generate HTML of city options list
+                if($num > 0){
+                    $opt = '<option value="">Select caste</option>';
+                    foreach ($castes as $caste){
+                        $opt .= '<optgroup label="'.$caste['ast'].'">';
+                        foreach($caste['cas'] as $cast){
+                            $opt .= '<option value="'.$cast['cid'].'" >'.$cast['cst'].'</option>';
+                        }
+                        $opt .= '</optgroup>';
+
+                    }
+                    $flag = true;
+                }else{
+                    $opt = '<option value="">Castes not available</option>';
+                    $flag = false;
+                }
+
+
+
+            }else{
+
+                //$castes = Caste::fetchAll($rel);
+                $castes = UserVariables::getCastes($rel);
+                $num = count($castes);
+
+                // Generate HTML of city options list
+                if($num > 0){
+                    $opt = '<option value="">Select caste</option>';
+                    foreach ($castes as $caste){
+                        //$opt .= '<option value="'.$caste['value'].'" >'.$caste['text'].'</option>';
+                        $opt .= '<option value="'.$caste->value.'" >'.$caste->text.'</option>';
+                    }
+                    $flag = true;
+                }else{
+                    $opt = '<option value="">Castes not available</option>';
+                    $flag = false;
+                }
+
+
+            }
+
+            $re = ['flag'=>$flag,'opt'=>$opt];
+            echo json_encode($re);
+        }
+    }
+
 
 }

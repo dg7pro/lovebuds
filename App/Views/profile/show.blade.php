@@ -93,51 +93,51 @@
             </div>
 
             <div class="up-body">
-                <h4>About Him</h4>
+                <h4>{{$profile->gender==1?'About Him':'About Her'}}</h4>
                 <div class="resume-content">
 
                     <div class="resume-body">
-                        <h5 class="text-primary"><i class="fa fa-user mr-2"></i>Basic Infomation:</h5>
+                        <h5 class="text-primary" style="font-family: BalooH, cursive"><i class="fa fa-user mr-2"></i>Basic Infomation:</h5>
                         <div class="bio-group">
                             <div class="bio">
                                 <span class="bio-field">Name</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">{{$profile->first_name.' '.$profile->last_name}}</span>
+                                <span class="bio-value">{!! $profile->first_name.' '.$profile->last_name !!}</span>
                             </div>
                             <div class="bio">
                                 <span class="bio-field">Gender</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">{{$profile->gender==1?'Male':'Female'}}</span>
+                                <span class="bio-value">{!! $profile->gender==1?'Male':'Female' !!}</span>
                             </div>
                             <div class="bio">
                                 <span class="bio-field">Birthday</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">{{$profile->dob}}</span>
+                                <span class="bio-value">{!! $profile->dob !!}</span>
                             </div>
                             <div class="bio">
                                 <span class="bio-field">Marital Status</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">{{($profile->mstatus)?$profile->mstatus:'Not Provided'}}</span>
+                                <span class="bio-value">{!! ($profile->mstatus)?$profile->mstatus:'<i>no info</i>' !!}</span>
                             </div>
                             <div class="bio">
                                 <span class="bio-field">Height</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">{{($profile->ht)?$profile->ht:'Not Provided'}}</span>
+                                <span class="bio-value">{!! ($profile->ht)?$profile->ht:'<i>no info</i>' !!}</span>
                             </div>
                             <div class="bio">
                                 <span class="bio-field">Complexion</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">{{($profile->complexion)?$profile->complexion:'Not Provided'}}</span>
+                                <span class="bio-value">{!! ($profile->complexion)?$profile->complexion:'<i>no info</i>' !!}</span>
                             </div>
                             <div class="bio">
                                 <span class="bio-field">Religion</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">{{($profile->religion)?$profile->religion:'Not Provided'}}</span>
+                                <span class="bio-value">{!! ($profile->religion)?$profile->religion:'<i>no info</i>' !!}</span>
                             </div>
                             <div class="bio">
                                 <span class="bio-field">Mother Tongue</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">{{($profile->lang)?$profile->lang:'Not Provided'}}</span>
+                                <span class="bio-value">{!! ($profile->lang)?$profile->lang:'<i>no info</i>' !!}</span>
                             </div>
 
                         </div>
@@ -149,42 +149,42 @@
                             <div class="bio">
                                 <span class="bio-field">Highest Education</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">{{($profile->edu)?$profile->edu:'Not Provided'}}</span>
+                                <span class="bio-value">{!! ($profile->edu)?$profile->edu:'<i>no info</i>' !!}</span>
                             </div>
                             <div class="bio">
                                 <span class="bio-field">Degree</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">{{($profile->deg)?$profile->deg:'Not Provided'}}</span>
+                                <span class="bio-value">{!! ($profile->deg)?$profile->deg:'<i>no info</i>' !!}</span>
                             </div>
                             <div class="bio">
                                 <span class="bio-field">University</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">{{($profile->university)?$profile->university:'Not Provided'}}</span>
+                                <span class="bio-value">{!! ($profile->university)?$profile->university:'<i>no info</i>' !!}</span>
                             </div>
                             <div class="bio">
                                 <span class="bio-field">Other Degrees</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">{{($profile->other_deg)?$profile->other_deg:'Not Provided'}}</span>
+                                <span class="bio-value">{!! ($profile->other_deg)?$profile->other_deg:'<i>no info</i>' !!}</span>
                             </div>
                             <div class="bio">
                                 <span class="bio-field">Occupation</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">{{($profile->occ)?$profile->occ:'Not Provided'}}</span>
+                                <span class="bio-value">{!! ($profile->occ)?$profile->occ:'<i>no info</i>' !!}</span>
                             </div>
                             <div class="bio">
                                 <span class="bio-field">Working In</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">{{($profile->working_in)?$profile->working_in:'Not Provided'}}</span>
+                                <span class="bio-value">{!! ($profile->working_in)?$profile->working_in:'<i>no info</i>' !!}</span>
                             </div>
                             <div class="bio">
                                 <span class="bio-field">Annual Income</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">{{($profile->income)?$profile->income.' / yr':'Not Provided'}}</span>
+                                <span class="bio-value">{!! ($profile->income)?$profile->income.' / yr':'<i>no info</i>' !!}</span>
                             </div>
                             <div class="bio">
                                 <span class="bio-field">Sector</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">{{($profile->sector)?$profile->sector:'Not Provided'}}</span>
+                                <span class="bio-value">{!! ($profile->sector)?$profile->sector:'<i>no info</i>'!!}</span>
                             </div>
                         </div>
                     </div>
@@ -195,32 +195,32 @@
                             <div class="bio">
                                 <span class="bio-field">Father</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">{{($profile->father_name)?$profile->father_name:'Not Provided'}}</span>
+                                <span class="bio-value">{!! ($profile->father_name)?$profile->father_name:'<i>no info</i>' !!}</span>
                             </div>
                             <div class="bio">
                                 <span class="bio-field">Work as</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">{{($profile->faa)?$profile->faa:'Not Provided'}}</span>
+                                <span class="bio-value">{!! ($profile->faa)?$profile->faa:'<i>no info</i>' !!}</span>
                             </div>
                             <div class="bio">
                                 <span class="bio-field">Mother</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">{{($profile->mother_name)?$profile->mother_name:'Not Provided'}}</span>
+                                <span class="bio-value">{!! ($profile->mother_name)?$profile->mother_name:'<i>no info</i>' !!}</span>
                             </div>
                             <div class="bio">
                                 <span class="bio-field">Work as</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">{{($profile->maa)?$profile->maa:'Not Provided'}}</span>
+                                <span class="bio-value">{!! ($profile->maa)?$profile->maa:'<i>no info</i>' !!}</span>
                             </div>
                             <div class="bio">
                                 <span class="bio-field">Brother</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">{!! ($profile->bros && $profile->mbros)?$profile->bros.' of which married '.$profile->mbros:'<em>no info</em>'!!}</span>
+                                <span class="bio-value">{!! ($profile->bros && $profile->mbros)?$profile->bros.' of which married '.$profile->mbros:'<i>no info</i>'!!}</span>
                             </div>
                             <div class="bio">
                                 <span class="bio-field">Sister</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">{!! ($profile->sis && $profile->msis)?$profile->sis.' of which married '.$profile->msis:'<em>no info</em>'!!}</span>
+                                <span class="bio-value">{!! ($profile->sis && $profile->msis)?$profile->sis.' of which married '.$profile->msis:'<i>no info</i>'!!}</span>
                             </div>
                             {{--<div class="bio">
                                 <span class="bio-field">Origin</span>
@@ -230,22 +230,22 @@
                             <div class="bio">
                                 <span class="bio-field">Family Status</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">{{($profile->fama)?$profile->fama:'Not Provided'}}</span>
+                                <span class="bio-value">{!! ($profile->fama)?$profile->fama:'<i>no info</i>' !!}</span>
                             </div>
                             <div class="bio">
                                 <span class="bio-field">Family Income</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">{{($profile->fami)?$profile->fami.' / yr':'Not Provided'}}</span>
+                                <span class="bio-value">{!! ($profile->fami)?$profile->fami.' / yr':'<i>no info</i>' !!}</span>
                             </div>
                             <div class="bio">
                                 <span class="bio-field">Family Type</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">{{($profile->famt)?$profile->famt:'Not Provided'}}</span>
+                                <span class="bio-value">{!! ($profile->famt)?$profile->famt:'<i>no info</i>' !!}</span>
                             </div>
                             <div class="bio">
                                 <span class="bio-field">Family Values</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">{{($profile->famv)?$profile->famv:'Not Provided'}}</span>
+                                <span class="bio-value">{!! ($profile->famv)?$profile->famv:'<i>no info</i>' !!}</span>
                             </div>
 
                         </div>
@@ -257,80 +257,80 @@
                             <div class="bio">
                                 <span class="bio-field">Diet</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">{{($profile->diet)?$profile->diet:'Not Provided'}}</span>
+                                <span class="bio-value">{!! ($profile->diet)?$profile->diet:'<i>no info</i>' !!}</span>
                             </div>
 
                             <div class="bio">
                                 <span class="bio-field">Smoke</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">{{($profile->smoke)?$profile->smoke:'Not Provided'}}</span>
+                                <span class="bio-value">{!! ($profile->smoke)?$profile->smoke:'<i>no info</i>' !!}</span>
                             </div>
                             <div class="bio">
                                 <span class="bio-field">Drink</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">{{($profile->drink)?$profile->drink:'Not Provided'}}</span>
+                                <span class="bio-value">{!! ($profile->drink)?$profile->drink:'<i>no info</i>' !!}</span>
                             </div>
                             <div class="bio">
                                 <span class="bio-field">Body Type</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">{{($profile->body)?$profile->body:'Not Provided'}}</span>
+                                <span class="bio-value">{!! ($profile->body)?$profile->body:'<i>no info</i>' !!}</span>
                             </div>
                             <div class="bio">
                                 <span class="bio-field">Weight</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">{{($profile->weight_id)?$profile->weight_id.' kgs':'Not Provided'}}</span>
+                                <span class="bio-value">{!! ($profile->weight_id)?$profile->weight_id.' kgs':'<i>no info</i>' !!}</span>
                             </div>
                             <div class="bio">
                                 <span class="bio-field">Blood</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">{{($profile->bg)?$profile->bg:'Not Provided'}}</span>
+                                <span class="bio-value">{!! ($profile->bg)?$profile->bg:'<i>no info</i>' !!}</span>
                             </div>
                             <div class="bio">
                                 <span class="bio-field">Hiv+</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">{{($profile->hiv)?($profile->hiv==1?'Yes':'No'):'Not Provided'}}</span>
+                                <span class="bio-value">{!! ($profile->hiv)?($profile->hiv==1?'Yes':'No'):'<i>no info</i>' !!}</span>
                             </div>
                             <div class="bio">
                                 <span class="bio-field">Thalassemia</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">{{($profile->thal)?$profile->thal:'Not Provided'}}</span>
+                                <span class="bio-value">{!! ($profile->thal)?$profile->thal:'<i>no info</i>' !!}</span>
                             </div>
                             <div class="bio">
                                 <span class="bio-field">Challenged</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">{{($profile->chal)?$profile->chal:'Not Provided'}}</span>
+                                <span class="bio-value">{!! ($profile->chal)?$profile->chal:'<i>no info</i>' !!}</span>
                             </div>
                         </div>
                     </div>
 
                     <div  class="resume-body">
-                        <h5 class="text-danger"><i class="fa fa-star mr-2"></i>Horoscope/Kundli/Astro:</h5>
+                        <h5 class="text-danger"><i class="fa fa-star mr-2"></i>Kundli/Astro:</h5>
 
                         <div class="bio-group">
                             <div class="bio">
                                 <span class="bio-field">Manglik Status</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">{{($profile->manglik)?$profile->manglik:'Not Provided'}}</span>
+                                <span class="bio-value">{!! ($profile->manglik)?$profile->manglik:'<i>no info</i>' !!}</span>
                             </div>
                             <div class="bio">
                                 <span class="bio-field">Rashi(Moon sign)</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">{{($profile->rashi)?$profile->rashi:'Not Provided'}}</span>
+                                <span class="bio-value">{!! ($profile->rashi)?$profile->rashi:'<i>no info</i>' !!}</span>
                             </div>
                             <div class="bio">
                                 <span class="bio-field">Sun Sign</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">{{($profile->sun)?$profile->sun:'Not Provided'}}</span>
+                                <span class="bio-value">{!! ($profile->sun)?$profile->sun:'<i>no info</i>' !!}</span>
                             </div>
                             <div class="bio">
                                 <span class="bio-field">Nakshatra</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">{{($profile->nak)?$profile->nak:'Not Provided'}}</span>
+                                <span class="bio-value">{!! ($profile->nak)?$profile->nak:'<i>no info</i>' !!}</span>
                             </div>
                             <div class="bio">
                                 <span class="bio-field">Birth Details</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">{{$profile->kundli_details}}</span>
+                                <span class="bio-value">{!! ($profile->kundli_details)? $profile->kundli_details : '<i>no info</i>' !!}</span>
                             </div>
 
                         </div>
@@ -422,9 +422,7 @@
             // console.log(uid);
             // console.log(pid);
             $.ajax({
-                headers:{
-                    'CsrfToken': $('meta[name="csrf-token"]').attr('content'),
-                },
+
                 url: "/AjaxActivity/recordVisitor",
                 method: 'post',
                 data: {
@@ -436,24 +434,6 @@
                     console.log(data);
                     console.log(status);
                     //$('#fav-profile').addClass('disabled');
-                },
-                error: function( jqXhr, textStatus, errorThrown ){
-                    console.log( jqXhr.responseJSON.message );
-                    console.log( errorThrown );
-                    //console.log( jqXhr.responseText );
-                    $.alert({
-                        title: 'Security Alert!',
-                        content: jqXhr.responseJSON.message + ' Please logout and login after sometime to continue.',
-                        icon: 'fa fa-skull',
-                        animation: 'scale',
-                        closeAnimation: 'scale',
-                        buttons: {
-                            okay: {
-                                text: 'Okay',
-                                btnClass: 'btn-blue'
-                            }
-                        }
-                    });
                 }
             });
         }
@@ -466,9 +446,7 @@
             console.log(receiver);
             console.log(i);
             $.ajax({
-                headers:{
-                    'CsrfToken': $('meta[name="csrf-token"]').attr('content'),
-                },
+
                 url: "/ajaxActivity/move-profile-to",
                 method: 'post',
                 data: {
@@ -483,24 +461,6 @@
                         toastr.success(data.msg);
                     }, 250);
                     //$('#hide-profile').addClass('disabled');
-                },
-                error: function( jqXhr, textStatus, errorThrown ){
-                    console.log( jqXhr.responseJSON.message );
-                    console.log( errorThrown );
-                    //console.log( jqXhr.responseText );
-                    $.alert({
-                        title: 'Security Alert!',
-                        content: jqXhr.responseJSON.message + ' Please logout and login after sometime to continue.',
-                        icon: 'fa fa-skull',
-                        animation: 'scale',
-                        closeAnimation: 'scale',
-                        buttons: {
-                            okay: {
-                                text: 'Okay',
-                                btnClass: 'btn-blue'
-                            }
-                        }
-                    });
                 }
             });
         }
@@ -568,9 +528,7 @@
                         btnClass: 'btn-blue',
                         action: function(){
                             $.ajax({
-                                headers:{
-                                    'CsrfToken': $('meta[name="csrf-token"]').attr('content'),
-                                },
+
                                 url: "/AjaxActivity/show-contact",
                                 method: 'post',
                                 data: {
@@ -587,26 +545,7 @@
                                     if(data.cc){
                                         $('#load_contact').html(data.addr);
                                     }
-                                },
-                                error: function( jqXhr, textStatus, errorThrown ){
-                                    console.log( jqXhr.responseJSON.message );
-                                    console.log( errorThrown );
-                                    //console.log( jqXhr.responseText );
-                                    $.alert({
-                                        title: 'Security Alert!',
-                                        content: jqXhr.responseJSON.message + ' Please logout and login after sometime to continue.',
-                                        icon: 'fa fa-skull',
-                                        animation: 'scale',
-                                        closeAnimation: 'scale',
-                                        buttons: {
-                                            okay: {
-                                                text: 'Okay',
-                                                btnClass: 'btn-blue'
-                                            }
-                                        }
-                                    });
                                 }
-
                             });
 
                             var btn1 = document.getElementById("contact-btn");

@@ -5,8 +5,10 @@ namespace App\Controllers;
 
 use App\Csrf;
 use App\Flash;
+use App\Models\Notification;
 use App\Models\User;
 use App\Models\UserVariables;
+use Carbon\Carbon;
 use Core\Controller;
 use Core\View;
 
@@ -42,7 +44,16 @@ class Register extends Controller
         $user = new User($_POST);
         if($user->save()){
 
+            // Send email
             $user->sendActivationEmail();
+
+            // Notify user
+            $dt = Carbon::now();
+            $dtt = $dt->toFormattedDateString();
+            $message = 'Congrats! Account successfully created on '.$dtt;
+            Notification::saveSelf($user->id,$message,$user->pid,$user->id);
+
+            // Redirect success
             $this->redirect('/register/success');
 
         }else{

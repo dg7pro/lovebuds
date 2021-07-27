@@ -8,6 +8,8 @@ use App\Lib\Helpers;
 use App\Models\Setting;
 use App\Models\User;
 use App\Models\UserVariables;
+use Carbon\Carbon;
+use Carbon\CarbonTimeZone;
 use Core\Controller;
 use \Core\View;
 
@@ -48,7 +50,15 @@ class Home extends Controller
     }
 
     public function session(){
-        var_dump($_SESSION);
+        //var_dump($_SESSION);
+
+//        $dt = Carbon::now();
+//        echo $dt->toFormattedDateString();
+
+
+        $castes = UserVariables::getCountries();
+        Helpers::dnd($castes);
+
     }
 
     public function whatsappAction(){

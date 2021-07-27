@@ -51,13 +51,15 @@ class Notification extends Model
     {
 
         $user = Auth::getUser();
+        $nid = self::notificationId(7);
 
-        $sql = "INSERT INTO notification (sender, receiver, message, pid) 
-                VALUES(:sender, :receiver, :message, :pid)";
+        $sql = "INSERT INTO notifications (id, sender, receiver, message, pid) 
+                VALUES(:id, :sender, :receiver, :message, :pid)";
 
         $db = static::getDB();
         $stmt = $db->prepare($sql);
 
+        $stmt->bindValue(':id', $nid, PDO::PARAM_INT);
         $stmt->bindValue(':sender', $user->id, PDO::PARAM_INT);
         $stmt->bindValue(':receiver', $receiver, PDO::PARAM_INT);
         $stmt->bindValue(':message', $message, PDO::PARAM_STR);
@@ -66,5 +68,43 @@ class Notification extends Model
         return $stmt->execute();
 
     }
+
+    public static function saveSelf($receiver, $message, $pid, $sender): bool
+    {
+        $nid = self::notificationId(7);
+
+        $sql = "INSERT INTO notifications (id, sender, receiver, message, pid) 
+                VALUES(:id, :sender, :receiver, :message, :pid)";
+
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+
+        $stmt->bindValue(':id', $nid, PDO::PARAM_INT);
+        $stmt->bindValue(':sender', $sender, PDO::PARAM_INT);
+        $stmt->bindValue(':receiver', $receiver, PDO::PARAM_INT);
+        $stmt->bindValue(':message', $message, PDO::PARAM_STR);
+        $stmt->bindValue(':pid', $pid, PDO::PARAM_STR);
+
+        return $stmt->execute();
+
+    }
+
+    /**
+     * @param $size
+     * @return string
+     */
+    protected static function notificationId($size): string
+    {
+        $key = 14;
+        $keys = range(0, 9);
+
+        for ($i = 0; $i < $size; $i++) {
+            $key .= $keys[array_rand($keys)];
+        }
+
+        return $key;
+
+    }
+
 
 }

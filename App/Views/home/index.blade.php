@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('page_og')
-    <meta property="og:url" content="http://www.jumatrimony.com/home/index"/>
+    <meta property="og:url" content="https://www.jumatrimony.com/home/index"/>
     <meta property="og:type" content="website"/>
     <meta property="og:title" content="JU Matrimony Service"/>
     <meta property="og:description" content="Free Indian Matrimony Service, so find lifepartner - a perfect Jeevansathi.
@@ -226,10 +226,6 @@
                 console.log(minAgeVal);
                 if(minAgeVal){
                     $.ajax({
-                        headers:{
-                            'CsrfToken': $('meta[name="csrf-token"]').attr('content'),
-                            // 'CsrfToken': '65f575dd7ba89dbd08a02a86bf990514eb8182254f9af1299d75cd1f92a7ec1',
-                        },
                         type:'POST',
                         url:'/ajaxLoad/minmaxAge',
                         data:{
@@ -240,24 +236,6 @@
                             //console.log(data);
                             //console.log(status);
                             $('#max_age').html(data.opt);
-                        },
-                        error: function( jqXhr, textStatus, errorThrown ){
-                            console.log( jqXhr.responseJSON.message );
-                            console.log( errorThrown );
-                            //console.log( jqXhr.responseText );
-                            $.alert({
-                                title: 'Security Alert!',
-                                content: jqXhr.responseJSON.message + ' Please logout and login after sometime to continue.',
-                                icon: 'fa fa-skull',
-                                animation: 'scale',
-                                closeAnimation: 'scale',
-                                buttons: {
-                                    okay: {
-                                        text: 'Okay',
-                                        btnClass: 'btn-blue'
-                                    }
-                                }
-                            });
                         }
                     });
                 }else{

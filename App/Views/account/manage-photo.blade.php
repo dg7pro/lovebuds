@@ -123,9 +123,6 @@
                             btnClass: 'btn-red',
                             action: function () {
                                 $.ajax({
-                                    headers: {
-                                        'CsrfToken': $('meta[name="csrf-token"]').attr('content'),
-                                    },
                                     url: "/AjaxActivity/delete-image",
                                     method: 'post',
                                     data: {
@@ -147,24 +144,6 @@
                                         setTimeout(function () {
                                             toastr.success(data.msg);
                                         }, 500);
-                                    },
-                                    error: function (jqXhr, textStatus, errorThrown) {
-                                        console.log(jqXhr.responseJSON.message);
-                                        console.log(errorThrown);
-                                        //console.log( jqXhr.responseText );
-                                        $.alert({
-                                            title: 'Security Alert!',
-                                            content: jqXhr.responseJSON.message + ' Please logout and login after sometime to continue.',
-                                            icon: 'fa fa-skull',
-                                            animation: 'scale',
-                                            closeAnimation: 'scale',
-                                            buttons: {
-                                                okay: {
-                                                    text: 'Okay',
-                                                    btnClass: 'btn-blue'
-                                                }
-                                            }
-                                        });
                                     }
                                 });
                             }
@@ -193,9 +172,6 @@
                     console.log(iid);
 
                     $.ajax({
-                        headers:{
-                            'CsrfToken': $('meta[name="csrf-token"]').attr('content'),
-                        },
                         url: "/AjaxActivity/delete-image",
                         method: 'post',
                         data: {
@@ -217,24 +193,6 @@
                             setTimeout(function(){
                                 toastr.success(data.msg);
                             }, 500);
-                        },
-                        error: function( jqXhr, textStatus, errorThrown ){
-                            console.log( jqXhr.responseJSON.message );
-                            console.log( errorThrown );
-                            //console.log( jqXhr.responseText );
-                            $.alert({
-                                title: 'Security Alert!',
-                                content: jqXhr.responseJSON.message + ' Please logout and login after sometime to continue.',
-                                icon: 'fa fa-skull',
-                                animation: 'scale',
-                                closeAnimation: 'scale',
-                                buttons: {
-                                    okay: {
-                                        text: 'Okay',
-                                        btnClass: 'btn-blue'
-                                    }
-                                }
-                            });
                         }
                     });
                 }
@@ -263,9 +221,6 @@
                             btnClass: 'btn-blue',
                             action: function(){
                                 $.ajax({
-                                    headers:{
-                                        'CsrfToken': $('meta[name="csrf-token"]').attr('content'),
-                                    },
                                     url: "/AjaxActivity/change-avatar",
                                     method: 'post',
                                     data: {
@@ -283,24 +238,6 @@
                                             toastr.success(data.msg);
                                         }, 500);
 
-                                    },
-                                    error: function( jqXhr, textStatus, errorThrown ){
-                                        console.log( jqXhr.responseJSON.message );
-                                        console.log( errorThrown );
-                                        //console.log( jqXhr.responseText );
-                                        $.alert({
-                                            title: 'Security Alert!',
-                                            content: jqXhr.responseJSON.message + ' Please logout and login after sometime to continue.',
-                                            icon: 'fa fa-skull',
-                                            animation: 'scale',
-                                            closeAnimation: 'scale',
-                                            buttons: {
-                                                okay: {
-                                                    text: 'Okay',
-                                                    btnClass: 'btn-blue'
-                                                }
-                                            }
-                                        });
                                     }
                                 });
                             }
@@ -328,9 +265,6 @@
                     console.log(iid);
 
                     $.ajax({
-                        headers:{
-                            'CsrfToken': $('meta[name="csrf-token"]').attr('content'),
-                        },
                         url: "/AjaxActivity/change-avatar",
                         method: 'post',
                         data: {
@@ -347,25 +281,6 @@
                             setTimeout(function(){
                                 toastr.success(data.msg);
                             }, 500);
-
-                        },
-                        error: function( jqXhr, textStatus, errorThrown ){
-                            console.log( jqXhr.responseJSON.message );
-                            console.log( errorThrown );
-                            //console.log( jqXhr.responseText );
-                            $.alert({
-                                title: 'Security Alert!',
-                                content: jqXhr.responseJSON.message + ' Please logout and login after sometime to continue.',
-                                icon: 'fa fa-skull',
-                                animation: 'scale',
-                                closeAnimation: 'scale',
-                                buttons: {
-                                    okay: {
-                                        text: 'Okay',
-                                        btnClass: 'btn-blue'
-                                    }
-                                }
-                            });
                         }
                     });
                 }

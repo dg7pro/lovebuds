@@ -18,8 +18,6 @@ class AjaxRegistration extends Ajax
      */
     public function selectGenderAction(){
 
-        $this->includeCheck();
-
         $male = [2,4];
         $female = [3,5];
         $ambiguous = [1,6,7];
@@ -49,8 +47,6 @@ class AjaxRegistration extends Ajax
      * Check User Email Input
      */
     public function checkEmailAction(){
-
-        $this->includeCheck();
 
         if(isset($_POST['em'])){
 
@@ -88,8 +84,6 @@ class AjaxRegistration extends Ajax
      */
     public function checkMobileAction(){
 
-        $this->includeCheck();
-
         if(isset($_POST['mb'])){
 
             $mb = $_POST['mb'];
@@ -126,8 +120,6 @@ class AjaxRegistration extends Ajax
      */
     public function checkPassword(){
 
-        $this->includeCheck();
-
         if(isset($_POST['pw'])){
 
             $pw = $_POST['pw'];
@@ -154,8 +146,6 @@ class AjaxRegistration extends Ajax
      *  Select Gender for popup registration
      */
     public function selectGenderPopup(){
-
-        $this->includeCheck();
 
         $male = [2,4];
         $female = [3,5];
@@ -186,8 +176,6 @@ class AjaxRegistration extends Ajax
      */
     public function selectAstroAction(){
 
-        //$this->includeCheck();
-
         $ind = [1,3,5,6];
         $oth = [2,4,7,8,9];
 
@@ -216,8 +204,6 @@ class AjaxRegistration extends Ajax
      * Resend Activation Email
      */
     public function resendActivationEmail(){
-
-        $this->includeCheck();
 
         if(isset($_POST['em']) && $_POST['em']!=''){
 

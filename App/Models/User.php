@@ -58,7 +58,7 @@ class User extends \Core\Model
 
         if(empty($this->errors)){
             $password_hash = password_hash($this->password, PASSWORD_DEFAULT);
-            $pid = self::generateProfileId(7);
+            $this->pid = self::generateProfileId(7);
             $avatar = self::getDefaultAvatar($this->gender);
 
             $this->myhobbies = [];
@@ -85,7 +85,7 @@ class User extends \Core\Model
             $stmt->bindValue(':password_hash', $password_hash, PDO::PARAM_STR);
             $stmt->bindValue(':cFor', $this->cFor, PDO::PARAM_INT);
             $stmt->bindValue(':gender', $this->gender, PDO::PARAM_INT);
-            $stmt->bindValue(':pid', $pid, PDO::PARAM_STR);
+            $stmt->bindValue(':pid', $this->pid, PDO::PARAM_STR);
             $stmt->bindValue(':avatar', $avatar, PDO::PARAM_STR);
             $stmt->bindValue(':activation_hash', $hashed_token, PDO::PARAM_STR);
             $stmt->bindValue(':hobbies',$myhobbies,PDO::PARAM_STR);
@@ -93,7 +93,13 @@ class User extends \Core\Model
             $stmt->bindValue(':castes',$mycastes,PDO::PARAM_STR);
             $stmt->bindValue(':langs',$langs,PDO::PARAM_STR);
 
-            return $stmt->execute();
+            $result = $stmt->execute();
+
+            if($result){
+                $this->id = $db->lastInsertId();
+            }
+
+            return $result;
 
         }
 

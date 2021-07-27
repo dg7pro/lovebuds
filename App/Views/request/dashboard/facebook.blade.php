@@ -15,7 +15,7 @@
         FB.ui({
             display: 'popup',
             method: 'share',
-            href: 'http://www.jumatrimony.com/home/index',
+            href: 'https://www.jumatrimony.com/home/index',
         }, function(response){
             console.log(response);
             if(response){
@@ -23,7 +23,7 @@
                 var fb = true;
                 $.ajax({
                     type:'POST',
-                    url:'/ajax/setFBAdd',
+                    url:'/AjaxActivity/setFBAdd',
                     data:{
                         fb:fb
                     },

@@ -178,7 +178,8 @@ color: $color-coco;
 
 .bio{
     padding: 0.5rem;
-    font-size: 1.125rem;  
+    font-size: 1.125rem;
+    font-family: Baloo, cursive;
 
     &-field{
         color: $color-coco;
@@ -192,8 +193,19 @@ color: $color-coco;
     }
 }
 
-@media (max-width:760px){
+@media (max-width:576px){
+    .up-body{
+        padding: 2rem 1.25rem;
+    }
 
+    .bio{
+        &-colon{
+            padding-right: 1rem;
+        }
+    }
+}
+
+@media (max-width:760px){
     .resume-body{
         width: 100%;
     }

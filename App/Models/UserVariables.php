@@ -33,6 +33,22 @@ class UserVariables extends Model
      * @param $rid
      * @return array
      */
+    public static function getCastesInOrder($rel): array
+    {
+        if($rel==1){
+
+            return self::getHinduCastes();
+
+        }else{
+            return self::getCastes($rel);
+        }
+
+    }
+
+    /**
+     * @param $rid
+     * @return array
+     */
     public static function getCastes($rid): array
     {
         $sql="SELECT * FROM castes WHERE religion_id=?";
@@ -103,6 +119,44 @@ class UserVariables extends Model
         }
         return $countries;
     }
+
+    /**
+     * @return array
+     */
+    public static function getHinduCastes(): array
+    {
+        $sql = "SELECT 
+            a.value as aid,
+            a.text as ast,
+            c.value as cid,
+            c.text as cst
+       
+            FROM alphabets as a 
+            LEFT JOIN castes as c ON c.alphabet_id = a.value WHERE c.religion_id=1 ORDER BY a.value, c.value";
+
+        $pdo = Model::getDB();
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        $alphabets = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $castes=array();
+        $casteKey=array();
+        $newKey=0;
+        foreach($alphabets as $k=>$v){
+            if(!in_array($v['aid'],$casteKey)){
+                $newKey++;
+                $castes[$newKey]['aid']=$v['aid'];
+                $castes[$newKey]['ast']=$v['ast'];
+            }
+            if($v['cst']!=null){
+                $castes[$newKey]['cas'][$k]["cid"] = $v["cid"];
+                $castes[$newKey]['cas'][$k]["cst"] = $v["cst"];
+            }
+            $casteKey[]  = $v['aid'];
+        }
+        return $castes;
+    }
+
 
     /**
      * @return array

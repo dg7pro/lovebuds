@@ -12,6 +12,8 @@
     <section class="main">
         @include('layouts.partials.alert')
 
+
+
         <h1 class="large text-heading">
             Create Profile
         </h1>
@@ -81,9 +83,9 @@
                 <div class="flex-field-2">
                     <select id="caste" name="caste_id" required>
                         <option value="" selected>Caste</option>
-                        @foreach($castes as $caste)
+                        {{--@foreach($castes as $caste)
                             <option value="{{$caste->value}}"  class="others">{{$caste->text}}</option>
-                        @endforeach
+                        @endforeach--}}
                     </select>
 
                 </div>
@@ -239,8 +241,8 @@
                 var rel = $(this).children("option:selected").val();
                 console.log(rel);
 
+                // Selection of Manglik Status
                 $.ajax({
-
                     url:"/AjaxRegistration/selectAstro",
                     method:'POST',
                     data:{rel:rel},
@@ -263,6 +265,29 @@
 
                 });
 
+            });
+
+            $('#religion').on('change', function(){
+                //var stateID = $(this).val();
+                var relId = $(this).children("option:selected").val();
+                console.log(relId);
+                if(relId){
+                    $.ajax({
+                        type:'POST',
+                        url:'/ajaxLoad/selectCaste',
+                        data:{
+                            rel:relId
+                        },
+                        dataType: "json",
+                        success:function(data,status){
+                            //console.log(data);
+                            //console.log(status);
+                            $('#caste').html(data.opt);
+                        }
+                    });
+                }else{
+                    $('#caste').html('<option value="">Select religion first</option>');
+                }
             });
 
         });
@@ -298,10 +323,6 @@
                 console.log(stateID);
                 if(stateID){
                     $.ajax({
-                        headers:{
-                            'CsrfToken': $('meta[name="csrf-token"]').attr('content'),
-                            // 'CsrfToken': '65f575dd7ba89dbd08a02a86bf990514eb8182254f9af1299d75cd1f92a7ec1',
-                        },
                         type:'POST',
                         url:'/ajaxLoad/select-district',
                         data:{
@@ -312,24 +333,6 @@
                             //console.log(data);
                             //console.log(status);
                             $('#ds_update').html(data.opt);
-                        },
-                        error: function( jqXhr, textStatus, errorThrown ){
-                            console.log( jqXhr.responseJSON.message );
-                            console.log( errorThrown );
-                            //console.log( jqXhr.responseText );
-                            $.alert({
-                                title: 'Security Alert!',
-                                content: jqXhr.responseJSON.message + ' Please logout and login after sometime to continue.',
-                                icon: 'fa fa-skull',
-                                animation: 'scale',
-                                closeAnimation: 'scale',
-                                buttons: {
-                                    okay: {
-                                        text: 'Okay',
-                                        btnClass: 'btn-blue'
-                                    }
-                                }
-                            });
                         }
                     });
                 }else{

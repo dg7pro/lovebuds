@@ -92,8 +92,6 @@ class Ajax extends Controller
      */
     public function unreadNotifications(){
 
-        $this->includeCheck();
-
         if(isset($_POST['readrecord'])){
 
             $data = '';
@@ -116,8 +114,8 @@ class Ajax extends Controller
                             </div>';
                 //$data .= '<a class="btn btn-pink" href="/account/thrash" role="button">Trash Box</a>';
             }
-            echo json_encode($data);
-            //echo $data;
+
+            echo $data;
         }
     }
 
@@ -125,8 +123,6 @@ class Ajax extends Controller
      * Mark notifications read
      */
     public function marNotification(){
-
-        $this->includeCheck();
 
         $msg ='';
         if(isset($_POST['aid'])){

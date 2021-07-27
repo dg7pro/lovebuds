@@ -170,7 +170,7 @@ class Image extends Model
 
         if($status){
             $message = 'Photo approved by moderator <a href="/account/manage-photo"><strong> View </strong></a>';
-            Notification::save($userId,$message,$_SESSION['user_id']);
+            Notification::save($userId, $message);
         }
         return $status;
     }
@@ -189,7 +189,9 @@ class Image extends Model
         $status = $stmt->execute([2,$userId,$imgId]);
 
         if($status){
-            //Notification::save('photo_rejected',$userId);
+
+            $message = 'Some of your Photos <a href="/account/manage-photo"><strong> rejected </strong></a> by moderator';
+            Notification::save($userId, $message);
             self::setAvatarIndexOnProfilePicRejection($userId,$imgId);
         }
 

@@ -17,7 +17,6 @@ class AjaxUpdate extends Ajax
      */
     public function contactInfoAction(){
 
-        $this->includeCheck();
         if(isset($_POST['ciu'])){
 
             $user = Auth::getUser();
@@ -55,7 +54,6 @@ class AjaxUpdate extends Ajax
      */
     public function updatePartnerPreferenceAction(){
 
-        $this->includeCheck();
         if(isset($_POST['pp'])){
 
             $user = Auth::getUser();
@@ -75,7 +73,6 @@ class AjaxUpdate extends Ajax
      */
     public function updateBasicInfoAction(){
 
-        $this->includeCheck();
         if(isset($_POST['bis'])){
 
             $user = Auth::getUser();
@@ -99,7 +96,6 @@ class AjaxUpdate extends Ajax
      */
     public function updateCasteInfoAction(){
 
-        $this->includeCheck();
         if(isset($_POST['cas'])){
 
             if(empty($_POST['mycastes'])){
@@ -120,7 +116,6 @@ class AjaxUpdate extends Ajax
      */
     public function updateEduCareerInfoAction(){
 
-        $this->includeCheck();
         if(isset($_POST['ecs'])){
 
             $user = Auth::getUser();
@@ -141,7 +136,6 @@ class AjaxUpdate extends Ajax
      */
     public function updateFamilyInfoAction(){
 
-        $this->includeCheck();
         if(isset($_POST['fis'])){
 
             $user = Auth::getUser();
@@ -162,7 +156,6 @@ class AjaxUpdate extends Ajax
      */
     public function lifestyleInfoAction(){
 
-        $this->includeCheck();
         if(isset($_POST['lis'])){
 
             $user = Auth::getUser();
@@ -179,7 +172,6 @@ class AjaxUpdate extends Ajax
      */
     public function likesInfoAction(){
 
-        $this->includeCheck();
         if(isset($_POST['lik'])){
 
             if(empty($_POST['myhobbies']) || empty($_POST['myinterests'])){
@@ -200,7 +192,6 @@ class AjaxUpdate extends Ajax
      */
     public function horoscopeInfoAction(){
 
-        $this->includeCheck();
         if(isset($_POST['his'])){
 
             $user = Auth::getUser();
