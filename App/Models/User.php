@@ -1894,6 +1894,8 @@ class User extends \Core\Model
             ]);
         }
 
+        return false;
+
     }
 
     /*public static function getUsersByTimestamp($t){

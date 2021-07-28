@@ -95,7 +95,7 @@ class UserVariables extends Model
     public static function getCountries(): array
     {
         $sql = "SELECT * FROM alphabets as a 
-        LEFT JOIN countries as c ON c.alphabet_id = a.value WHERE a.active=1 ORDER BY a.value, c.name";
+        LEFT JOIN countries as c ON c.alphabet_id = a.value WHERE c.name!='' ORDER BY a.value, c.name";
 
         $pdo = Model::getDB();
         $stmt = $pdo->prepare($sql);
