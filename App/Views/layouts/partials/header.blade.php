@@ -22,6 +22,9 @@
                         <li class="nav-item blink">
                             <a class="nav-link" href="{{'/account/dashboard'}}">DASHBOARD</a>
                         </li>
+                            <li class="nav-item blink">
+                                <a class="nav-link" href="{{'/company/help'}}">HELP</a>
+                            </li>
                         <li class="nav-item blink">
                             <a class="nav-link" href="{{'/account/logout'}}">LOGOUT</a>
                         </li>

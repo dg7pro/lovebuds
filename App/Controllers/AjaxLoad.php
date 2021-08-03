@@ -30,7 +30,7 @@ class AjaxLoad extends Ajax
                     $opt = '<option value="">Sorry!</option>';
                     $flag = true;
                 }else{
-                    $opt = '<option value="">Brothers Married</option>';
+                    $opt = '<option value="">Brothers Married: 0</option>';
                     for ($x = 1; $x <= $num; $x++) {
                         $opt .= '<option value="'.$x.'">'.$x.'</option>';
                     }
@@ -62,7 +62,7 @@ class AjaxLoad extends Ajax
                     $opt = '<option value="">Sorry!</option>';
                     $flag = true;
                 }else{
-                    $opt = '<option value="">Sisters Married</option>';
+                    $opt = '<option value="">Sisters Married: 0</option>';
                     for ($x = 1; $x <= $num; $x++) {
                         $opt .= '<option value="'.$x.'">'.$x.'</option>';
                     }

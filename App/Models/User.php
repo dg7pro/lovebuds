@@ -3,6 +3,7 @@
 namespace App\Models;
 
 
+use App\Lib\Helpers;
 use App\Mail;
 use App\Token;
 use Core\Model;
@@ -188,6 +189,13 @@ class User extends \Core\Model
         if (!preg_match("/^[A-Za-z]{3,}$/",$l_name)) {
             $this->errors[] = 'Invalid last name';
         }
+
+    }
+
+    /**
+     * Validate name
+     */
+    public function validateWhatsapp(){
 
         // whatsapp address
         if (!preg_match("/^[6-9]\d{9}$/",$this->whatsapp)) {
@@ -402,7 +410,7 @@ class User extends \Core\Model
     {
 
         return $sql = "SELECT users.*,
-            heights.feet as ht, 
+            heights.ft as ht, 
             religions.name as religion,
             communities.name as lang,
             countries.name as country,
@@ -1544,6 +1552,7 @@ class User extends \Core\Model
         }
 
         $this->validateName();
+        $this->validateWhatsapp();
 
         if(empty($this->errors)){
 
@@ -1643,7 +1652,7 @@ class User extends \Core\Model
 
         if(empty($this->errors)) {
 
-            $sql = "UPDATE users SET first_name=?, last_name=?, caste_id=?, language_id=?, marital_id=?, height_id=?, 
+            $sql = "UPDATE users SET first_name=?, last_name=?, caste_id=?, tongue_id=?, marital_id=?, height_id=?, 
                     country_id=?, state=?, district=? WHERE id=?";
 
             $db = Model::getDB();
@@ -1652,7 +1661,7 @@ class User extends \Core\Model
                 $this->first_name,
                 $this->last_name,
                 $this->caste_id,
-                $this->language_id,
+                $this->tongue_id,
                 $this->marital_id,
                 $this->height_id,
                 $this->country_id,

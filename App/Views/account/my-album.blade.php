@@ -11,8 +11,15 @@
     <section class="profile">
 
         <div class="album-card mt-5">
-            <h3 class="album-heading text-blue">Upload your images here:</h3>
-            <p>You can upload maximum of 3 photos. Your images should be single (no group images are allowed), clear, sharp and front facing.</p>
+            {{--<h3 class="album-heading text-blue">Upload your images here:</h3>--}}
+            <h3 class="album-heading text-blue">Upload Page:</h3>
+            <p><span class="text-orange">Click on grey canvas</span> below to upload, on computers you can drag n drop even: <br>
+            <span class="text-secondary bg-light"><b>Tools on upload:</b>
+                <i class="fa fa-trash" aria-hidden="true"></i> Delete current
+                <i class="fa">&#xf044;</i> Crop and edit
+                <i class="fa fa-upload" aria-hidden="true"></i> Upload to server
+            </span>
+            </p>
 
             @if($num<3)
                 <div class="image-area">
@@ -80,8 +87,10 @@
 
             </div>
             <div class="mt-4">
-                <a href="{{'/account/manage-photo'}}" class="btn btn-sm btn-pink">Manage Photo</a>
-                <a href="{{'/account/dashboard'}}" class="btn btn-sm btn-yellow">Go to Dashboard</a>
+                <a href="{{'/account/dashboard'}}" class="btn btn-sm btn-yellow"><i class="fa fa-angle-double-left" aria-hidden="true"></i> Dashboard</a>
+               {{-- <a href="{{'/account/manage-photo'}}" class="btn btn-sm btn-pink">Manage Photo</a>--}}
+                <button class="btn btn-sm btn-pink" role="button" id="manage-photo" data-id="{{$num}}">Manage Photo</button>
+
             </div>
         </div>
 
@@ -328,6 +337,23 @@
 
     </script>
 
+    <script>
+        $(document).ready(function() {
+            $('#manage-photo').on('click', function () {
+                var mp = $(this).attr("data-id");
+                console.log(mp);
+                if(mp==0){
+                    $.alert({
+                        title: 'Alert!',
+                        content: 'Oops! There is no photo to manage, please upload your photo',
+                    });
+                }else{
+                    // similar behavior as clicking on a link
+                    window.location.href = "{{'/account/manage-photo'}}";
+                }
+
+            });
+        });
+    </script>
 
 @endsection
-

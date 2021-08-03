@@ -63,4 +63,11 @@ class Company extends Controller
         View::renderBlade('company.disclaimer');
     }
 
+    /**
+     * Show tabs page of Companies TnC
+     */
+    public function helpAction(){
+        View::renderBlade('company.help');
+    }
+
 }

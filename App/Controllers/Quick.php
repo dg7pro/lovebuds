@@ -305,7 +305,7 @@ class Quick extends Controller
                 $newProfilesInfo[$newKey]["state"] = $profileValue["state"];
                 $newProfilesInfo[$newKey]["district"] = $profileValue["district"];
             }
-            if($profileValue['filename']!=null && $profileValue['approved']!=0 && $profileValue['linked']!=0){
+            if($profileValue['filename']!=null && $profileValue['approved']==1 && $profileValue['linked']!=0){
                 $newProfilesInfo[$newKey]['pics'][$profileKey]["fn"] = $profileValue["filename"];
                 $newProfilesInfo[$newKey]['pics'][$profileKey]["pp"] = $profileValue["pp"];
             }

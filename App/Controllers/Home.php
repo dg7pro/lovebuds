@@ -50,14 +50,14 @@ class Home extends Controller
     }
 
     public function session(){
-        //var_dump($_SESSION);
+        var_dump($_SESSION);
 
 //        $dt = Carbon::now();
 //        echo $dt->toFormattedDateString();
 
 
-        $castes = UserVariables::getCountries();
-        Helpers::dnd($castes);
+//        $castes = UserVariables::getCountries();
+//        Helpers::dnd($castes);
 
     }
 

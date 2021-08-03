@@ -136,6 +136,8 @@ class AjaxUpdate extends Ajax
      */
     public function updateFamilyInfoAction(){
 
+        //echo json_encode($_POST);
+
         if(isset($_POST['fis'])){
 
             $user = Auth::getUser();

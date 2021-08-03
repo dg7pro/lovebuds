@@ -60,10 +60,11 @@
                     </p>
                     <div>
                         @if($authUser)
-                            <a href="https://wa.me/{{'91'.$profile->whatsapp}}?text=Hi I am interested, here is my profile: http://www.jumatrimony.com/profile/{{$profile->pid}}" target="_blank" class="btn btn-pink" role="button" onclick="recordWhatsappInterest({{$profile->id}}); return true;">Wa Interest</a>
+                            <a href="https://wa.me/{{'91'.$profile->whatsapp}}?text=Hi I am interested, here is my profile: http://www.jumatrimony.com/profile/{{$profile->pid}}"
+                               target="_blank" class="btn btn-pink" role="button" onclick="recordWhatsappInterest({{$profile->id}}); return true;"><i class="fab fa-whatsapp text-dark"> </i> Interest</a>
                             <button id="contact-btn" class="btn btn-orange contact" onclick="viewContactAdd({{$profile->id}})">Contact</button>
                         @else
-                            <button type="button" class="btn btn-pink" data-toggle="modal" data-target="#exampleModal">Wa Interest</button>
+                            <button type="button" class="btn btn-pink" data-toggle="modal" data-target="#exampleModal"><i class="fab fa-whatsapp text-dark"> </i> Interest</button>
                             <button type="button" class="btn btn-orange" data-toggle="modal" data-target="#exampleModal">Contact</button>
                         @endif
 
@@ -97,7 +98,7 @@
                 <div class="resume-content">
 
                     <div class="resume-body">
-                        <h5 class="text-primary" style="font-family: BalooH, cursive"><i class="fa fa-user mr-2"></i>Basic Infomation:</h5>
+                        <h5 class="text-primary"><i class="fa fa-user mr-2"></i>Basic Infomation:</h5>
                         <div class="bio-group">
                             <div class="bio">
                                 <span class="bio-field">Name</span>

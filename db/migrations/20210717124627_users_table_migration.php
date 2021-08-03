@@ -24,7 +24,7 @@ final class UsersTableMigration extends AbstractMigration
 
             // account details - 15
             ->addColumn('pid', 'string', ['limit' => 20,'null'=>false])
-            ->addColumn('email', 'string', ['limit' => 255,'null'=>false])
+            ->addColumn('email', 'string', ['limit' => 170,'null'=>false])
             ->addColumn('mobile', 'string', ['limit' => 10,'null'=>false])
             ->addColumn('whatsapp', 'string', ['limit' => 10,'null'=>true])
             ->addColumn('password_hash', 'string', ['limit' => 255,'null'=>false])
@@ -175,7 +175,9 @@ final class UsersTableMigration extends AbstractMigration
             ->addColumn('created_at','timestamp',['null'=>false,'default'=>'CURRENT_TIMESTAMP'])
             ->addColumn('updated_at','timestamp',['null'=>false,'default'=>'CURRENT_TIMESTAMP'])
 
-            ->addIndex(['pid', 'email'], ['unique' => true])
+            ->addIndex(['id'])
+            ->addIndex(['pid'], ['unique' => true])
+            ->addIndex(['email'], ['unique' => true])
             ->create();
 
     }

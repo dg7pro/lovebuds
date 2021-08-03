@@ -55,9 +55,11 @@ class AjaxSearch extends Controller
                                 </p>
                                 <div>';
             if($_SESSION['user_id']){
-                $output .= '<a href="https://wa.me/91'.$profile['mobile'].'?text=Hi I am interested, here is my profile: http://www.jumatrimony.com/profile/'.$pid.'" target="_blank" id="contact-btn-'.$profile['id'].'" class="btn btn-pink" role="button" onclick="sendWhatsappInterest('.$profile['id'].'); return true;">Wa Interest</a>';
+                $output .= '<a href="https://wa.me/91'.$profile['mobile'].'?text=Hi I am interested, here is my profile: http://www.jumatrimony.com/profile/'.$pid.'" target="_blank" id="contact-btn-'.$profile['id'].'" class="btn btn-pink" role="button" onclick="sendWhatsappInterest('.$profile['id'].'); return true;">
+                                <i class="fab fa-whatsapp text-dark"> </i> Interest</a>';
             }else{
-                $output .= '<button type="button" class="btn btn-orange" data-toggle="modal" data-target="#exampleModal">Wa Interest</button>';
+                $output .= '<button type="button" class="btn btn-orange" data-toggle="modal" data-target="#exampleModal">
+                                <i class="fab fa-whatsapp text-dark"> </i> Interest</button>';
             }
             if($_SESSION['user_id']){
                 $output .= '<button id="contact-btn-'.$profile['id'].'" data-id="'.$profile['id'].'" class="btn btn-orange contact" onclick="viewContactAdd('.$profile['id'].')">Contact</button>';
@@ -85,7 +87,7 @@ class AjaxSearch extends Controller
                             </div>
                             <div id="ups-ab-overlay-'.$profile['id'].'" class="ups-ab-overlay">
                                 <!--user profiles address bar-->
-                                <div class="text">Contact Address</div>
+                                <div class="text"></div>
                             </div>
                         </div>';
             $output .= '</div>';
@@ -192,7 +194,7 @@ class AjaxSearch extends Controller
                 $newProfilesInfo[$newKey]["district"] = $profileValue["district"];
 
             }
-            if($profileValue['filename']!=null && $profileValue['approved']!=0 && $profileValue['linked']!=0){
+            if($profileValue['filename']!=null && $profileValue['approved']==1 && $profileValue['linked']!=0){
                 $newProfilesInfo[$newKey]['pics'][$profileKey]["fn"] = $profileValue["filename"];
                 $newProfilesInfo[$newKey]['pics'][$profileKey]["pp"] = $profileValue["pp"];
             }

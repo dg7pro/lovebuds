@@ -4,7 +4,7 @@
     <meta property="og:url" content="https://www.jumatrimony.com/home/index"/>
     <meta property="og:type" content="website"/>
     <meta property="og:title" content="JU Matrimony Service"/>
-    <meta property="og:description" content="Free Indian Matrimony Service, so find lifepartner - a perfect Jeevansathi.
+    <meta property="og:description" content="Free Indian Matrimony Service, so find lifepartner - join & unite.
                             God creates couple and we just unite them together"/>
     <meta property="og:image" content="{{'/img/showcase.jpg'}}"/>
 @endsection

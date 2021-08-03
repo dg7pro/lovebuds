@@ -47,8 +47,9 @@
             @endforeach
         </div>
         <div class="mt-4">
-            <a href="{{'/account/my-album'}}" class="btn btn-sm btn-pink">Go to Album</a>
-            <a href="{{'/account/dashboard'}}" class="btn btn-sm btn-yellow">Go to Dashboard</a>
+            <a href="{{'/account/dashboard'}}" class="btn btn-sm btn-yellow"><i class="fa fa-angle-double-left" aria-hidden="true"></i> Dashboard</a>
+            <a href="{{'/account/my-album'}}" class="btn btn-sm btn-pink">Upload Page</a>
+            {{--<a href="{{'/account/dashboard'}}" class="btn btn-sm btn-yellow">Go to Dashboard</a>--}}
         </div>
 
     </section>

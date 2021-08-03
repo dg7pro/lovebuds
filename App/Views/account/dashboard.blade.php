@@ -36,8 +36,8 @@
                 <li class="nav-item" role="presentation">
                     <a class="btn btn-yellow  nav-item" id="pills-profile-tab" data-toggle="pill" href="#pills-profile"
                        role="tab" aria-controls="pills-profile" aria-selected="false">
-                        <i class="fas fa-camera-retro text-white"></i>
-                        Manage Album
+                        <i class="fas fa-camera text-white"></i>
+                        My Album
                     </a>
                 </li>
                 <li class="nav-item" role="presentation">
@@ -112,7 +112,7 @@
                     <tr>
                         <th colspan="2">Education & Career
                             {{--<button class="btn btn-yellow btn-sm">Edit</button>--}}
-                            <a href="{{'/account/edit-profile#edu-career-card'}}" class="btn btn-yellow btn-sm" role="button">Edit</a>
+                            <a href="{{'/account/edit-profile#edu-career-card'}}" class="btn btn-light btn-sm" role="button">Edit</a>
                         </th>
                     </tr>
                     </thead>
@@ -151,7 +151,7 @@
                     </tr>
                     <tr>
                         <td>Mother:</td>
-                        <td class="hide-sm">{!! ($authUser-> father_name) ? $authUser->father_name : $pf  !!}</td>
+                        <td class="hide-sm">{!! ($authUser-> mother_name) ? $authUser->mother_name : $pf  !!}</td>
                     </tr>
 
                     </tbody>
@@ -211,7 +211,11 @@
                     @if($image!=null)
                         <img src="{{'/uploaded/pics/'.$image->filename}}" class="img-thumbnail" alt="User Image" width="225px" height="auto"/><br>
                     @else
-                        <img src="{{'/img/'.($authUser->gender==1?'groom-grayscale.jpg':'bride-grayscale.jpg')}}" class="img-thumbnail" alt="User Image" width="225px" height="auto"/>
+                        <div class="imgWithIcon2">
+                        <a href="{{'/account/my-album'}}"><img src="{{'/img/'.($authUser->gender==1?'groom-grayscale.jpg':'bride-grayscale.jpg')}}" class="img-thumbnail" alt="User Image" width="225px" height="auto"/></a>
+                            <i class="fa fa-upload fa-2x {{$authUser->gender==1?'text-light':'text-secondary'}}" aria-hidden="true"><span class="baloo"> Click Me</span></i>
+                        </div>
+
                     @endif
                 </div>
                 <div class="my-3">You can upload maximum of 3 photos. Your images should be single (no group images are allowed),
@@ -219,7 +223,8 @@
                 <div>
                     {{--<div><span class=""><i class="fa fa-camera text-blue" aria-hidden="true"> </i> You can upload maximum of 3 photos</span></div>--}}
                     <div><span class=""><i class="fa fa-upload text-blue" aria-hidden="true"></i> Upload and save your photo on server</span></div>
-                    <div><span class=""><i class="fa fa-crop text-orange" aria-hidden="true"></i> Crop and adjust your photo with photo edit tool before final uploading</span></div>
+                    {{--<div><span class=""><i class="fa fa-crop text-orange" aria-hidden="true"></i> Crop and adjust your photo with photo edit tool before final uploading</span></div>--}}
+                    <div><span class=""><i class="fa text-heading">&#xf044;</i> Crop and adjust your photo with photo edit tool before final uploading</span></div>
                     <div><span class=""><i class="fa fa-trash text-red" aria-hidden="true"></i> Replace photo with better one  </span></div>
                     {{--<div><span class=""><i class="fa fa-check text-green" aria-hidden="true"> </i> The photo has been approved and visible to others</span></div>
                     <div><span class=""><i class="fa fa-clock text-orange" aria-hidden="true"> </i> The photo has been submitted for screening, It is pending approval</span></div>
@@ -233,7 +238,7 @@
                     </div>
                 @else
                     <div class="buttons mt-3">
-                        <a href="{{'/account/my-album'}}" class="btn btn-blue">Proceed to upload..</a>
+                        <a href="{{'/account/my-album'}}" class="btn btn-blue">Upload Page</a>
                     </div>
                 @endif
 

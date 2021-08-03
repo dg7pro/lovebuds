@@ -40,7 +40,7 @@
                             <div class="col-md-4 mb-3 px-2">
                                 <label for="rel_update">Religion</label>
                                 <select id="rel_update" name="rel_update" class="form-control" disabled>
-                                    <option>Choose...</option>
+                                    <option value="">Choose...</option>
                                     @foreach($religions as $religion)
                                         <option value="{{$religion->id}}" {{($authUser->religion_id==$religion->id)?'Selected':''}}>{{$religion->name}}</option>
                                     @endforeach
@@ -49,7 +49,7 @@
                             <div class="col-md-4 mb-3 px-2">
                                 <label for="gen_update">Gender</label>
                                 <select id="gen_update" name="gen_update" class="form-control" disabled>
-                                    <option selected>Choose...</option>
+                                    <option selected value="">Choose...</option>
                                     <option value="1" {{($authUser->gender==1)?'Selected':''}}>Male</option>
                                     <option value="2" {{($authUser->gender==2)?'Selected':''}}>Female</option>
                                 </select>
@@ -63,7 +63,7 @@
                             <div class="col-md-6 mb-3 px-2">
                                 <label for="cas_update">Your Caste</label>
                                 <select id="cas_update" name="cas_update" class="form-control">
-                                    <option>Choose...</option>
+                                    <option value="">Choose...</option>
                                     @if($authUser->religion_id==1)
                                         @foreach($castes as $caste)
                                             <optgroup label="{{$caste['ast']}}">
@@ -84,7 +84,7 @@
                             <div class="col-md-6 mb-3 px-2">
                                 <label for="mt_update">Mother Tongue</label>
                                 <select id="mt_update" name="mt_update" class="form-control">
-                                    <option>Choose...</option>
+                                    <option value="">Choose...</option>
                                     @foreach($tongues as $tongue)
                                         <optgroup label="{{$tongue['direction']}}">
                                             @foreach($tongue['lang'] as $lang)
@@ -98,7 +98,7 @@
                             <div class="col-md-6 mb-3 px-2">
                                 <label for="ms_update">Marital Status</label>
                                 <select id="ms_update" name="ms_update" class="form-control">
-                                    <option>Choose...</option>
+                                    <option value="">Choose...</option>
                                     @foreach($maritals as $marital)
                                         <option value="{{$marital->id}}" {{($authUser->marital_id==$marital->id)?'Selected':''}}>{{$marital->status}}</option>
                                     @endforeach
@@ -108,7 +108,7 @@
                             <div class="col-md-6 mb-3 px-2">
                                 <label for="ht_update">Height</label>
                                 <select id="ht_update" name="ht_update" class="form-control">
-                                    <option>Choose...</option>
+                                    <option value="">Choose...</option>
                                     @foreach($heights as $height)
                                         <option value="{{$height->id}}" {{($authUser->height_id==$height->id)?'Selected':''}}>{{$height->feet}}</option>
                                     @endforeach
@@ -118,7 +118,7 @@
                             <div class="col-md-4 mb-3 px-2">
                                 <label for="cn_update">Living In Country:</label>
                                 <select id="cn_update" name="cn_update" class="form-control">
-                                    <option>Choose...</option>
+                                    <option value="">Choose...</option>
                                     @foreach($countries as $country)
                                         <optgroup label="{{$country['alpha']}}">
                                             @foreach($country['coni'] as $con)
@@ -218,7 +218,7 @@
                             <div class="col-md-6 mb-3 px-2">
                                 <label for="education">Highest Education</label>
                                 <select id="education" class="form-control">
-                                    <option>Choose...</option>
+                                    <option value="">Choose...</option>
                                     @foreach($educations as $education)
                                         <optgroup label="{{$education['stream']}}">
                                             @foreach($education['edu'] as $edu)
@@ -231,7 +231,7 @@
                             <div class="col-md-6 mb-3 px-2">
                                 <label for="degree">UG Degree</label>
                                 <select id="degree" class="form-control">
-                                    <option>Choose...</option>
+                                    <option value="">Choose...</option>
                                     @foreach($degrees as $degree)
                                         <option value="{{$degree->id}}" {{($authUser->degree_id==$degree->id)?'Selected':''}}>{{$degree->name}}</option>
                                     @endforeach
@@ -240,7 +240,7 @@
                             <div class="col-md-6 mb-3 px-2">
                                 <label for="university">University</label>
                                 <select id="university" class="form-control">
-                                    <option>Choose...</option>
+                                    <option value="">Choose...</option>
                                     @foreach($universities as $university)
                                         <option value="{{$university->id}}" {{($authUser->university_id==$university->id)?'Selected':''}}>{{$university->name}}</option>
                                     @endforeach
@@ -255,7 +255,7 @@
                             <div class="col-md-6 mb-3 px-2">
                                 <label for="sector">Employed In (Sector)</label>
                                 <select id="sector" class="form-control">
-                                    <option>Choose...</option>
+                                    <option value="">Choose...</option>
                                     @foreach($sectors as $sector)
                                         <option value="{{$sector->id}}" {{($authUser->sector_id==$sector->id)?'Selected':''}}>{{$sector->name}}</option>
                                     @endforeach
@@ -265,7 +265,7 @@
                             <div class="col-md-6 mb-3 px-2">
                                 <label for="occupation">Occupation</label>
                                 <select id="occupation" class="form-control">
-                                    <option>Choose...</option>
+                                    <option value="">Choose...</option>
                                     @foreach($occupations as $occupation)
                                         <optgroup label="{{$occupation['category']}}">
                                             @foreach($occupation['occ'] as $occ)
@@ -284,7 +284,7 @@
                             <div class="col-md-6 mb-3 px-2">
                                 <label for="income">Annual Income</label>
                                 <select id="income" class="form-control">
-                                    <option>Choose...</option>
+                                    <option value="">Choose...</option>
                                     @foreach($incomes as $income)
                                         <option value="{{$income->id}}" {{($authUser->income_id==$income->id)?'Selected':''}}>{{$income->level}}</option>
                                     @endforeach
@@ -315,7 +315,7 @@
                             <div class="col-md-6 mb-3 px-2">
                                 <label for="father">Father Is</label>
                                 <select id="father" class="form-control">
-                                    <option>Choose...</option>
+                                    <option value="">Choose...</option>
                                     @foreach($fathers as $father)
                                         <option value="{{$father->id}}" {{($authUser->father_id==$father->id)?'Selected':''}}>{{$father->status}}</option>
                                     @endforeach
@@ -331,7 +331,7 @@
                             <div class="col-md-6 mb-3 px-2">
                                 <label for="mother">Mother Is</label>
                                 <select id="mother" class="form-control">
-                                    <option>Choose...</option>
+                                    <option value="">Choose...</option>
                                     @foreach($mothers as $mother)
                                         <option value="{{$mother->id}}" {{($authUser->mother_id==$mother->id)?'Selected':''}}>{{$mother->status}}</option>
                                     @endforeach
@@ -343,7 +343,7 @@
 
                                 <div class="input-group mb-2">
                                     <select class="custom-select" style="margin-left: 0; background: none" id="bros">
-                                        <option selected >Brothers</option>
+                                        <option value="" selected >Brothers</option>
                                         @for($b=1;$b<=7;$b++)
                                             <option value="{{$b}}" {{($authUser->bros==$b)?'Selected':''}}>{{$b}}</option>
                                         @endfor
@@ -351,7 +351,7 @@
                                     </select>
                                     <select class="custom-select" style="background: none" id="mbros">
                                         @if($authUser->bros != 100)
-                                            <option selected>Married ones</option>
+                                            <option value="" selected>Married ones: 0</option>
                                             @for($mb=1;$mb<=$authUser->bros;$mb++)
                                                 <option value="{{$mb}}" {{($authUser->mbros==$mb)?'Selected':''}}>{{$mb}}</option>
                                             @endfor
@@ -367,7 +367,7 @@
 
                                 <div class="input-group mb-2">
                                     <select class="custom-select" style="margin-left: 0; background: none" id="sis">
-                                        <option selected value=null>Sisters</option>
+                                        <option value="" selected>Sisters</option>
                                         @for($s=1;$s<=7;$s++)
                                             <option value="{{$s}}" {{($authUser->sis==$s)?'Selected':''}}>{{$s}}</option>
                                         @endfor
@@ -375,7 +375,7 @@
                                     </select>
                                     <select class="custom-select" style="background: none" id="msis">
                                         @if($authUser->sis != 100)
-                                            <option selected>Married ones</option>
+                                            <option value="" selected>Married ones: 0</option>
                                             @for($ms=1;$ms<=$authUser->sis;$ms++)
                                                 <option value="{{$ms}}" {{($ms==$authUser->msis)?'Selected':''}}>{{$ms}}</option>
                                             @endfor
@@ -389,7 +389,7 @@
                             <div class="col-md-6 mb-3 px-2">
                                 <label for="affluence">Family Status</label>
                                 <select id="affluence" class="form-control">
-                                    <option>Choose...</option>
+                                    <option value="">Choose...</option>
                                     @foreach($famAffluence as $affluence)
                                         <option value="{{$affluence->id}}" {{($authUser->famAffluence_id==$affluence->id)?'Selected':''}}>{{$affluence->status}}</option>
                                     @endforeach
@@ -399,7 +399,7 @@
                             <div class="col-md-6 mb-3 px-2">
                                 <label for="famType">Family Type</label>
                                 <select id="famType" class="form-control">
-                                    <option>Choose...</option>
+                                    <option value="">Choose...</option>
                                     @foreach($famTypes as $famType)
                                         <option value="{{$famType->id}}" {{($authUser->famType_id==$famType->id)?'Selected':''}}>{{$famType->name}}</option>
                                     @endforeach
@@ -409,7 +409,7 @@
                             <div class="col-md-6 mb-3 px-2">
                                 <label for="famValue">Family Values</label>
                                 <select id="famValue" class="form-control">
-                                    <option>Choose...</option>
+                                    <option value="">Choose...</option>
                                     @foreach($famValues as $value)
                                         <option value="{{$value->id}}" {{($authUser->famValue_id==$value->id)?'Selected':''}}>{{$value->name}}</option>
                                     @endforeach
@@ -419,7 +419,7 @@
                             <div class="col-md-6 mb-3 px-2">
                                 <label for="famIncome">Family Income</label>
                                 <select id="famIncome" class="form-control">
-                                    <option>Choose...</option>
+                                    <option value="">Choose...</option>
                                     @foreach($famIncomes as $famIncome)
                                         <option value="{{$famIncome->id}}" {{($authUser->famIncome_id==$famIncome->id)?'Selected':''}}>{{$famIncome->level}}</option>
                                     @endforeach
@@ -445,7 +445,7 @@
                             <div class="col-md-4 mb-3 px-2">
                                 <label for="diet">Dietary Habits</label>
                                 <select id="diet" name="diet" class="form-control">
-                                    <option>Choose...</option>
+                                    <option value="">Choose...</option>
                                     @foreach($diets as $diet)
                                         <option value="{{$diet->id}}" {{($authUser->diet_id==$diet->id)?'Selected':''}}>{{$diet->type}}</option>
                                     @endforeach
@@ -454,7 +454,7 @@
                             <div class="col-md-4 mb-3 px-2">
                                 <label for="smoke">Smoking Habit</label>
                                 <select id="smoke" name="smoke" class="form-control">
-                                    <option>Choose...</option>
+                                    <option value="">Choose...</option>
                                     @foreach($smokes as $smoke)
                                         <option value="{{$smoke->id}}" {{($authUser->smoke_id==$smoke->id)?'Selected':''}}>{{$smoke->status}}</option>
                                     @endforeach
@@ -463,7 +463,7 @@
                             <div class="col-md-4 mb-3 px-2">
                                 <label for="drink">Drinking Habits</label>
                                 <select id="drink" name="drink" class="form-control">
-                                    <option>Choose...</option>
+                                    <option value="">Choose...</option>
                                     @foreach($drinks as $drink)
                                         <option value="{{$drink->id}}" {{($authUser->drink_id==$drink->id)?'Selected':''}}>{{$drink->status}}</option>
                                     @endforeach
@@ -503,7 +503,7 @@
                             <div class="col-md-4 mb-3 px-2">
                                 <label for="btype">Body type</label>
                                 <select id="btype" class="form-control">
-                                    <option>Choose...</option>
+                                    <option value="">Choose...</option>
                                     @foreach($bodies as $body)
                                         <option value="{{$body->id}}" {{($authUser->body_id==$body->id)?'Selected':''}}>{{$body->type}}</option>
                                     @endforeach
@@ -513,7 +513,7 @@
                             <div class="col-md-4 mb-3 px-2">
                                 <label for="complexion">Complexion</label>
                                 <select id="complexion" name="complexion" class="form-control">
-                                    <option>Choose...</option>
+                                    <option value="">Choose...</option>
                                     @foreach($complexions as $complexion)
                                         <option value="{{$complexion->id}}" {{($authUser->complexion_id==$complexion->id)?'Selected':''}}>{{$complexion->type}}</option>
                                     @endforeach
@@ -523,7 +523,7 @@
                             <div class="col-md-4 mb-3">
                                 <label for="wt">Weight(kgs)</label>
                                 <select id="wt" name="wt" class="form-control">
-                                    <option>Choose...</option>
+                                    <option value="">Choose...</option>
                                     @foreach($wts as $wt)
                                         <option value="{{$wt}}" {{($authUser->weight_id==$wt)?'Selected':''}}>{{$wt.' kgs'}}</option>
                                     @endforeach
@@ -533,7 +533,7 @@
                             <div class="col-md-4 mb-3 px-2">
                                 <label for="bGroup">Blood Group</label>
                                 <select id="bGroup" name="bGroup" class="form-control">
-                                    <option>Choose...</option>
+                                    <option value="">Choose...</option>
                                     @foreach($bGroups as $value)
                                         <option value="{{$value->id}}" {{($authUser->bGroup_id==$value->id)?'Selected':''}}>{{$value->type}}</option>
                                     @endforeach
@@ -552,7 +552,7 @@
                             <div class="col-md-4 mb-3 px-2">
                                 <label for="thalassemia">Thalassemia</label>
                                 <select id="thalassemia" class="form-control">
-                                    <option>Choose...</option>
+                                    <option value="">Choose...</option>
                                     @foreach($thalassemia as $value)
                                         <option value="{{$value->id}}" {{($authUser->thalassemia_id==$value->id)?'Selected':''}}>{{$value->status}}</option>
                                     @endforeach
@@ -562,7 +562,7 @@
                             <div class="col-md-6 mb-3 px-2">
                                 <label for="challenged">Physically Challenged?</label>
                                 <select id="challenged" class="form-control">
-                                    <option>Choose...</option>
+                                    <option value="">Choose...</option>
                                     @foreach($challenges as $challenge)
                                         <option value="{{$challenge->id}}" {{($authUser->challenged_id==$challenge->id)?'Selected':''}}>{{$challenge->status}}</option>
                                     @endforeach
@@ -571,7 +571,7 @@
                             <div class="col-md-6 mb-3 px-2">
                                 <label for="citizenship">Residential Status</label>
                                 <select id="citizenship" class="form-control">
-                                    <option>Choose...</option>
+                                    <option value="">Choose...</option>
                                     @foreach($citizenship as $value)
                                         <option value="{{$value->id}}" {{($authUser->citizenship_id==$value->id)?'Selected':''}}>{{$value->status}}</option>
                                     @endforeach
@@ -642,7 +642,7 @@
                             <div class="col-md-4 mb-3 px-2">
                                 <label for="sunSign">Sun Sign</label>
                                 <select id="sunSign" class="form-control">
-                                    <option>Choose...</option>
+                                    <option value="">Choose...</option>
                                     @foreach($signs as $ss)
                                         <option value="{{$ss->id}}" {{($authUser->sun_id==$ss->id)?'Selected':''}}>{{$ss->text}}</option>
                                     @endforeach
@@ -652,7 +652,7 @@
                             <div class="col-md-4 mb-3 px-2">
                                 <label for="moonSign">Moon Sign</label>
                                 <select id="moonSign" class="form-control">
-                                    <option>Choose...</option>
+                                    <option value="">Choose...</option>
                                     @foreach($signs as $ms)
                                         <option value="{{$ms->id}}" {{($authUser->moon_id==$ms->id)?'Selected':''}}>{{$ms->text}}</option>
                                     @endforeach
@@ -662,7 +662,7 @@
                             <div class="col-md-4 mb-3 px-2">
                                 <label for="nakshatra">Nakshatra</label>
                                 <select id="nakshatra" class="form-control">
-                                    <option>Choose...</option>
+                                    <option value="">Choose...</option>
                                     @foreach($nakshatras as $nak)
                                         <option value="{{$nak->id}}" {{($authUser->nakshatra_id==$nak->id)?'Selected':''}}>{{$nak->text}}</option>
                                     @endforeach
@@ -672,7 +672,7 @@
                             <div class="col-md-4 mb-3 px-2">
                                 <label for="manglik">Manglik Status</label>
                                 <select id="manglik" class="form-control">
-                                    <option>Choose...</option>
+                                    <option value="">Choose...</option>
                                     @foreach($mangliks as $manglik)
                                         <option value="{{$manglik->id}}" {{($authUser->manglik_id==$manglik->id)?'Selected':''}}>{{$manglik->status}}</option>
                                     @endforeach
@@ -682,7 +682,7 @@
                             <div class="col-md-4 mb-3 px-2">
                                 <label for="hm">Horoscope Match</label>
                                 <select id="hm" class="form-control">
-                                    <option>Choose...</option>
+                                    <option value="">Choose...</option>
                                     <option value=1 {{($authUser->hm==1)?'Selected':''}}>Necessary</option>
                                     <option value=0 {{($authUser->hm==0)?'Selected':''}}>Not Necessary</option>
                                     <option value="3" {{($authUser->hm==3)?'Selected':''}}>May be</option>
@@ -692,7 +692,7 @@
                             <div class="col-md-4 mb-3 px-2">
                                 <label for="hp">Horoscope Privacy</label>
                                 <select id="hp" class="form-control">
-                                    <option>Choose...</option>
+                                    <option value="">Choose...</option>
                                     <option value="1" {{($authUser->hp==1)?'Selected':''}}>Visible</option>
                                     <option value="0" {{($authUser->hp==0)?'Selected':''}}>Hide</option>
                                     <option value="3" {{($authUser->hp==3)?'Selected':''}}>On demand</option>
@@ -803,7 +803,7 @@
                         }
                     });
                 }else{
-                    $('#msis').html('<option value="">Select brothers first</option>');
+                    $('#msis').html('<option value="">Select sister first</option>');
                 }
             });
         });
@@ -887,32 +887,41 @@
                 //console.log(ds);
 
                 //console.log('reached here');
-                $.ajax({
-                    url: "/ajaxUpdate/updateBasicInfo",
-                    method: 'post',
-                    data: {
-                        bis:bis,
-                        first_name: fn,
-                        last_name: ln,
-                        //community_id:com,
-                        caste_id:cas,
-                        language_id:mt,
-                        marital_id:ms,
-                        height_id:ht,
-                        country_id:cn,
-                        state:st,
-                        district:ds
-                    },
-                    dataType: "json",
-                    success: function (data, status) {
-                        // var message = data.msg;
-                        setTimeout(function(){
-                            toastr.success(data.msg);
-                        }, 500);
-                        //console.log(data.msg);
-                        //console.log(status);
-                    }
-                });
+
+                if(fn && ln && cas && mt && ms && ht && cn && st && ds){
+                    $.ajax({
+                        url: "/ajaxUpdate/updateBasicInfo",
+                        method: 'post',
+                        data: {
+                            bis:bis,
+                            first_name: fn,
+                            last_name: ln,
+                            //community_id:com,
+                            caste_id:cas,
+                            tongue_id:mt,
+                            marital_id:ms,
+                            height_id:ht,
+                            country_id:cn,
+                            state:st,
+                            district:ds
+                        },
+                        dataType: "json",
+                        success: function (data, status) {
+                            // var message = data.msg;
+                            setTimeout(function(){
+                                toastr.success(data.msg);
+                            }, 500);
+                            //console.log(data.msg);
+                            //console.log(status);
+                        }
+                    });
+                }else{
+                    $.alert({
+                        title: 'Alert!',
+                        content: 'Please fill all the fields of Basic Information Section',
+                    });
+                }
+
             });
 
             $('#education-career-update').on('click', function () {
@@ -928,31 +937,40 @@
                 var organization = $('#organization').val();
                 var income = $('#income').val();
 
-                $.ajax({
+                if(education && degree && university && otherDeg && sector && occupation && organization && income){
 
-                    url: "/ajaxUpdate/updateEduCareerInfo",
-                    method: 'post',
-                    data: {
-                        ecs:ecs,
-                        education_id: education,
-                        degree_id: degree,
-                        university_id:university,
-                        other_deg:otherDeg,
-                        sector_id:sector,
-                        occupation_id:occupation,
-                        working_in:organization,
-                        income_id:income
-                    },
-                    dataType: "json",
-                    success: function (data, status) {
-                        //var message = data.msg;
-                        setTimeout(function(){
-                            toastr.success(data.msg);
-                        }, 500);
-                        console.log(data);
-                        console.log(status);
-                    }
-                });
+                    $.ajax({
+                        url: "/ajaxUpdate/updateEduCareerInfo",
+                        method: 'post',
+                        data: {
+                            ecs:ecs,
+                            education_id: education,
+                            degree_id: degree,
+                            university_id:university,
+                            other_deg:otherDeg,
+                            sector_id:sector,
+                            occupation_id:occupation,
+                            working_in:organization,
+                            income_id:income
+                        },
+                        dataType: "json",
+                        success: function (data, status) {
+                            //var message = data.msg;
+                            setTimeout(function(){
+                                toastr.success(data.msg);
+                            }, 500);
+                            console.log(data);
+                            console.log(status);
+                        }
+                    });
+                }else{
+                    $.alert({
+                        title: 'Alert!',
+                        content: 'Please fill all the fields of Education & Career',
+                    });
+                }
+
+
             });
 
             $('#family-info-update').on('click', function () {
@@ -972,35 +990,46 @@
                 var famValue = $('#famValue').val();
                 var famIncome = $('#famIncome').val();
 
-                $.ajax({
+                if(father_name && mother_name && father && mother && bros && sis && affluence && famType && famValue && famIncome){
+                    $.ajax({
 
-                    url: "/ajaxUpdate/updateFamilyInfo",
-                    method: 'post',
-                    data: {
-                        fis:fis,
-                        father_name:father_name,
-                        mother_name:mother_name,
-                        father_id: father,
-                        mother_id: mother,
-                        bros:bros,
-                        mbros:mbros,
-                        sis:sis,
-                        msis:msis,
-                        famAffluence_id:affluence,
-                        famType_id:famType,
-                        famValue_id:famValue,
-                        famIncome_id:famIncome
-                    },
-                    dataType: "json",
-                    success: function (data, status) {
-                        //var message = data.msg;
-                        setTimeout(function(){
-                            toastr.success(data.msg);
-                        }, 500);
-                        //console.log(data);
-                        //console.log(status);
-                    }
-                });
+                        url: "/ajaxUpdate/updateFamilyInfo",
+                        method: 'post',
+                        data: {
+                            fis:fis,
+                            father_name:father_name,
+                            mother_name:mother_name,
+                            father_id: father,
+                            mother_id: mother,
+                            bros:bros,
+                            mbros:mbros,
+                            sis:sis,
+                            msis:msis,
+                            famAffluence_id:affluence,
+                            famType_id:famType,
+                            famValue_id:famValue,
+                            famIncome_id:famIncome
+                        },
+                        dataType: "json",
+                        success: function (data, status) {
+                            //var message = data.msg;
+                            setTimeout(function(){
+                                toastr.success(data.msg);
+                            }, 500);
+                            //console.log(data);
+                            //console.log(status);
+                        }
+                    });
+
+                }else{
+
+                    $.alert({
+                        title: 'Alert!',
+                        content: 'Please fill all the fields of Families Details, to update families section',
+                    });
+                }
+
+
             });
 
             $('#lifestyle-info-update').on('click', function () {
@@ -1023,37 +1052,46 @@
                 var langs = $('#langs').val();
                 //console.log(langs);
 
-                $.ajax({
-                    url: "/ajaxUpdate/lifestyleInfo",
-                    method: 'post',
-                    data: {
-                        lis:lis,
-                        diet_id:diet,
-                        smoke_id:smoke,
-                        drink_id:drink,
-                        pets:pets,
-                        house:house,
-                        car:car,
-                        body_id:btype,
-                        complexion_id:complexion,
-                        weight_id:wt,
-                        bGroup_id:bGroup,
-                        hiv:hiv,
-                        thalassemia_id:thalassemia,
-                        challenged_id:challenged,
-                        citizenship_id:citizenship,
-                        langs:langs
-                    },
-                    dataType: "json",
-                    success: function (data, status) {
-                        //var message = data.msg;
-                        setTimeout(function(){
-                            toastr.success(data.msg);
-                        }, 500);
-                        console.log(data.msg);
-                        console.log(status);
-                    }
-                });
+                if(diet && smoke && drink && pets && house && car && btype && complexion && wt && bGroup && hiv &&
+                    thalassemia && challenged && citizenship && langs) {
+
+                    $.ajax({
+                        url: "/ajaxUpdate/lifestyleInfo",
+                        method: 'post',
+                        data: {
+                            lis: lis,
+                            diet_id: diet,
+                            smoke_id: smoke,
+                            drink_id: drink,
+                            pets: pets,
+                            house: house,
+                            car: car,
+                            body_id: btype,
+                            complexion_id: complexion,
+                            weight_id: wt,
+                            bGroup_id: bGroup,
+                            hiv: hiv,
+                            thalassemia_id: thalassemia,
+                            challenged_id: challenged,
+                            citizenship_id: citizenship,
+                            langs: langs
+                        },
+                        dataType: "json",
+                        success: function (data, status) {
+                            //var message = data.msg;
+                            setTimeout(function () {
+                                toastr.success(data.msg);
+                            }, 500);
+                            console.log(data.msg);
+                            console.log(status);
+                        }
+                    });
+                }else{
+                    $.alert({
+                        title: 'Alert!',
+                        content: 'Please fill all the fields of Families Details, to update families section',
+                    });
+                }
             });
 
             $('#likes-info-update').on('click', function () {
@@ -1063,24 +1101,35 @@
                 var myInterests  = $('#my-interests').val();
                 console.log(myInterests);
 
-                $.ajax({
-                    url: "/ajaxUpdate/likesInfo",
-                    method: 'post',
-                    data: {
-                        lik:lik,
-                        myhobbies:myHobbies,
-                        myinterests:myInterests
-                    },
-                    dataType: "json",
-                    success: function (data, status) {
-                        var message = data.msg;
-                        setTimeout(function(){
-                            toastr.success(data.msg);
-                        }, 500);
-                        console.log(data);
-                        console.log(status);
-                    }
-                });
+                if(myHobbies.length===0 || myInterests.length===0) {
+
+                    $.alert({
+                        title: 'Alert!',
+                        content: 'Please select your hobbies and interests, may your life partner have similar hobbies and interests',
+                    });
+
+                }else{
+                    $.ajax({
+                        url: "/ajaxUpdate/likesInfo",
+                        method: 'post',
+                        data: {
+                            lik:lik,
+                            myhobbies:myHobbies,
+                            myinterests:myInterests
+                        },
+                        dataType: "json",
+                        success: function (data, status) {
+                            var message = data.msg;
+                            setTimeout(function(){
+                                toastr.success(data.msg);
+                            }, 500);
+                            console.log(data);
+                            console.log(status);
+                        }
+                    });
+                }
+
+
             });
 
             $('#caste-info-update').on('click', function () {
@@ -1089,24 +1138,32 @@
                 var myCastes = $('#my-preferred-caste').val();
                 console.log(myCastes);
 
-                $.ajax({
+                if(myCastes.length===0) {
 
-                    url: "/ajaxUpdate/updateCasteInfo",
-                    method: 'post',
-                    data: {
-                        cas:cas,
-                        mycastes:myCastes
-                    },
-                    dataType: "json",
-                    success: function (data, status) {
-                        //var message = data.msg;
-                        setTimeout(function(){
-                            toastr.success(data.msg);
-                        }, 500);
-                        console.log(data);
-                        console.log(status);
-                    }
-                });
+                    $.alert({
+                        title: 'Alert!',
+                        content: 'Please select your preferred castes, we will search your partner within those caste',
+                    });
+
+                }else{
+                    $.ajax({
+                        url: "/ajaxUpdate/updateCasteInfo",
+                        method: 'post',
+                        data: {
+                            cas: cas,
+                            mycastes: myCastes
+                        },
+                        dataType: "json",
+                        success: function (data, status) {
+                            //var message = data.msg;
+                            setTimeout(function () {
+                                toastr.success(data.msg);
+                            }, 500);
+                            console.log(data);
+                            console.log(status);
+                        }
+                    });
+                }
             });
 
             $('#horoscope-info-update').on('click', function () {
@@ -1120,34 +1177,43 @@
                 var hm = $('#hm').val();
                 var hp = $('#hp').val();
                 var kundli_details = $('#kundli_details').val();
-
-
                 //console.log('Hello');
 
-                $.ajax({
-                    url: "/ajaxUpdate/horoscopeInfo",
-                    method: 'post',
-                    data: {
-                        his:his,
-                        sun_id:sunSign,
-                        moon_id:moonSign,
-                        nakshatra_id:nakshatra,
-                        horoscope:horo,
-                        manglik_id:manglik,
-                        hm:hm,
-                        hp:hp,
-                        kundli_details:kundli_details
-                    },
-                    dataType: "json",
-                    success: function (data, status) {
-                        var message = data.msg;
-                        setTimeout(function(){
-                            toastr.success(data.msg);
-                        }, 500);
-                        console.log(data);
-                        console.log(status);
-                    }
-                });
+                if(sunSign && moonSign && nakshatra && horo && manglik && hm && hp) {
+
+                    $.ajax({
+                        url: "/ajaxUpdate/horoscopeInfo",
+                        method: 'post',
+                        data: {
+                            his:his,
+                            sun_id:sunSign,
+                            moon_id:moonSign,
+                            nakshatra_id:nakshatra,
+                            horoscope:horo,
+                            manglik_id:manglik,
+                            hm:hm,
+                            hp:hp,
+                            kundli_details:kundli_details
+                        },
+                        dataType: "json",
+                        success: function (data, status) {
+                            var message = data.msg;
+                            setTimeout(function(){
+                                toastr.success(data.msg);
+                            }, 500);
+                            console.log(data);
+                            console.log(status);
+                        }
+                    });
+
+                }else{
+                    $.alert({
+                        title: 'Alert!',
+                        content: 'Please select your preferred castes, we will search your partner within those caste',
+                    });
+                }
+
+
             });
 
         });
