@@ -122,7 +122,7 @@
 
             <div class="flex-row-stretch form-group mb-4">
                 <div class="flex-field-1">
-                    <input type="text" id="whatsapp" name="whatsapp" placeholder="Whatsapp" value="{{isset($arr['whatsapp'])?$arr['whatsapp']:''}}" required>
+                    <input type="text" id="whatsapp" name="whatsapp" placeholder="Whatsapp number" value="{{isset($arr['whatsapp'])?$arr['whatsapp']:''}}" required>
                     <small class="form-text">For sending & receiving whatsapp interest </small>
                 </div>
 

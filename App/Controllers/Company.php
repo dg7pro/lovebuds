@@ -64,10 +64,19 @@ class Company extends Controller
     }
 
     /**
-     * Show tabs page of Companies TnC
+     * Help and how to use
      */
     public function helpAction(){
         View::renderBlade('company.help');
+    }
+
+    /**
+     * Feedback form
+     */
+    public function feedbackAction(){
+
+        header("Location: https://docs.google.com/forms/d/e/1FAIpQLSe09c_f_oaWJCRwUTqQTqW2roCXMKPKZOa7d2cejikACg46ow/viewform?usp=sf_link");
+        exit();
     }
 
 }

@@ -22,7 +22,7 @@
                                 <p class="d-none d-md-block">Only approved images are visible to others, this is done for moderation.</p>
                                 <p class="mb-0 mt-1">
                                     <button class="btn btn-sm btn-green chgAvt {{$image->pp==1?'disabled':''}}" id="{{'chgAvt-'.$image->img_id}}" data-id="{{$image->img_id}}" data-name="{{$image->filename}}" value="{{$image->filename}}" {{$image->pp==1?'disabled':''}}>Make Avatar</button>
-                                    <button class="btn btn-coco btn-sm delImage" id="{{'delImage-'.$image->img_id}}" data-id="{{$image->img_id}}" data-name="{{$image->filename}}" value="{{$image->filename}}">Delete</button>
+                                    <button class="btn btn-coco btn-sm delImage disabled" id="{{'delImage-'.$image->img_id}}" data-id="{{$image->img_id}}" data-name="{{$image->filename}}" value="{{$image->filename}}" disabled>Delete</button>
                                 </p>
                             @elseif($image->approved==2)
                                 <h6 class="mb-3 text-danger font-weight-medium"> Rejected</h6>
