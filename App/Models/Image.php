@@ -4,6 +4,7 @@
 namespace App\Models;
 
 
+use App\Auth;
 use Core\Model;
 use PDO;
 
@@ -93,11 +94,11 @@ class Image extends Model
      * @param $fileName
      * @return bool
      */
-    public static function persistUserImage($userId, $fileName): bool
+    public function persistUserImage(User $user, $fileName): bool
     {
 
         // check if this is first image
-        $x = self::checkForFirstImage($userId);
+        $x = self::checkForFirstImage($user->id);
 
         $pdo = Model::getDB();
         $img_id = self::random_token(5);
@@ -106,17 +107,17 @@ class Image extends Model
 
             $sql = "INSERT INTO images (user_id,img_id,pp,filename) VALUES (?,?,?,?)";
             $stmt = $pdo->prepare($sql);
-            $result=$stmt->execute([$userId,$img_id,1,$fileName]);
+            $result=$stmt->execute([$user->id,$img_id,1,$fileName]);
 
             // if first image make it avatar
-            $sqlP = "UPDATE users SET avatar=?,photo=? WHERE id=?";
-            $stmt = $pdo->prepare($sqlP);
-            $stmt->execute([$fileName,1,$userId]);
+            $user->makeFirstImageAvatar($fileName);
+
+
 
         }else{
             $sql = "INSERT INTO images (user_id,img_id,filename) VALUES (?,?,?)";
             $stmt = $pdo->prepare($sql);
-            $result=$stmt->execute([$userId,$img_id,$fileName]);
+            $result=$stmt->execute([$user->id,$img_id,$fileName]);
         }
 
         return $result;
@@ -169,8 +170,8 @@ class Image extends Model
         $status =  $stmt->execute([1,$userId,$imgId]);
 
         if($status){
-            $message = 'Photo approved by moderator <a href="/account/manage-photo"><strong> View </strong></a>';
-            Notification::save($userId, $message);
+            $notification = New Notification();
+            $notification->informAboutPhotoApproval($userId);
         }
         return $status;
     }
@@ -190,8 +191,8 @@ class Image extends Model
 
         if($status){
 
-            $message = 'Some of your Photos <a href="/account/manage-photo"><strong> rejected </strong></a> by moderator';
-            Notification::save($userId, $message);
+            $notification = new Notification();
+            $notification->informAboutPhotoRejection($userId);
             self::setAvatarIndexOnProfilePicRejection($userId,$imgId);
         }
 
@@ -365,5 +366,74 @@ class Image extends Model
         return false;
 
     }
+
+    public static function updateUserImage($filename, $userId, $imgId){
+
+        $pdo=Model::getDB();
+
+        $sql = "UPDATE images SET filename=? WHERE user_id=? AND img_id=?";
+        $stmt = $pdo->prepare($sql);
+        $statusX =  $stmt->execute([$filename,$userId,$imgId]);
+
+    }
+
+    public function unlinkedImagesCount(): int
+    {
+
+        $sql = "SELECT * FROM images WHERE linked=0";
+        $pdo = Model::getDB();
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        return $stmt->rowCount();
+    }
+
+    public function fetchUnlinkedImages(): array
+    {
+        $sql = "SELECT * FROM images WHERE linked=0";
+        $pdo = Model::getDB();
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
+    }
+
+    public function deleteUnlinkedImages(): int
+    {
+        $uselessImages = $this->fetchUnlinkedImages();
+
+        $fr = $f1 = $f2 = false;
+        foreach($uselessImages as $img){
+            // unlink main image
+            if(file_exists('uploads/pics/'.$img->filename)){
+                $f1 = unlink('uploads/pics/'.$img->filename);
+            }
+            // unlink thumbnail
+            if(file_exists('uploads/tmb/tn_'.$img->filename)){
+                $f2 = unlink('uploads/tmb/tn_'.$img->filename);
+            }
+
+        }
+        if($f1 && $f2){
+            $fr =  $this->delAll();
+        }
+        return $fr;
+
+    }
+
+    public function delSingle($imgId, $filename): bool
+    {
+        $sql = "DELETE FROM `images` WHERE linked=0 AND img_id=? AND filename=?";
+        $pdo = Model::getDB();
+        $stmt = $pdo->prepare($sql);
+        return $stmt->execute([$imgId,$filename]);
+    }
+
+    public function delAll(): bool
+    {
+        $sql = "DELETE FROM `images` WHERE linked=0";
+        $pdo = Model::getDB();
+        $stmt = $pdo->prepare($sql);
+        return $stmt->execute();
+    }
+
 
 }

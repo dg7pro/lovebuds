@@ -34,8 +34,8 @@ class AjaxSearch extends Controller
                 $output .= '<div id="gallery'.$profile['id'].'" class="gallery" itemscope itemtype="http://schema.org/ImageGallery">';
                 foreach($profile['pics'] as $pic){
                     $output .= '<figure itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject">                                                
-                                        <a href="/uploaded/pics/'.$pic['fn'].'" data-id="'.$profile['id'].'" class="ju-album2" data-caption="xyz" data-width="600" data-height="800" itemprop="contentUrl">                                                   
-                                            <img src="/uploaded/tmb/tn_'.$pic['fn'].'" alt="dfdf" width="135px" class="profile-image"'.($pic['pp']!=1?'hidden':'').'>
+                                        <a href="/uploads/pics/'.$pic['fn'].'" data-id="'.$profile['id'].'" class="ju-album2" data-caption="xyz" data-width="600" data-height="800" itemprop="contentUrl">                                                   
+                                            <img src="/uploads/tmb/tn_'.$pic['fn'].'" alt="dfdf" width="135px" class="profile-image"'.($pic['pp']!=1?'hidden':'').'>
                                         </a>
                                     </figure>';
                 }
@@ -55,7 +55,7 @@ class AjaxSearch extends Controller
                                 </p>
                                 <div>';
             if($_SESSION['user_id']){
-                $output .= '<a href="https://wa.me/91'.$profile['mobile'].'?text=Hi I am interested, here is my profile: http://www.jumatrimony.com/profile/'.$pid.'" target="_blank" id="contact-btn-'.$profile['id'].'" class="btn btn-pink" role="button" onclick="sendWhatsappInterest('.$profile['id'].'); return true;">
+                $output .= '<a href="https://wa.me/91'.$profile['mobile'].'?text=Hi I am interested, here is my profile: http://www.jumatrimony.com/profile/'.$pid.'" target="_blank" id="interest-btn-'.$profile['id'].'" class="btn btn-pink" role="button" onclick="sendWhatsappInterest('.$profile['id'].'); return true;">
                                 <i class="fab fa-whatsapp text-dark"> </i> Interest</a>';
             }else{
                 $output .= '<button type="button" class="btn btn-orange" data-toggle="modal" data-target="#exampleModal">

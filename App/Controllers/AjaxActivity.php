@@ -222,14 +222,18 @@ class AjaxActivity extends Ajax
             $userId=$_POST['uid'];
             $profileId = $_POST['pid'];
 
+            $notification = new Notification();
+
             if($userId!=$profileId){
 
-                $con = VisitProfile::checkRow($profileId);
+                $vp = new VisitProfile();
+                $con = $vp->checkRow($profileId);
 
                 if($con){
-                    $flag = VisitProfile::updateRow($profileId);
+                    $flag = $vp->updateRow($profileId);
                 }else{
-                    $flag = VisitProfile::insertRow($profileId);
+                    $flag = $vp->insertRow($profileId);
+                    $notification->informAboutProfileVisitor($profileId);
                 }
 
                 $msg = ($flag)?"Recorded profile visitor":"Something went wrong!";
@@ -252,9 +256,10 @@ class AjaxActivity extends Ajax
     public function setFBAdd(){
 
         //$usr = Auth::getUser();
-        $uid = $_SESSION['user_id'];
+        //$uid = $_SESSION['user_id'];
         if(isset($_POST['fb'])){
-            $result = User::markFB($uid);
+            $user = Auth::getUser();
+            $result = $user->markFB();
             if($result){
                 echo 'Your account credited with 100 contacts with no time expiry';
             }else{
@@ -264,26 +269,27 @@ class AjaxActivity extends Ajax
 
     }
 
-    protected function createContact($oid){
+    /*protected function createContact($oid){
 
         $info = User::getContact($oid);
 
         if($info->one_way){
             $output = '<span><i class="fab fa-info-circle"></i> Member has been informed that you are interested</span>';
         }else {
-           /* $output = '<span><i class="fab fa-whatsapp"></i> ' . $info->whatsapp . '</span>
+            $output = '<span><i class="fab fa-whatsapp"></i> ' . $info->whatsapp . '</span>
                                 <span class="mr-1"><i class="fas fa-phone-alt"></i>  ' . $info->mobile . '</span>
-                                <span class="ml-3"><i class="far fa-envelope"></i> ' . $info->email . '</span>';*/
+                                <span class="ml-3"><i class="far fa-envelope"></i> ' . $info->email . '</span>';
             $output = '';
         }
         return $output;
-    }
+    }*/
 
 
     /**
+     * Deprecated
      *  Show & record viewed Contact
      */
-    public function showContact(){
+    public function showContactOld(){
 
         if(isset($_SESSION['user_id']) && isset($_POST['other_id'])){
 
@@ -324,6 +330,155 @@ class AjaxActivity extends Ajax
         $_data_arr = ['flag'=>$flag, 'msg'=>$msg, 'addr'=>$addr, 'cc'=>$cc];
         echo json_encode($_data_arr);
 
+    }
+
+
+    /**
+     *  Show & record viewed Contact
+     */
+    public function showContact(){
+
+        $addr = '';
+        $flag = '';
+        $cc = false;
+
+        if(isset($_SESSION['user_id']) && isset($_POST['other_id'])){
+
+            $otherId = $_POST['other_id'];              // Other member
+            $notification = new Notification();         // Get Notification instance
+            $user = Auth::getUser();                    // Get Auth User
+
+            if($otherId==$_SESSION['user_id']){
+
+                $msg = "This is your profile: not Counted!";
+                $json_data = ['flag'=>$flag, 'msg'=>$msg, 'addr'=>$addr, 'cc'=>$cc];
+                $this->echoJson($json_data);
+
+            }
+
+            if($this->isOnewayEnabled($otherId)){
+
+                $notification->informAboutInterestedMember($otherId);
+
+                $msg = "You can't see address of this user due to his/her privacy settings";
+                $addr = '<span><i class="fab fa-info-circle"></i> Member has been informed that you are interested</span>';
+                $cc = true;
+                $json_data = ['flag'=>$flag, 'msg'=>$msg, 'addr'=>$addr, 'cc'=>$cc];
+                $this->echoJson($json_data);
+
+            }
+
+            if($this->isCBlocked($user)){
+
+                $msg = "Verification is done to safeguard interest of all users";
+                $addr = '<span><i class="fab fa-info-circle"></i> Please verify your account to see address <a href="/account/aadhar-verification">click me</a> </span>';
+                $cc = true;
+                $json_data = ['flag'=>$flag, 'msg'=>$msg, 'addr'=>$addr, 'cc'=>$cc];
+                $this->echoJson($json_data);
+
+            }
+
+            if(!$this->haveCredits($user)){
+                $msg = "You do not have enough credits to see address ";
+                $addr = '<span><i class="fab fa-info-circle"></i> Please make onetime payment of just Rs. 200 <a href="/account/pay">Pay now </a> </span>';
+                $cc = true;
+                $json_data = ['flag'=>$flag, 'msg'=>$msg, 'addr'=>$addr, 'cc'=>$cc];
+                $this->echoJson($json_data);
+            }else{
+                $rc = new RecordContact();
+                if($rc->create($user->id,$otherId)){
+
+                    $notification->informAboutContactViewed($otherId);
+
+                    $flag = $user->incrementAc();
+                    $msg = ($flag)?'Success You viewed the contact info of profile: Counted':'Unable to fetch record';
+                }else{
+                    $msg = 'You have already viewed the contact info of this profile earlier: Not counted';
+                }
+                $json_data = ['flag'=>$flag, 'msg'=>$msg, 'addr'=>$addr, 'cc'=>$cc];
+                $this->echoJson($json_data);
+            }
+
+
+        }else{
+            $msg = "Please login to continue.";
+            $json_data = ['flag'=>$flag, 'msg'=>$msg, 'addr'=>$addr, 'cc'=>$cc];
+            $this->echoJson($json_data);
+        }
+
+    }
+
+    public function acceptInterest(){
+
+        if(isset($_SESSION['user_id']) && isset($_POST['notice_id'])){
+
+            $noticeId = $_POST['notice_id'];
+
+            $notification = new Notification();
+
+            if($notification->informAboutAcceptInterest($noticeId)){
+                $msg = "We have send your contact details to the member";
+                $flag = true;
+                $json_data = ['flag'=>$flag, 'msg'=>$msg];
+                $this->echoJson($json_data);
+            }
+
+        }
+
+    }
+
+    private function echoJson($json_data){
+        echo json_encode($json_data);
+        exit();
+    }
+
+    private function isOnewayEnabled($oid): bool
+    {
+        $otherUser = User::getContact($oid);
+        if($otherUser->one_way){
+            return true;
+        }
+        return false;
+    }
+
+    private function isCBlocked(User $user): bool
+    {
+        if($user->c_block){
+            return true;
+        }
+        return false;
+    }
+
+    private function haveCredits(User $user): bool
+    {
+        $credits = $user->credits;
+        $address_count = $user->ac;
+        $num = $credits-$address_count;
+        if($num>0){
+            return true;
+        }
+        return false;
+
+    }
+
+    public function generatePersistOtp(){
+
+        $user = Auth::getUser();
+        $result = $user->createNewOtp();
+
+        if($result){
+            $flag = true;
+            $msg = "Otp generated successfully";
+            // temporary
+            $_SESSION['otp']=$user->otp;
+        }else{
+            $flag = false;
+            $msg = "Sorry! Otp can't be generated";
+        }
+
+
+        $json_data = ['msg'=>$msg,'flag'=>$flag];
+        echo json_encode($json_data);
     }
 
 }

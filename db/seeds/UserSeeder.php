@@ -1,6 +1,7 @@
 <?php
 
 
+use App\Lib\Helpers;
 use App\Models\UserVariables;
 use Phinx\Seed\AbstractSeed;
 
@@ -31,7 +32,7 @@ class UserSeeder extends AbstractSeed
             $hashedPwd = password_hash('jum@2021', PASSWORD_DEFAULT);
 
             $data[] = [
-                'pid'           => self::generateProfileId(7),
+                'pid'           => Helpers::generateProfileId(7),
                 'gender'        => $gender,
                 'avatar'        => $gender == 1 ? 'avatar_groom.jpg' : 'avatar_bride.jpg',
                 'for_id'          => rand(1, 7),
@@ -65,29 +66,6 @@ class UserSeeder extends AbstractSeed
         }
 
         $this->table('users')->insert($data)->saveData();
-
-    }
-
-    public static function generateProfileId($size): string
-    {
-
-        $alpha_key = '';
-        $keys = range('A', 'Z');
-
-        for ($i = 0; $i < 2; $i++) {
-            $alpha_key .= $keys[array_rand($keys)];
-        }
-
-        $length = $size - 2;
-
-        $key = '';
-        $keys = range(0, 9);
-
-        for ($i = 0; $i < $length; $i++) {
-            $key .= $keys[array_rand($keys)];
-        }
-
-        return $alpha_key . $key;
 
     }
 

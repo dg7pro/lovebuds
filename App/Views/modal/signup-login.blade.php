@@ -111,7 +111,7 @@
                                 <input type="password" name="password" class="form-control" placeholder="New password" minlength="6" required autocomplete="new-password">
                             </div>
                             <div class="form-group form-check">
-                                <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                                <input type="checkbox" class="form-check-input" id="exampleCheck1" required>
                                 <label class="form-check-label" for="exampleCheck1">I agree with tnc and privacy policy</label>
                             </div>
 

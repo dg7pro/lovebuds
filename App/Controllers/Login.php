@@ -49,14 +49,24 @@ class Login extends Controller
 
         if($user){
 
-            if(!$user->is_active){
-                $this->redirect('/login/activate-account?email='.$user->email);
+            // If both email and mobile is not verified we can't continue
+            if(!$user->ev && !$user->mv){
+                echo "Your account is not activated yet please verify your email or mobile to continue...";
+                exit();
+                // TODO: new page to be created
+                /*$this->redirect('/login/activate-account?email='.$user->email);
+                exit();*/
+            }
+
+            if($user->is_block){
+                //$this->redirect('/login/activate-account?email='.$user->email);
+                echo "We can't login you, your account has been blocked";
                 exit();
             }
 
             Auth::login($user,$remember_me);
 
-            if($user->first_name==''){
+            if(!$user->is_active){
                 Flash::addMessage('Login Successful. Please complete the form');
                 $this->redirect('/account/create-profile');
             }

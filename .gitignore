@@ -3,5 +3,6 @@
 /logs
 /vendor
 /App/Views/cache
-/public/uploaded/pics
-/public/uploaded/tmb
+/public/uploads/pics
+/public/uploads/tmb
+/public/uploads/aadhar

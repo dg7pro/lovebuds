@@ -25,7 +25,7 @@
             @foreach($images as $image)
                 <div class="col-md-3 col-xl-3" id="{{'my-pic-'.$image->img_id}}">
                     <div class="card mb-4">
-                        <img class="card-img-top img-responsive" src="{{'/uploaded/pics/'.$image->filename}}">
+                        <img class="card-img-top img-responsive" src="{{'/uploads/pics/'.$image->filename}}">
                         <div class="card-body">
                             <p class="mb-2"><span class="{{$image->pp==1?'badge badge-primary text-wrap':''}} ">{{'User Id: '.$image->user_id}}</span></p>
 

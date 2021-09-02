@@ -4,6 +4,7 @@
 namespace App\Controllers;
 
 
+use App\Auth;
 use App\Models\User;
 use Core\Controller;
 use Core\View;
@@ -16,7 +17,12 @@ class Quick extends Controller
      */
     public function searchAction(){
 
-        View::renderBlade('quick.new2');
+        if(Auth::getUser()){
+            $this->redirect('/search/index');
+        }else{
+            View::renderBlade('quick.new2');
+        }
+
 
     }
 
@@ -40,8 +46,8 @@ class Quick extends Controller
                 $output .= '<div id="gallery'.$profile['id'].'" class="gallery" itemscope itemtype="http://schema.org/ImageGallery">';
                 foreach($profile['pics'] as $pic){
                     $output .= '<figure itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject">                                                
-                                        <a href="/uploaded/pics/'.$pic['fn'].'" data-id="'.$profile['id'].'" class="ju-album2" data-caption="xyz" data-width="600" data-height="800" itemprop="contentUrl">                                                   
-                                            <img src="/uploaded/tmb/tn_'.$pic['fn'].'" alt="dfdf" width="135px" class="profile-image"'.($pic['pp']!=1?'hidden':'').'>
+                                        <a href="/uploads/pics/'.$pic['fn'].'" data-id="'.$profile['id'].'" class="ju-album2" data-caption="xyz" data-width="600" data-height="800" itemprop="contentUrl">                                                   
+                                            <img src="/uploads/tmb/tn_'.$pic['fn'].'" alt="dfdf" width="135px" class="profile-image"'.($pic['pp']!=1?'hidden':'').'>
                                         </a>
                                     </figure>';
                 }
@@ -110,8 +116,8 @@ class Quick extends Controller
                 $output .= '<div id="gallery'.$profile['id'].'" class="gallery" itemscope itemtype="http://schema.org/ImageGallery">';
                 foreach($profile['pics'] as $pic){
                     $output .= '<figure itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject">                                                
-                                        <a href="/uploaded/pics/'.$pic['fn'].'" data-id="'.$profile['id'].'" class="ju-album2" data-caption="xyz" data-width="600" data-height="800" itemprop="contentUrl">                                                   
-                                            <img src="/uploaded/tmb/tn_'.$pic['fn'].'" alt="dfdf" width="135px" class="profile-image"'.($pic['pp']!=1?'hidden':'').'>
+                                        <a href="/uploads/pics/'.$pic['fn'].'" data-id="'.$profile['id'].'" class="ju-album2" data-caption="xyz" data-width="600" data-height="800" itemprop="contentUrl">                                                   
+                                            <img src="/uploads/tmb/tn_'.$pic['fn'].'" alt="dfdf" width="135px" class="profile-image"'.($pic['pp']!=1?'hidden':'').'>
                                         </a>
                                     </figure>';
                 }
@@ -185,6 +191,8 @@ class Quick extends Controller
 
         if ($num > 0) {
             $output = self::createDisplayCard($newProfilesInfo);
+        }else{
+            $output = '<div>Sorry! no match found</div>';
         }
         echo $output;
 

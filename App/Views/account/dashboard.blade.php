@@ -24,6 +24,8 @@
             <i class="fas fa-user"></i>
             Welcome <a href="{{'/profile/'.$authUser->pid}}">{{ucfirst($authUser->first_name).' '.ucfirst($authUser->last_name)}}</a>
         </p>
+
+        @include('layouts.partials.alert')
         <div class="dash-buttons">
             <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
                 <li class="nav-item" role="presentation">
@@ -168,7 +170,18 @@
                     <tbody>
                     <tr>
                         <td>Mobile:</td>
-                        <td class="hide-sm" id="mb-field">{{$authUser->mobile}}</td>
+                        <td class="hide-sm" id="mb-field">{{$authUser->mobile}}
+                            {{--<a href="{{'/account/verify-mobile'}}">Verify</a>--}}
+                            @if($authUser->mv)
+                                <span class="text-green text-sm-left">
+                                <a id="mobile-verified" data-toggle="tooltip" data-placement="top"
+                                   title="Mobile Verified">
+                                <i class="fa fa-check-circle fa-1x" aria-hidden="true"></i></a>
+                            </span>
+                            @else
+                                <a href="{{'/register/verify-mobile'}}" class="badge badge-primary">Verify</a>
+                            @endif
+                        </td>
                     </tr>
                     <tr>
                         <td>Whatsapp:</td>
@@ -176,20 +189,34 @@
                     </tr>
                     <tr>
                         <td>Email:</td>
-                        <td class="hide-sm">{{$authUser->email}}</td>
+                        <td class="hide-sm">{{$authUser->email}}
+                            @if($authUser->ev)
+                                <span class="text-green text-sm-left">
+                                    <a id="email-verified" data-toggle="tooltip" data-placement="top"
+                                       title="Email Verified">
+                                    <i class="fa fa-check-circle fa-1x" aria-hidden="true"></i></a>
+                                </span>
+                            </span>
+                            @else
+                                <a href="{{'/register/verify-email'}}" class="badge badge-primary">Verify</a>
+                            @endif
+
+
+                        </td>
+
                     </tr>
                     <tr>
                         <td>Privacy:</td>
                         <td class="hide-sm" id="ow-field">
                             @if($authUser->one_way)
                             <em class="text-muted">Oneway Communication</em>
-                            <span class="text-blue text-sm-left"><i>
+                            <span class="text-blue text-sm-left">
                                 <a id="one-way" data-toggle="tooltip" data-placement="top"
                                    title=" Oneway Communication: Others will not be able to see your contact, but you will receive notification
                                   that other member is Interested. Specially designed for female members who are self
                                   managing their profile"><i class="fa fa-info-circle" aria-hidden="true"></i>
                                 </a>
-                            </i></span>
+                            </span>
                             @else
                                 <em class="text-muted">Contact details are visible</em>
                             @endif
@@ -201,6 +228,43 @@
 
                     </tbody>
                 </table>
+
+                <table class="ju-table">
+                    <thead>
+                    <tr>
+                        <th colspan="2">Your Account
+                           {{-- <a class="btn btn-yellow btn-sm" role="button" data-toggle="modal" data-target="#contactsModal">Info</a>--}}
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Aadhar Verified:</td>
+                        <td class="hide-sm" id="mb-field">
+                            @if($authUser->aadhar!='' && $authUser->is_verified)
+                                Verified
+                            @elseif($authUser->aadhar!='' && !($authUser->is_verified))
+                                <a href="{{'/account/upload-aadhar'}}" class="text-muted font-italic"><u>Verify Now</u></a>
+                            @else
+                                <a href="{{'/account/aadhar-verification'}}" class="text-muted font-italic"><u>Verify Now</u></a>
+                            @endif
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>Credit Limits:</td>
+                        <td class="hide-sm">{{$authUser->credits}} credits
+                            <span class="text-info text-sm-left">
+                                <a id="credits-info" data-toggle="tooltip" data-placement="top"
+                                   title="You can view these many contacts">
+                                <i class="fa fa-info-circle" aria-hidden="true"></i></a>
+                            </span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+
             </div>
             <!-- My Profile end -->
 
@@ -257,7 +321,8 @@
             <div class="tab-pane fade" id="pills-share" role="tabpanel" aria-labelledby="pills-contact-tab">
                 <h4 class="text-center text-secondary">-- Sharing is Caring -- </h4>
 
-                <div>
+                @if($authUser->fb_add==0)
+                    <div>
                     <p>This is your website (build for the community) and it's services are also free
                     ( & will remain so forever), so what you can do for this - free matrimonial service ?
                         <br><b class="text-blue"><i>The answer is: Just a single share on facebook, is what we expect from you.</i></b></p>
@@ -267,10 +332,86 @@
                         (view contact numbers of 100 profiles). And it does not stops here:
                         <br><b class="text-blue"><i>Share more no. of times to earn more credits</i></b></p>
                 </div>
-                <a class="btn btn-blue" id="shareBtn">
+                    <a class="btn btn-blue" id="shareBtn">
                     <i class="fab fa-facebook text-white"></i>
                     Share on Facebook
                 </a>
+
+                @else
+                    <div class="mt-5">
+                        <p>Earn more credits by <b class="text-blue">direct referring</b> - this free website to 5 unmarried people.
+                            <br>You can give name & mobile numbers of your close friends, relatives and family members who are
+                            in marriageable age, and may be searching their life-partner like you.
+                        </p>
+                        <p>* At least 3 contacts (name & mobile are necessary)</p>
+
+                        {{--<div>
+                            <form>
+                                <div class="form-row mb-3">
+                                    <div class="col-md-4 col-sm-6 col-xs-6">
+                                        <input type="text" class="form-control" placeholder="First person">
+                                    </div>
+                                    <div class="col-md-4 col-sm-6 col-xs-6">
+                                        <input type="text" class="form-control" placeholder="First person mobile (10 digits)">
+                                    </div>
+                                </div>
+                                <div class="form-row mb-3">
+                                    <div class="col-md-4 col-sm-6 col-xs-6">
+                                        <input type="text" class="form-control" placeholder="Second person">
+                                    </div>
+                                    <div class="col-md-4 col-sm-6 col-xs-6">
+                                        <input type="text" class="form-control" placeholder="Second person mobile (10 digits)">
+                                    </div>
+                                </div>
+                                <div class="form-row mb-3">
+                                    <div class="col-md-4 col-sm-6 col-xs-6">
+                                        <input type="text" class="form-control" placeholder="Third person">
+                                    </div>
+                                    <div class="col-md-4 col-sm-6 col-xs-6">
+                                        <input type="text" class="form-control" placeholder="Third person mobile (10 digits)">
+                                    </div>
+                                </div>
+                                <div class="form-row mb-3">
+                                    <div class="col-md-4 col-sm-6 col-xs-6">
+                                        <input type="text" class="form-control" placeholder="Fourth person">
+                                    </div>
+                                    <div class="col-md-4 col-sm-6 col-xs-6">
+                                        <input type="text" class="form-control" placeholder="Fourth person mobile (10 digits)">
+                                    </div>
+                                </div>
+                                <div class="form-row mb-3">
+                                    <div class="col-md-4 col-sm-6 col-xs-6">
+                                        <input type="text" class="form-control" placeholder="Fifth person name">
+                                    </div>
+                                    <div class="col-md-4 col-sm-6 col-xs-6">
+                                        <input type="text" class="form-control" placeholder="Fifth person mobile (10 digits)">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>--}}
+
+                        <form class="form" action="{{'/account/save-person'}}" method="POST">
+
+
+                            @for($r=$num+1;$r<=5;$r++)
+                            <div class="flex-row form-group">
+                                <input type="hidden"  name="contact[{{$r}}][sno]" value={{$r}}>
+                                <div class="flex-field-2">
+                                    <input type="text"  name="contact[{{$r}}][name]" placeholder="{{$r.'. Person name'}} {{$i<=3?'*':''}}" {{$i<=3?'required':''}}>
+                                </div>
+                                <div class="flex-field-2">
+                                    <input type="text" name="contact[{{$r}}][mobile]" placeholder="mobile no. {{$i<=3?'*':''}} {{$i==1?'(10 digits)':''}}" {{$i<=3?'required':''}}>
+                                </div>
+                            </div>
+                            <span hidden>{{$i++}}</span>
+                            @endfor
+
+                            @if($num<5)
+                                <input type="submit" value="Submit contacts" name="add-numbers-submit" class="btn btn-green may-1">
+                            @endif
+                        </form>
+                    </div>
+                @endif
 
 
             </div>
@@ -362,7 +503,11 @@
 @section('js')
 
 <script>
-    $('#one-way').tooltip();
+    $(document).ready(function(){
+        $('#one-way').tooltip();
+        $('#email-verified').tooltip();
+        $('#credits-info').tooltip();
+    });
 
     $(document).ready(function(){
         $('a[data-toggle="pill"]').on('show.bs.tab', function(e) {
@@ -373,6 +518,61 @@
             $('#pills-tab a[href="' + activeTab + '"]').tab('show');
         }
     });
+
+    function acceptInterest(id){
+
+        console.log('accepted');
+        console.log(id);
+        $.confirm({
+            title: 'Accept Interest ',
+            content: 'When you accept, your contact details will be send to other member ',
+            icon: 'fa fa-question-circle',
+            animation: 'scale',
+            closeAnimation: 'scale',
+            opacity: 0.5,
+            buttons: {
+                'confirm': {
+                    text: 'Accept',
+                    btnClass: 'btn-blue',
+                    action: function(){
+                        $.ajax({
+
+                            url: "/AjaxActivity/accept-interest",
+                            method: 'post',
+                            data: {
+                                notice_id:id
+                            },
+                            dataType:"json",
+                            success: function (data, status) {
+                                console.log(data);
+                                console.log(status);
+                                setTimeout(function(){
+                                    toastr.success(data.msg);
+                                }, 1000);
+
+
+                                //$('#hide-profile').addClass('disabled');
+                            }
+                        });
+
+                        /*var cbtn = document.getElementById("contact-btn-"+id);
+                        console.log(cbtn);
+                        var addr = document.getElementById("ups-ab-overlay-"+id);
+                        addr.style.width= 0;
+                        addr.style.left= 100;
+                        cbtn.setAttribute('disabled','disabled');*/
+                    }
+                },
+                cancel: function(){
+                    $.alert('You clicked <strong>cancel</strong>. You can accept it later on.');
+                },
+
+            }
+        });
+
+
+
+    }
 </script>
 
 @include('request.dashboard.facebook')

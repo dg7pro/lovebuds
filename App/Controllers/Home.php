@@ -3,8 +3,12 @@
 namespace App\Controllers;
 
 
+use App\Auth;
 use App\Flash;
 use App\Lib\Helpers;
+use App\Models\Image;
+use App\Models\Member;
+use App\Models\Notification;
 use App\Models\Setting;
 use App\Models\User;
 use App\Models\UserVariables;
@@ -51,6 +55,11 @@ class Home extends Controller
 
     public function session(){
         var_dump($_SESSION);
+       /* echo "<br>";
+        var_dump(Auth::getUser());
+
+        echo "<br>";
+        var_dump(Auth::getUser());*/
 
 //        $dt = Carbon::now();
 //        echo $dt->toFormattedDateString();
@@ -92,9 +101,13 @@ class Home extends Controller
 
     public function testAction(){
 
-        $cUser = User::findByID(1);
+        //$cUser = User::findByID(1);
         //var_dump($cUser->langs);
-        echo $cUser->langs == "[]"? json_encode($cUser->langs):'false';
+        //echo $cUser->langs == "[]"? json_encode($cUser->langs):'false';
+
+
+        $results = User::testSql2();
+        Helpers::dnd($results);
 
     }
 
@@ -105,7 +118,22 @@ class Home extends Controller
     }
 
     public function font(){
-        View::renderBlade('home/font');
+        //View::renderBlade('home/font');
+
+        /*$notice = new Notification();
+        echo $notice->countDuplicateEntry(108,109);*/
+
+        //echo date();
+        $flag = 0;
+        if(file_exists('uploaded/pics/60fe711bd4a8e_jhjh.jpg')){
+            $f1 = unlink('uploaded/pics/60fe711bd4a8e_jhjh.jpg');
+            $f2 = unlink('uploaded/tmb/tn_60fe711bd4a8e_jhjh.jpg');
+            if($f1 && $f2){
+                $flag = 1;
+            }
+        }
+
+        echo $flag;
     }
 
     public function short(){
@@ -123,10 +151,18 @@ class Home extends Controller
 
     public function checkbox(){
 
+        //View::renderBlade('/register/verify_mobile');
         //View::renderBlade('home/checkbox');
 
 //        $countries = UserVariables::getCountries();
 //        Helpers::dnd($countries);
+
+        $newImage = new Image();
+        $user = Auth::getUser();
+
+        var_dump($user);
+        echo "<br><br><br>";
+        $newImage->persistUserImage2($user);
 
 
     }

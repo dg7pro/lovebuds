@@ -1,0 +1,5 @@
+Account activation
+
+Your email is important for communication. Please click the following link to verify your email:
+
+{{ url }}

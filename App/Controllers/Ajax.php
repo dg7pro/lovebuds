@@ -92,17 +92,28 @@ class Ajax extends Controller
      */
     public function unreadNotifications(){
 
+        $user = Auth::getUser();
         if(isset($_POST['readrecord'])){
 
             $data = '';
-            $results = Notification::fetchAll($_SESSION['user_id']);
+            $notice = new Notification();
+            $results = $notice->fetchAll($user);
             $num = count($results);
 
             if($num>0){
                 foreach($results as $notify) {
                     $data .= '<div data-id="'.$notify->id.'" class="alert alert-info alert-dismissible fade show" role="alert">
-                        '. $notify->message .'
-                        <button type="button" class="close" data-dismiss="alert" onclick="marNotification('.$notify->id.')" aria-label="Close">
+                        '. $notify->message .'';
+                    if($notify->type>=3){
+                        if($notify->response==0){
+                            $data .= '.     | Click to: <a href="javascript:void(0)" onclick="acceptInterest('.$notify->id.')"> <strong> Accept</strong></a>';
+                        }else{
+                            $data .= '.<strong> Your Response: Ok</strong> ';
+                        }
+
+                    }
+
+                    $data .= '<button type="button" class="close" data-dismiss="alert" onclick="marNotification('.$notify->id.')" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>';
@@ -126,7 +137,8 @@ class Ajax extends Controller
 
         $msg ='';
         if(isset($_POST['aid'])){
-            $result = Notification::markAsRead($_POST['aid']);
+            $notice = new Notification();
+            $result = $notice->markAsRead($_POST['aid']);
             if($result){
                 $msg = 'Marked as read, will be automatically deleted in 30days ';
             }else{

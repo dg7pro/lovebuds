@@ -216,12 +216,12 @@
                             <div class="bio">
                                 <span class="bio-field">Brother</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">{!! ($profile->bros && $profile->mbros)?$profile->bros.' of which married '.$profile->mbros:'<i>no info</i>'!!}</span>
+                                <span class="bio-value">{!! ($profile->bros && $profile->mbros!='')?$profile->bros.' of which married '.$profile->mbros:'<i>no info</i>'!!}</span>
                             </div>
                             <div class="bio">
                                 <span class="bio-field">Sister</span>
                                 <span class="bio-colon">:</span>
-                                <span class="bio-value">{!! ($profile->sis && $profile->msis)?$profile->sis.' of which married '.$profile->msis:'<i>no info</i>'!!}</span>
+                                <span class="bio-value">{!! ($profile->sis && $profile->msis!='')?$profile->sis.' of which married '.$profile->msis:'<i>no info</i>'!!}</span>
                             </div>
                             {{--<div class="bio">
                                 <span class="bio-field">Origin</span>
@@ -432,8 +432,8 @@
                 },
                 dataType: "json",
                 success: function (data, status) {
-                    console.log(data);
-                    console.log(status);
+                    //console.log(data);
+                    //console.log(status);
                     //$('#fav-profile').addClass('disabled');
                 }
             });

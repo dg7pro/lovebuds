@@ -18,7 +18,7 @@ class VisitProfile extends Model
      * @param $profileId
      * @return int
      */
-    public static function checkRow($profileId): int
+    public function checkRow($profileId): int
     {
         $user = Auth::getUser();
 
@@ -33,7 +33,7 @@ class VisitProfile extends Model
      * @param $profileId
      * @return bool
      */
-    public static function updateRow($profileId): bool
+    public function updateRow($profileId): bool
     {
 
         $user = Auth::getUser();
@@ -49,20 +49,14 @@ class VisitProfile extends Model
      * @param $profileId
      * @return bool
      */
-    public static function insertRow($profileId): bool
+    public function insertRow($profileId): bool
     {
         $user = Auth::getUser();
 
         $sql = "INSERT INTO visit_profile (sender,receiver) VALUES (?,?)";
         $pdo = Model::getDB();
         $stmt = $pdo->prepare($sql);
-        $result = $stmt->execute([$user->id,$profileId]);
-
-        if($result){
-            $message = '<a href="/profile/'.$user->pid.'" ><strong> '.$user->first_name.' </strong></a> visited your profile';
-            Notification::save($profileId,$message,$user->id,$user->pid);
-        }
-        return $result;
+        return $stmt->execute([$user->id,$profileId]);
 
     }
 

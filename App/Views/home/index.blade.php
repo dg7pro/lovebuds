@@ -58,7 +58,7 @@
                     <select name="minAge" id="min_age" class="form-control">
                         <option value="">age from</option>
                         @foreach($age_rows as $row)
-                            <option value="{{$row}}">{{$row}}</option>
+                            <option value="{{$row}}" {{$row==18?'Selected':''}}>{{$row}}</option>
                         @endforeach
 
                     </select>
@@ -66,7 +66,7 @@
                     <select name="maxAge" id="max_age" class="form-control">
                         <option value="">age to</option>
                         @foreach($age_rows as $row)
-                            <option value="{{$row}}">{{$row}}</option>
+                            <option value="{{$row}}"  {{$row==38?'Selected':''}}>{{$row}}</option>
                         @endforeach
                     </select>
                 </div>
@@ -74,7 +74,7 @@
                 <select name="rel" id="religion" class="form-control search-input">
                     <option value="">Religion</option>
                     @foreach($religions as $religion)
-                        <option value="{{$religion->id}}">
+                        <option value="{{$religion->id}}" {{$religion->id==1?'Selected':''}}>
                             {{$religion->name}}
                         </option>
                     @endforeach
@@ -85,7 +85,7 @@
                 <select name="lan" id="community" class="form-control search-input">
                     <option value="">Language speaking</option>
                     @foreach($languages as $language)
-                        <option value="{{$language->value}}">
+                        <option value="{{$language->value}}" {{$language->value==6?'Selected':''}}>
                             {{$language->text}}
                         </option>
                     @endforeach

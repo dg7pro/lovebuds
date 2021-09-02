@@ -8,6 +8,7 @@ use App\Mail;
 use App\Token;
 use Core\Model;
 use Core\View;
+use Exception;
 use PDO;
 use Faker;
 
@@ -16,7 +17,7 @@ use Faker;
  * Class User
  * @package App\Models
  */
-class User extends \Core\Model
+class User extends Model
 {
     /**
      * User constant
@@ -51,6 +52,7 @@ class User extends \Core\Model
      * Save user information into database
      *
      * @return bool|false
+     * @throws Exception
      */
     public function save(): bool
     {
@@ -70,13 +72,15 @@ class User extends \Core\Model
             $myinterests = json_encode($this->myinterests);
             $mycastes = json_encode($this->mycastes);
             $langs = json_encode($this->langs);
+            $credits = 25;
+            $this->otp = $this->generateOtp(4);
 
             $token = new Token();
             $hashed_token = $token->getHash();             // Saved in users table
             $this->activation_token = $token->getValue();  // To be send in email
 
-            $sql = 'INSERT INTO users (mobile, email, password_hash, for_id, gender, pid, avatar, activation_hash, myhobbies, myinterests, mycastes, langs)
-                    VALUES (:mobile, :email, :password_hash, :cFor, :gender, :pid, :avatar, :activation_hash, :hobbies, :interests, :castes, :langs)';
+            $sql = 'INSERT INTO users (mobile, email, password_hash, for_id, gender, pid, avatar, activation_hash, myhobbies, myinterests, mycastes, langs, credits, otp)
+                    VALUES (:mobile, :email, :password_hash, :cFor, :gender, :pid, :avatar, :activation_hash, :hobbies, :interests, :castes, :langs, :credits, :otp)';
 
             $db = static::getDB();
             $stmt = $db->prepare($sql);
@@ -93,6 +97,8 @@ class User extends \Core\Model
             $stmt->bindValue(':interests',$myinterests,PDO::PARAM_STR);
             $stmt->bindValue(':castes',$mycastes,PDO::PARAM_STR);
             $stmt->bindValue(':langs',$langs,PDO::PARAM_STR);
+            $stmt->bindValue(':credits',$credits,PDO::PARAM_INT);
+            $stmt->bindValue(':otp', $this->otp,PDO::PARAM_INT);
 
             $result = $stmt->execute();
 
@@ -239,6 +245,40 @@ class User extends \Core\Model
     {
 
         return $gender==1?'avatar_groom.jpg':'avatar_bride.jpg';
+    }
+
+    /**
+     * @param $digits
+     * @return int
+     * @throws Exception
+     */
+    public function generateOtp($digits): int
+    {
+        return random_int( 10 ** ( $digits - 1 ), ( 10 ** $digits ) - 1);
+    }
+
+    /**
+     * @return bool
+     * @throws Exception
+     */
+    public function createNewOtp(): bool
+    {
+        if($this->otp==''){
+
+            $this->otp = $this->generateOtp(4);
+            $sql = 'UPDATE users SET otp = :otp WHERE id = :id';
+
+            $db = static::getDB();
+            $stmt = $db->prepare($sql);
+
+            $stmt->bindValue(':otp', $this->otp, PDO::PARAM_INT);
+            $stmt->bindValue(':id', $this->id, PDO::PARAM_INT);
+
+            $stmt->execute();
+            return $stmt->rowCount();
+        }
+        return true;
+
     }
 
     /* **************************************
@@ -833,12 +873,119 @@ class User extends \Core\Model
         // TODO with mail exception
     }
 
+    public function sendVerificationEmail()
+    {
+
+        $token = new Token();
+        $hashed_token = $token->getHash();             // Saved in users table
+        $this->updateUserHash($hashed_token);
+
+        $this->activation_token = $token->getValue();  // To be send in email
+
+        $url = 'https://' . $_SERVER['HTTP_HOST'] . '/register/activate/' . $this->activation_token;
+
+        $text = View::getTemplate('register/verification_email.txt', ['url' => $url]);
+        $html = View::getTemplate('register/verification_email.html', ['url' => $url]);
+
+        Mail::send($this->email, 'Email Verification', $text, $html);
+        // TODO with mail exception
+    }
+
+    public function updateUserHash($hashed_token): bool
+    {
+
+        $sql = 'UPDATE users
+                SET activation_hash = :hashed_token
+                WHERE id = :id';
+
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+
+        $stmt->bindValue(':hashed_token', $hashed_token, PDO::PARAM_STR);
+        $stmt->bindValue(':id', $this->id, PDO::PARAM_INT);
+
+        return $stmt->execute();
+
+    }
+
+    public function incrementCredits($val): bool
+    {
+
+        $credits = $this->credits + $val;
+        $sql = 'UPDATE users SET credits = :credits WHERE id = :uid';
+
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+
+        $stmt->bindValue(':credits', $credits, PDO::PARAM_INT);
+        $stmt->bindValue(':uid', $this->id, PDO::PARAM_INT);
+
+        return $stmt->execute();
+
+    }
+
+    public static function actOfBlockingUser($uid): bool
+    {
+
+        $sql = 'UPDATE users SET is_block = 1 WHERE id = :uid';
+
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+
+        $stmt->bindValue(':uid', $uid, PDO::PARAM_INT);
+
+        return $stmt->execute();
+
+    }
+
+    public static function actOfUnblockingUser($uid): bool
+    {
+
+        $sql = 'UPDATE users SET is_block = 0 WHERE id = :uid';
+
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+
+        $stmt->bindValue(':uid', $uid, PDO::PARAM_INT);
+
+        return $stmt->execute();
+
+    }
+
+    public static function actOfCBlockingUser($uid): bool
+    {
+
+        $sql = 'UPDATE users SET c_block = 1 WHERE id = :uid';
+
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+
+        $stmt->bindValue(':uid', $uid, PDO::PARAM_INT);
+
+        return $stmt->execute();
+
+    }
+
+    public static function actOfCUnblockingUser($uid): bool
+    {
+
+        $sql = 'UPDATE users SET c_block = 0 WHERE id = :uid';
+
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+
+        $stmt->bindValue(':uid', $uid, PDO::PARAM_INT);
+
+        return $stmt->execute();
+
+    }
+
     /**
      * Activate the user account with the specified activation token
      *
      * @param string $value Activation token from the URL
      *
-     * @return void
+     * @return int
      */
     public static function activate($value)
     {
@@ -846,7 +993,7 @@ class User extends \Core\Model
         $hashed_token = $token->getHash();
 
         $sql = 'UPDATE users
-                SET is_active = 1, ev = 1,
+                SET ev = 1,
                     activation_hash = null
                 WHERE activation_hash = :hashed_token';
 
@@ -856,23 +1003,24 @@ class User extends \Core\Model
         $stmt->bindValue(':hashed_token', $hashed_token, PDO::PARAM_STR);
 
         $stmt->execute();
+        return $stmt->rowCount();
     }
 
     /**
      * @param $uid
      * @return bool
      */
-    public static function markFB($uid): bool
+    public function markFB(): bool
     {
 
-        $sql = 'UPDATE users
-                SET fb_add = 1 
-                WHERE id = :uid';
+        $credits = $this->credits + 25;
+        $sql = 'UPDATE users SET fb_add = 1, credits = :credits WHERE id = :uid';
 
         $db = static::getDB();
         $stmt = $db->prepare($sql);
 
-        $stmt->bindValue(':uid', $uid, PDO::PARAM_INT);
+        $stmt->bindValue(':credits', $credits, PDO::PARAM_INT);
+        $stmt->bindValue(':uid', $this->id, PDO::PARAM_INT);
 
         return $stmt->execute();
     }
@@ -1576,7 +1724,8 @@ class User extends \Core\Model
                 occupation_id= :occupation,                
                 country_id= :country,
                 state= :state,
-                district= :district                
+                district= :district,
+                is_active=1
                 WHERE id= :id";
 
             $pdo = Model::getDB();
@@ -1907,6 +2056,19 @@ class User extends \Core\Model
 
     }
 
+
+    public function makeFirstImageAvatar($fileName): bool
+    {
+        $credits = $this->credits + 25;
+        $db = Model::getDB();
+        $sqlP = "UPDATE users SET avatar=?,photo=?,credits=? WHERE id=?";
+        $stmt = $db->prepare($sqlP);
+        $stmt->execute([$fileName,1,$credits,$this->id]);
+
+        return true;
+    }
+
+
     /*public static function getUsersByTimestamp($t){
 
         $sql = "SELECT * FROM users WHERE created_at<='.$t.'";
@@ -1970,6 +2132,86 @@ class User extends \Core\Model
         $stmt->execute();
         return $stmt->rowCount();
 
+    }
+
+    /**
+     * @param $start
+     * @param $limit
+     * @return array
+     */
+    public static function liveSearchType($start, $limit, $type): array
+    {
+
+        $query = "SELECT * FROM users ";
+
+        if($type=='blocked'){
+            $query .= 'WHERE is_block =1';
+        }elseif($type=='unverified'){
+            $query .= 'WHERE is_verified =0';
+        }elseif($type=='unpaid'){
+            $query .= 'WHERE is_paid =0';
+        }elseif($type=='inactive'){
+            $query .= 'WHERE is_active =0';
+        }else{
+            $query .= 'WHERE id > 0';
+        }
+
+        if($_POST['query'] != ''){
+            $query .= '
+            AND (first_name LIKE "%'.str_replace('', '%', $_POST['query']).'%" 
+            OR last_name LIKE "%'.str_replace('', '%', $_POST['query']).'%" 
+            OR email LIKE "%'.str_replace('', '%', $_POST['query']).'%"
+            )';
+        }
+
+
+        $query .= ' ORDER BY id DESC ';
+
+        $filter_query = $query . 'LIMIT '.$start.','.$limit.'';
+
+
+        $pdo=Model::getDB();
+        $stmt=$pdo->prepare($filter_query);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
+
+
+    }
+
+    /**
+     * @return int
+     */
+    public static function liveSearchTypeCount($type): int
+    {
+
+        $query = "SELECT * FROM users ";
+
+        if($type=='blocked'){
+            $query .= 'WHERE is_block =1';
+        }elseif($type=='unverified'){
+            $query .= 'WHERE is_verified =0';
+        }elseif($type=='unpaid'){
+            $query .= 'WHERE is_paid =0';
+        }elseif($type=='inactive'){
+            $query .= 'WHERE is_active =0';
+        }else{
+            $query .= 'WHERE id > 0';
+        }
+
+        if($_POST['query'] != ''){
+            $query .= '
+            AND (first_name LIKE "%'.str_replace('', '%', $_POST['query']).'%" 
+            OR last_name LIKE "%'.str_replace('', '%', $_POST['query']).'%" 
+            OR email LIKE "%'.str_replace('', '%', $_POST['query']).'%"
+            )';
+        }
+
+
+        $pdo=Model::getDB();
+        $stmt=$pdo->prepare($query);
+        $stmt->execute();
+        return $stmt->rowCount();
+
 
     }
 
@@ -1978,19 +2220,32 @@ class User extends \Core\Model
      */
     public function incrementAc(): bool
     {
-
-        $rcn = new RecordContact();
-
         $this->ac = $this->ac+1;
 
         $db = Model::getDB();
         $sql = "UPDATE users SET ac=? WHERE id =?";
         $stmt = $db->prepare($sql);
-        return $stmt->execute([
-            $this->ac,
-            $this->id
-        ]);
+        return $stmt->execute([$this->ac, $this->id]);
 
+    }
+
+    public function saveAadhar($postData){
+
+        $this->aadhar = str_replace(' ', '', $postData['aadhar']);
+
+        $db = Model::getDB();
+        $sql = "UPDATE users SET aadhar=? WHERE id =?";
+        $stmt = $db->prepare($sql);
+        return $stmt->execute([ $this->aadhar, $this->id ]);
+
+    }
+
+    public static function verifyMe($uid): bool
+    {
+        $db = Model::getDB();
+        $sql = "UPDATE users SET is_verified=? WHERE id =?";
+        $stmt = $db->prepare($sql);
+        return $stmt->execute([ true, $uid ]);
     }
 
 }
