@@ -12,7 +12,9 @@ use App\Models\Contact;
 use App\Models\Image;
 use App\Models\Notification;
 use App\Models\UserVariables;
+use App\Sms;
 use Core\View;
+use Exception;
 
 
 /**
@@ -303,6 +305,24 @@ class Account extends Authenticated
 
         Flash::addMessage($msg, 'info');
         View::renderBlade('account/my-aadhar',['front'=>$front, 'back'=>$back]);
+
+    }
+
+
+    public function verifyAuthUserMobile(){
+
+        $user = Auth::getUser();
+        $mobile = $user->mobile;
+        $mv = $user->mv;
+
+        if($mobile!='' && !$mv){
+            $user->createNewOtp();
+            $sms = new Sms();
+            $sms->sendOtp($mobile,$user->otp);
+            View::renderBlade('register/verify_mobile', ['mobile'=>$mobile]);
+        }else{
+            throw new Exception('Page is no more available for you.', 404);
+        }
 
     }
 

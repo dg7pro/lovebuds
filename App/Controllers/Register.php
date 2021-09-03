@@ -9,6 +9,7 @@ use App\Flash;
 use App\Models\Notification;
 use App\Models\User;
 use App\Models\UserVariables;
+use App\Sms;
 use Core\Controller;
 use Core\View;
 use Exception;
@@ -60,6 +61,7 @@ class Register extends Controller
 
             // Send mobile otp message
             $_SESSION['otp']=$user->otp;
+            Sms::sendOtp($user->mobile,$user->otp);
 
             $this->redirect('/register/verify-mobile');
 

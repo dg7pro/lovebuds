@@ -11,6 +11,7 @@ use App\Models\Notification;
 use App\Models\RecordContact;
 use App\Models\User;
 use App\Models\VisitProfile;
+use App\Sms;
 
 /**
  * Class AjaxActivity
@@ -470,7 +471,9 @@ class AjaxActivity extends Ajax
             $flag = true;
             $msg = "Otp generated successfully";
             // temporary
-            $_SESSION['otp']=$user->otp;
+            //$_SESSION['otp']=$user->otp;
+            Sms::sendOtp($user->mobile,$user->otp);
+
         }else{
             $flag = false;
             $msg = "Sorry! Otp can't be generated";

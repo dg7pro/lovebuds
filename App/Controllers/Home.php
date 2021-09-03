@@ -12,10 +12,12 @@ use App\Models\Notification;
 use App\Models\Setting;
 use App\Models\User;
 use App\Models\UserVariables;
+use App\Textlocal\Textlocal;
 use Carbon\Carbon;
 use Carbon\CarbonTimeZone;
 use Core\Controller;
 use \Core\View;
+use Exception;
 
 /**
  * Home controller
@@ -164,6 +166,49 @@ class Home extends Controller
         echo "<br><br><br>";
         $newImage->persistUserImage2($user);
 
+
+    }
+
+    public function testTextlocalAction(){
+
+        $textlocal = new Textlocal(false,false,'NmI1NzM2NjM3NzYyNjU2NjQ4NGIzOTU4NGE2Mzc5NDg=');
+
+        $otp = 7772;
+        $number = 918887610230;
+
+       /* $numbers = [];
+        array_push($numbers,$number);*/
+        $numbers = [$number];
+
+        $sender = 'JUMARY';
+        $message = 'Your one time password for activating your JuMatrimony account is '.$otp;
+
+        try {
+            $result = $textlocal->sendSms($numbers, $message, $sender,null,true);
+            print_r($result);
+        } catch (Exception $e) {
+            die('Error: ' . $e->getMessage());
+        }
+    }
+
+    public function testBulksmsAction(){
+
+        //error_reporting (E_ALL ^ E_NOTICE);
+        /*$otp = 2277;
+        $username="JUNITE";
+        $password ="titanic2021";
+        $number=7565097233;
+        $sender="JUMARY";
+        $message='Your one time password for activating your JuMatrimony account is '.$otp;
+
+        $template_id='1507162868231309659';
+        $url="http://api.bulksmsgateway.in/sendmessage.php?user=".urlencode($username)."&password=".urlencode($password)."&mobile=".urlencode($number)."&sender=".urlencode($sender)."&message=".urlencode($message)."&type=".urlencode('3')."&template_id=".urlencode($template_id);
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        echo $curl_scraped_page = curl_exec($ch);
+        if(json_decode($curl_scraped_page)->status){
+            throw new Exception('Sms failed to send due to some reason.', 500);
+        }*/
 
     }
 
