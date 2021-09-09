@@ -13,10 +13,10 @@ class Sms
         //$otp = 2277;
         //$number=7565097233;
 
-        $username="JUNITE";
-        $password ="titanic2021";
-        $sender="JUMARY";
-        $template_id='1507162868231309659';
+        $username = $_ENV['SMS_USERNAME'];
+        $password = $_ENV['SMS_PASSWORD'];
+        $sender = $_ENV['SMS_SENDER'];
+        $template_id = $_ENV['SMS_TEMPLATE_ID'];
         $message='Your one time password for activating your JuMatrimony account is '.$otp;
 
 

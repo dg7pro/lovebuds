@@ -13,7 +13,7 @@
                 <div id="{{'my-pic-'.$image->img_id}}">
                     <div class="media d-flex mt-4 mb-4">
                         <div class="media-image align-self-center mr-3 rounded">
-                            <a href="#"><img src="{{'/uploaded/pics/'.$image->filename}}" alt="customer image" width="145px" height="auto"></a>
+                            <a href="#"><img src="{{'/uploads/pics/'.$image->filename}}" alt="customer image" width="145px" height="auto"></a>
                         </div>
                         <div class="media-body align-self-center">
 

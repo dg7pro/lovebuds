@@ -344,4 +344,63 @@ class UserVariables extends Model
         return date($sFormat, $fVal);
     }
 
+    public static function getStates($lan){
+
+        $sql="SELECT state_id FROM community_state WHERE community_id=?";
+        $pdo = Model::getDB();
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$lan]);
+        return $stmt->fetchAll(PDO::FETCH_COLUMN);
+
+    }
+
+    public static function getEduOcc(){
+
+        $sql="SELECT eo.education_id, eo.occupation_id, e.name as edu, o.name as occ FROM edu_occ AS eo
+                LEFT JOIN educations AS e ON e.id = eo.education_id
+                LEFT JOIN occupations AS o ON o.id = eo.occupation_id";
+        $pdo = Model::getDB();
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    }
+
+    public static function getReligionName($rel){
+
+        $sql="SELECT name FROM religions WHERE id=?";
+        $pdo = Model::getDB();
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$rel]);
+        return $stmt->fetch(PDO::FETCH_COLUMN);
+    }
+
+    public static function getCommunityName($rel){
+
+        $sql="SELECT name FROM communities WHERE id=?";
+        $pdo = Model::getDB();
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$rel]);
+        return $stmt->fetch(PDO::FETCH_COLUMN);
+    }
+
+    public static function getMaritalStatus(){
+
+        $sql="SELECT status FROM maritals";
+        $pdo = Model::getDB();
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public static function getIncomes($id){
+
+        $sql="SELECT level FROM incomes WHERE id <=?";
+        $pdo = Model::getDB();
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$id]);
+        return $stmt->fetchAll(PDO::FETCH_COLUMN);
+    }
+
+
 }

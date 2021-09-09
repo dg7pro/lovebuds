@@ -60,7 +60,7 @@
             <div class="image-area" id="my-album">
                 @foreach($images as $image)
                     <div id="{{'my-pic-'.$image->img_id}}" class="imgWithIcon">
-                        <img src="{{'/uploaded/pics/'.$image->filename}}" class="my-images">
+                        <img src="{{'/uploads/pics/'.$image->filename}}" class="my-images">
                         @if($image->approved ==2)
                             <i class="fa fa-window-close text-red img-i" aria-hidden="true"> </i>
                         @elseif($image->approved==1)

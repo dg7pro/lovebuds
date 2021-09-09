@@ -75,8 +75,8 @@
             // console.log(front);
             // console.log(back);
 
-            document.getElementById("front-img").src="/uploads/aadhaar/"+front;
-            document.getElementById("back-img").src="/uploads/aadhaar/"+back;
+            document.getElementById("front-img").src="/uploads/aadhar/"+front;
+            document.getElementById("back-img").src="/uploads/aadhar/"+back;
             $('#aadhaarModal').modal("show");
         }
 

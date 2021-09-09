@@ -5,7 +5,7 @@
     <meta property="og:title" content="Profile Page jumatrimony.com free matrimonial services" />
     <meta property="og:url" content="http://www.jumatrimony.com/profile/{{$profile->pid}}" />
     <meta property="og:description" content="JU free matrimonial services shaadi, jeevansathi for Indians Bharati">
-    <meta property="og:image" content="http://jumatrimony.com/uploaded/tmb/{{'tn_'.$profile->avatar}}">
+    <meta property="og:image" content="http://jumatrimony.com/uploads/tmb/{{'tn_'.$profile->avatar}}">
 @endsection--}}
 
 @section('page_css')
@@ -36,11 +36,11 @@
                             @foreach($images as $image)
                                 <figure itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject">
                                     <!-- Link to the big image, not mandatory, but usefull when there is no JS -->
-                                    <a href="{{'/uploaded/pics/'.$image->filename}}" data-id="{{$profile->id}}" class="ju-album"
+                                    <a href="{{'/uploads/pics/'.$image->filename}}" data-id="{{$profile->id}}" class="ju-album"
                                        data-caption="Sea side, south shore<br><em class='text-muted'>© Dominik Schröder</em>"
                                        data-width="600" data-height="800" itemprop="contentUrl">
                                         <!-- Thumbnail -->
-                                        <img class="up-image" src="{{'/uploaded/tmb/tn_'.$image->filename}}" alt="user image 2" {{$image->pp!=1?'hidden':''}}>
+                                        <img class="up-image" src="{{'/uploads/tmb/tn_'.$image->filename}}" alt="user image 2" {{$image->pp!=1?'hidden':''}}>
                                     </a>
                                 </figure>
                             @endforeach

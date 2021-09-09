@@ -775,6 +775,12 @@ table.li-table tr:nth-child(even) {
   place-items: center;
 }
 
+.bottom-buttons {
+  margin: 3rem 5% 2rem;
+  display: grid;
+  place-items: center;
+}
+
 .profiles {
   display: grid;
   place-items: center;
@@ -807,6 +813,12 @@ table.li-table tr:nth-child(even) {
 .profile-image {
   border-radius: 50%;
   border: 5px solid #ffab73;
+}
+
+.blur-image {
+  -webkit-filter: blur(8px);
+  /* Safari 6.0 - 9.0 */
+  filter: blur(8px);
 }
 
 .profile-bio {

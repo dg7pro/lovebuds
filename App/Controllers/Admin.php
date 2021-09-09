@@ -4,8 +4,7 @@
 namespace App\Controllers;
 
 
-use App\Auth;
-use App\Models\Aadhaar;
+use App\Models\Aadhar;
 use App\Models\Image;
 use App\Models\Notification;
 use App\Models\User;
@@ -172,7 +171,7 @@ class Admin extends Administered
 
     public function verifyAadhaarAction(){
 
-        $cards = Aadhaar::pendingIds();
+        $cards = Aadhar::pendingIds();
         //var_dump($cards);
         View::renderBlade('admin.verify-aadhaar',['cards'=>$cards]);
     }

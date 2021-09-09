@@ -273,7 +273,7 @@
 
                 <div>
                     @if($image!=null)
-                        <img src="{{'/uploaded/pics/'.$image->filename}}" class="img-thumbnail" alt="User Image" width="225px" height="auto"/><br>
+                        <img src="{{'/uploads/pics/'.$image->filename}}" class="img-thumbnail" alt="User Image" width="225px" height="auto"/><br>
                     @else
                         <div class="imgWithIcon2">
                         <a href="{{'/account/my-album'}}"><img src="{{'/img/'.($authUser->gender==1?'groom-grayscale.jpg':'bride-grayscale.jpg')}}" class="img-thumbnail" alt="User Image" width="225px" height="auto"/></a>

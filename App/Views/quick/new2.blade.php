@@ -31,6 +31,9 @@
     </section>
     <!-- profiles section ends -->
 
+    <section class="bottom-buttons">
+            <a href="{{'/register/index'}}" class="btn btn-blue">Its takes only 5min's to Register</a>
+    </section>
 
 
     @include('modal.signup-login')
@@ -43,6 +46,15 @@
 
     <!-- photoswipe js code -->
     @include('searchJS.pswipeFunctions')
+
+    <script>
+        (function($){
+            $(document).on('contextmenu', 'img', function() {
+                return false;
+            })
+        })(jQuery);
+    </script>
+
 
     <script>
         $(document).ready(function(){
@@ -102,7 +114,8 @@
 
         /* For first time load */
         $(document).ready(function(){
-            loadQuickSearchResults();
+            //loadQuickSearchResults();
+            loadFilterResults();
         });
 
         /* New Profiles */
@@ -144,13 +157,54 @@
             });
         }
 
+        /* New Profiles */
+        function loadFilterResults(sex=''){
+
+            //console.log(jsonString);
+            console.log('filter data');
+            console.log(sex);
+
+            var gender = "{{$_GET['gender'] ??''}}";
+            var minAge = "{{$_GET['minAge'] ??''}}";
+            var maxAge = "{{$_GET['maxAge'] ??''}}";
+            var rel = "{{$_GET['rel'] ??''}}";
+            var lan = "{{$_GET['lan'] ??''}}";
+
+            if(sex!==''){
+                gender = '';
+            }
+            console.log(gender);
+            console.log(minAge);
+            console.log(maxAge);
+            console.log(rel);
+            console.log(lan);
+
+            $.ajax({
+                url: "/quick/ajax-filter-profiles",
+                method: "POST",
+                data:{
+                    sex:sex,
+                    gender:gender,
+                    minAge:minAge,
+                    maxAge:maxAge,
+                    rel:rel,
+                    lan:lan
+                },
+                success:function(data){
+                    $('#quick-search-profiles').html(data);
+                }
+            });
+        }
+
         $('.smart_grooms').on('click', function(){
-            loadQuickSearchResults(1);
+            //loadQuickSearchResults(1);
+            loadFilterResults(1);
             console.log('grooms clicked');
         });
 
         $('.beautiful_brides').on('click', function(){
-            loadQuickSearchResults(2);
+            //loadQuickSearchResults(2);
+            loadFilterResults(2);
             console.log('brides clicked');
         });
     </script>

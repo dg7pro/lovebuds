@@ -5,6 +5,7 @@ namespace App\Controllers;
 
 
 use App\Auth;
+use App\Models\Member;
 use App\Models\User;
 use Core\Controller;
 use Core\View;
@@ -322,6 +323,106 @@ class Quick extends Controller
 
         return $newProfilesInfo;
 
+    }
+
+    public static function createDummyCard($profiles): string
+    {
+        $output='';
+        foreach($profiles as $profile) {
+            $output .= '<div class="profiles-card"><div class="main-card"><div class="profile-sidebar">';
+            if(!isset($profile['pics'])){
+                $output .= '<img src="/uploads/filter/'.$profile['img'].'" class="profile-image blur-image" width="135px" alt="User Image1" />';
+            }
+
+
+            $output .= '<p class="profile-bio">'.$profile['age'].' yrs, '.$profile['ht'].'<br>'.$profile['sahar'].'</p>';
+            $output .= '</div>';
+
+            $output .= '<div class="profile-main">
+                                <h2 class="profile-name">'.$profile['name'].'</h2>
+                                <p class="profile-position">'.$profile['edu'].', '.$profile['occ'].'</p>
+                                 <p class="profile-body">'.$profile['rel'].', '.$profile['lan'].', '.$profile['ms'].', '.$profile['mk'].', Income: '.$profile['income'].'/annum,
+                                  Location: '.$profile['sahar'].', '.$profile['rajya'].', India
+                                  
+                                </p>
+                                <div>
+                                    <button class="btn btn-pink" data-toggle="modal" data-target="#exampleModal">Full Profile</button>';
+
+            $output .= '<button type="button" class="btn btn-orange contact" id="contact-btn-'.$profile['id'].'" data-id="'.$profile['id'].'" onclick="showCon('.$profile['id'].')">Contact</button>';
+
+
+            $output .= '</div></div>';
+
+            $output .= '<div class="profile-handler">                              
+                                <a title="Share on whatsapp" data-id="'.$profile['id'].'" class="share" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-share san"></i></a>
+                                <a title="Shortlist and Like" data-id="'.$profile['id'].'" class="shortlist" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-heart san"></i></a>
+                                <a title="Downlist and Hide" data-id="'.$profile['id'].'" class="downlist" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-arrow-circle-down san"></i></a>
+                            </div>';
+            $output .= '</div>';
+
+            $output .= '<div class="ups-ab">
+                            <span>Contact Address & photo visible to only registered users</span>
+
+                            <div id="ups-ab-overlay-'.$profile['id'].'" class="ups-ab-overlay">
+                                <!--user profiles address bar-->
+                                <div class="text"></div>
+                            </div>
+                        </div>';
+            $output .= '</div>';
+        }
+        return $output;
+    }
+
+    /**
+     *  Search Handler function
+     */
+    public function ajaxFilterProfiles(){
+
+        $sex = (isset($_POST['sex']) && $_POST['sex']!='')?$_POST['sex']:2;
+        $gen = (isset($_POST['gender']) && $_POST['gender']!='')?$_POST['gender']:$sex;
+        $rel = (isset($_POST['rel']) && $_POST['rel']!='')?$_POST['rel']:1;
+        $lan = (isset($_POST['lan']) && $_POST['lan']!='')?$_POST['lan']:6;
+
+        if($lan!=6){
+            $lang = [$lan,6];
+        }else{
+            $lang = [6];
+        }
+
+       /* $data = array();
+        $data['rel']=array();
+        $data['lan']=array();
+
+        $sex = $_POST['sex']!=''?$_POST['sex']:2;
+        $data['gender']=$_POST['gender']!=''?$_POST['gender']:$sex;
+        $data['minAge']=$_POST['minAge'];
+        $data['maxAge']=$_POST['maxAge'];
+        array_push($data['rel'],$_POST['rel']);
+        array_push($data['lan'],$_POST['lan']);*/
+
+        //$queries = self::buildQuery($data);
+
+        //var_dump($queries);
+
+        //$profiles = User::getQuickSearchResults($queries);
+
+        $mem = new Member();
+        $profiles = $mem->getMembers($gen,$rel,$lan);
+
+        //$newProfilesInfo = self::getAssociativeArrayResult($profiles);
+
+        //$num = count($newProfilesInfo);
+        $num = count($profiles);
+        $output = '';
+
+        if ($num > 0) {
+            $output = self::createDummyCard($profiles);
+        }else{
+            $output = '<div>Sorry! no match found</div>';
+        }
+        echo $output;
+
+        //echo json_encode($queries);
     }
 
 

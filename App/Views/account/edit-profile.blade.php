@@ -214,6 +214,12 @@
                         <h3 class="">Education & Career</h3>
                     </div>
                     <div class="card-body">
+                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                            Please write <strong>Not Applicable </strong> if you do not have or don't wish to tell it.
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
                         <div class="form-row">
                             <div class="col-md-6 mb-3 px-2">
                                 <label for="education">Highest Education</label>
@@ -242,13 +248,18 @@
                                 <select id="university" class="form-control">
                                     <option value="">Choose...</option>
                                     @foreach($universities as $university)
-                                        <option value="{{$university->id}}" {{($authUser->university_id==$university->id)?'Selected':''}}>{{$university->name}}</option>
+                                        <option value="{{$university->id}}" {{($authUser->university_id==$university->id)?'Selected':''}}>{{$university->name.' ~'.$university->location}}</option>
                                     @endforeach
                                 </select>
                             </div>
 
                             <div class="col-md-6 mb-3 px-2">
                                 <label for="otherDeg">Other UG Degree</label>
+                                <span class="text-info text-sm-left">
+                                    <a id="working-info" data-toggle="tooltip" data-placement="top"
+                                       title=" Please write 'Not Applicable' if you do not have or don't wish to tell it.">
+                                    <i class="fa fa-question-circle" aria-hidden="true"></i></a>
+                                </span>
                                 <input type="text" class="form-control" name="otherDeg" id="otherDeg" placeholder="Other Degree" value="{{$authUser->other_deg}}">
                             </div>
 
@@ -278,6 +289,11 @@
 
                             <div class="col-md-6 mb-3 px-2">
                                 <label for="organization">Working In</label>
+                                <span class="text-info text-sm-left">
+                                    <a id="working-info" data-toggle="tooltip" data-placement="top"
+                                       title=" Please write 'Not Applicable' if you do not have or don't wish to tell it.">
+                                    <i class="fa fa-question-circle" aria-hidden="true"></i></a>
+                                </span>
                                 <input type="text" class="form-control" name="organization" id="organization" placeholder="Name of Organization" value="{{$authUser->working_in}}">
                             </div>
 
@@ -638,6 +654,12 @@
                         <h3 class="">Horoscope</h3>
                     </div>
                     <div class="card-body">
+                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                            Please select <strong>Don't know!</strong> if you do not know the information right now. You can change it later on
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
                         <div class="form-row">
                             <div class="col-md-4 mb-3 px-2">
                                 <label for="sunSign">Sun Sign</label>
@@ -741,6 +763,11 @@
     <script>
         $(document).ready(function() {
             $('.js-example-basic-multiple').select2();
+        });
+        $(document).ready(function(){
+            $('#working-info').tooltip();
+            $('#other-deg').tooltip();
+
         });
     </script>
 
@@ -1209,7 +1236,7 @@
                 }else{
                     $.alert({
                         title: 'Alert!',
-                        content: 'Please select your preferred castes, we will search your partner within those caste',
+                        content: 'Please fill all the fields of Astro & horoscope Details, to update astro section',
                     });
                 }
 
