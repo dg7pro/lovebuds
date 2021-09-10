@@ -12,6 +12,7 @@ use App\Models\Notification;
 use App\Models\Setting;
 use App\Models\User;
 use App\Models\UserVariables;
+use App\Sms;
 use App\Textlocal\Textlocal;
 use Carbon\Carbon;
 use Carbon\CarbonTimeZone;
@@ -110,6 +111,9 @@ class Home extends Controller
 
         $results = User::testSql2();
         Helpers::dnd($results);
+        /*$notice = new Notification();
+        $nos = $notice->fetchAll(Auth::getUser());
+        var_dump($nos);*/
 
     }
 
@@ -210,6 +214,17 @@ class Home extends Controller
             throw new Exception('Sms failed to send due to some reason.', 500);
         }*/
 
+    }
+
+    public function testSmsAction(){
+        $number=7565097233;
+        $otp=3456;
+        $re = Sms::sendOtp($number,$otp);
+        if($re){
+            echo "Sms sent successfully";
+        }else{
+            echo "Sorry unable to send";
+        }
     }
 
 }

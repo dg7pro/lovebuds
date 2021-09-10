@@ -94,8 +94,9 @@
                 <label for="amount">Aadhar(12 Digits)</label>
                 <div class="flex">
                     {{--<span class="currency"></span>--}}
-                    <input type="text" id="aadhar" name="aadhar" autofocus="" maxlength="14"
-                           onkeyup="return checkDigit(event)" pattern="^\d{4}\s\d{4}\s\d{4}$" required>
+                    {{--<input type="text" id="aadhar" name="aadhar" autofocus="" maxlength="14"
+                           onkeyup="return checkDigit(event)" pattern="^\d{4}\s\d{4}\s\d{4}$" required>--}}
+                    <input type="text" id="aadhar" name="aadhar" autofocus="" maxlength="14" pattern="^\d{4}\s\d{4}\s\d{4}$" required>
                     {{--<input type="number" id="part1" name="amount">--}}
                    {{-- <input id="part2" name="amount" type="text" maxlength="4" onkeyup="move(event,'part1','part2','part3')" required>
                     <input id="part3" name="amount" type="text" maxlength="4" onkeyup="move(event,'part2','part3',' ')" required>--}}

@@ -761,10 +761,10 @@ class User extends Model
     {
         $url = 'https://' . $_SERVER['HTTP_HOST'] . '/password/reset/' . $this->password_reset_token;
 
-        $text = View::getTemplate('Password/reset_email.txt', ['url' => $url]);
-        $html = View::getTemplate('Password/reset_email.html', ['url' => $url]);
+        $text = View::getTemplate('password/reset_email.txt', ['url' => $url]);
+        $html = View::getTemplate('password/reset_email.html', ['url' => $url]);
 
-        Mail::send($this->email, 'Password reset', $text, $html);
+        Mail::send($this->email, 'Password reset JuMatrimony', $text, $html);
     }
 
     /**

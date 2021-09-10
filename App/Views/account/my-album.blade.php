@@ -34,7 +34,7 @@
                              data-service="/Album/async"
                              {{--data-meta-pic-id="{{$picId+1}}"--}}
                              data-did-init="slimInitialised"
-                             data-did-load="isHotEnough"
+                             {{--data-did-load="isHotEnough"--}}
                              data-did-transform="imageTransformed"
                              {{--                     data-will-crop-initial="determineInitialCropRect"--}}
                              {{--                     data-will-transform="addTextWatermark"--}}
