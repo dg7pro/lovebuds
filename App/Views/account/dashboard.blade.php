@@ -23,6 +23,10 @@
         <p class="lead">
             <i class="fas fa-user"></i>
             Welcome <a href="{{'/profile/'.$authUser->pid}}">{{ucfirst($authUser->first_name).' '.ucfirst($authUser->last_name)}}</a>
+            <a href="{{'/profile/'.$authUser->pid}}" class="goto-your-profile" target="_blank" id="your-profile" data-toggle="tooltip" data-placement="top"
+               title="Goto your profile">
+                <i class="fa fa-external-link-alt" style="font-size: 18px; color: gray;" aria-hidden="true"></i>
+            </a>
         </p>
 
         @include('layouts.partials.alert')
@@ -84,7 +88,12 @@
                     <tbody>
                     <tr>
                         <td>Profile Id:</td>
-                        <td class="hide-sm text-primary"><b>{{$authUser->pid}}</b></td>
+                        <td class="hide-sm text-primary"><b>{{$authUser->pid}}</b>
+                            <a href="{{'/profile/'.$authUser->pid}}" class="goto-your-profile" target="_blank" id="your-profile-tip" data-toggle="tooltip" data-placement="top"
+                               title="Goto your profile">
+                                <i class="fa fa-external-link-alt" style="font-size: 16px; color: gray;" aria-hidden="true"></i>
+                            </a>
+                        </td>
                     </tr>
                     <tr>
                         <td>Full name:</td>
@@ -170,8 +179,9 @@
                     <tbody>
                     <tr>
                         <td>Mobile:</td>
-                        <td class="hide-sm" id="mb-field">{{$authUser->mobile}}
+                        <td class="hide-sm">
                             {{--<a href="{{'/account/verify-mobile'}}">Verify</a>--}}
+                            <span id="mb-field">{{$authUser->mobile}}</span>
                             @if($authUser->mv)
                                 <span class="text-green text-sm-left">
                                 <a id="mobile-verified" data-toggle="tooltip" data-placement="top"
@@ -179,7 +189,9 @@
                                 <i class="fa fa-check-circle fa-1x" aria-hidden="true"></i></a>
                             </span>
                             @else
-                                <a href="{{'/register/verify-mobile'}}" class="badge badge-primary">Verify</a>
+                                {{--<a href="{{'/sriganesh/send-otp-page'}}" class="badge badge-primary">Verify</a>--}}
+                                {{--<a onclick="confirmNumber({{$authUser->mobile}})" class="badge badge-primary">Verify</a>--}}
+                                <a onclick="confirmNumber()" data-mobile="{{$authUser->mobile}}" class="badge badge-primary" id="user-mobile-verification">Verify</a>
                             @endif
                         </td>
                     </tr>
@@ -261,6 +273,17 @@
                             </span>
                         </td>
                     </tr>
+
+                    <tr>
+                        <td>Your Profile:</td>
+                        <td class="hide-sm">
+                            <a href="{{'/profile/'.$authUser->pid}}" class="goto-your-profile" target="_blank" id="goto-your-profile" data-toggle="tooltip" data-placement="top"
+                               title="Goto your profile"> View Profile
+                                <i class="fa fa-external-link-alt" style="font-size: 16px; color: gray;" aria-hidden="true"></i>
+                            </a>
+                        </td>
+                    </tr>
+
                     </tbody>
                 </table>
 
@@ -507,6 +530,7 @@
         $('#one-way').tooltip();
         $('#email-verified').tooltip();
         $('#credits-info').tooltip();
+        $('.goto-your-profile').tooltip();
     });
 
     $(document).ready(function(){
@@ -518,6 +542,50 @@
             $('#pills-tab a[href="' + activeTab + '"]').tab('show');
         }
     });
+
+    function confirmNumber(){
+
+        var url = "/sriganesh/verify-mobile";
+        var mobile = $('#user-mobile-verification').attr("data-mobile");
+        $.confirm({
+            title: 'Confirm Mobile!',
+            content: 'Please check your mobile number. Verification code will be send on this number: <strong>'+ mobile +' </strong>',
+            icon: 'fa fa-mobile-alt',
+            animation: 'scale',
+            closeAnimation: 'scale',
+            opacity: 0.5,
+            buttons: {
+                /*confirm: function () {
+                    $.alert('Confirmed!');
+                },*/
+               /* cancel: function () {
+                    $.alert('Canceled!');
+                },*/
+                somethingElse: {
+                    text: 'Edit no.',
+                    //btnClass: 'btn-blue',
+                    keys: ['enter', 'shift'],
+                    action: function(){
+                        //$.alert('Something else?');
+                        $('#contactsModal').modal('show');
+                    }
+                },
+                confirm: {
+                    text: 'Verify Mobile',
+                    btnClass: 'btn-green',
+                    action: function(){
+                        //$.alert('Confirmed!');
+                        $(location).attr('href',url);
+                    }
+                },
+                cancel: function () {
+                    //$.alert('Canceled!');
+                },
+
+
+            }
+        });
+    }
 
     function acceptInterest(id){
 

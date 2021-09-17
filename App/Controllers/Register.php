@@ -60,10 +60,10 @@ class Register extends Controller
             $_SESSION['mobile']=$user->mobile;
 
             // Send mobile otp message
-            $_SESSION['otp']=$user->otp;
+            //$_SESSION['otp']=$user->otp;
             Sms::sendOtp($user->mobile,$user->otp);
 
-            $this->redirect('/register/verify-mobile');
+            $this->redirect('/sriganesh/verify-mobile');
 
         }else{
 
@@ -92,13 +92,16 @@ class Register extends Controller
     {
         //var_dump($this->route_params['token']);
         //exit();
+        $message = isset($_SESSION['user_id'])?'Email verified successfully':'Email verified successfully. Please login to continue...';
+
         $result = User::activate($this->route_params['token']);
 
         if($result){
-            Flash::addMessage('Email verified successfully. Please login to continue...', 'success');
+            Flash::addMessage($message, 'success');
             $this->redirect('/account/dashboard');
         }else{
-            echo "Could not verify you sorry!";
+            //echo "Could not verify you sorry!";
+            throw new Exception('Something went wrong or server is too busy.', 500);
         }
 
 
@@ -114,91 +117,18 @@ class Register extends Controller
         View::renderBlade('register/activated');
     }
 
-    /**
-     * @throws Exception
-     */
-    public function verifyMobileAction(){
-
-        if($user=Auth::getUser()){
-            $mobile = $user->mobile;
-            $mv = $user->mv;
-        }else{
-            $mobile = $_SESSION['mobile'] ?? '';
-            $mv = false;
-        }
-        if($mobile=='' || $mv){
-            throw new Exception('Page is no more available for you.', 404);
-        }
-        View::renderBlade('register/verify_mobile', ['mobile'=>$mobile]);
-
-    }
-
-    public function matchOtpAction(){
-
-        if($_POST['submit-otp']){
-
-            $otp = $_POST['txt1'].$_POST['txt2'].$_POST['txt3'].$_POST['txt4'];
-            $otp = (int)$otp;
-
-            if($user=Auth::getUser()){
-                if($user->otp==$otp){
-                    $user->verifyMobile();
-                    Flash::addMessage('Mobile verified successfully. Please login to continue...', 'success');
-                    $this->redirect('/login/index');
-                }else{
-                    Flash::addMessage('Otp Not-matched please submit correct otp ff', 'danger');
-                    $this->redirect('/register/verify-mobile');
-                }
-            }else{
-
-                $user = User::findByID($_SESSION['otp_user_id']);
-                if(($user->otp==$otp) && ($user->mobile==$_SESSION['mobile'])){
-                    //echo 'matched';
-                    if($user->verifyMobile()){
-                        Flash::addMessage('Mobile verified successfully. Please login to continue...', 'success');
-                        $this->redirect('/login/index');
-                    }
-                }else{
-                    Flash::addMessage('Otp Not-matched please submit correct otp', 'danger');
-                    $this->redirect('/register/verify-mobile');
-                }
-
-            }
-
-        }
-
-    }
-
-    /*public function matchOtpAction(){
-
-        if($_POST['submit-otp']){
-
-            $user = User::findByID($_SESSION['otp_user_id']);
-
-            $otp = $_POST['txt1'].$_POST['txt2'].$_POST['txt3'].$_POST['txt4'];
-            //echo $otp;
-            $otp = (int)$otp;
-            if(($user->otp==$otp) && ($user->mobile==$_SESSION['mobile'])){
-                //echo 'matched';
-                if($user->verifyMobile()){
-
-                    Flash::addMessage('Mobile verified successfully. Please login to continue...', 'success');
-                    $this->redirect('/login/index');
-                }
-
-            }else{
-                Flash::addMessage('Otp Not-matched please submit correct otp', 'danger');
-                $this->redirect('/register/verify-mobile');
-            }
-
-
-        }
-
-    }*/
-
     public function verifyEmailAction(){
 
-        $user=Auth::getUser();
+        if(isset($_SESSION['user_id'])){
+            $user=Auth::getUser();
+        }elseif(isset($_SESSION['un_active_user_id'])){
+            $user=User::findByID($_SESSION['un_active_user_id']);
+        }else{
+            throw new Exception('Please login to access this page/url.', 404);
+        }
+        if($user->ev){
+            throw new Exception('Page is no more available for you. Your email is already verified', 404);
+        }
         $user->sendVerificationEmail();
         View::renderBlade('register/verify_email');
 

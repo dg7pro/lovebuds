@@ -1680,6 +1680,11 @@ class User extends Model
      * ***************************************
      * */
 
+    public function ucOnlyFirst($str): string
+    {
+        return ucfirst(strtolower($str));
+    }
+
     /**
      * @param $data
      * @return bool
@@ -1705,6 +1710,8 @@ class User extends Model
         if(empty($this->errors)){
 
             //$this->name = $this->first_name.' '.$this->last_name;
+            $this->first_name = $this->ucOnlyFirst($this->first_name);
+            $this->last_name = $this->ucOnlyFirst($this->last_name);
             $this->dob = $this->year.'-'.$this->month.'-'.$this->day;
             $this->country_id = 77;
 
@@ -2142,7 +2149,7 @@ class User extends Model
     public static function liveSearchType($start, $limit, $type): array
     {
 
-        $query = "SELECT * FROM users ";
+        $query = "SELECT users.*, fors.name as cfor FROM users LEFT JOIN fors ON users.for_id = fors.id ";
 
         if($type=='blocked'){
             $query .= 'WHERE is_block =1';
@@ -2153,7 +2160,7 @@ class User extends Model
         }elseif($type=='inactive'){
             $query .= 'WHERE is_active =0';
         }else{
-            $query .= 'WHERE id > 0';
+            $query .= 'WHERE users.id > 0';
         }
 
         if($_POST['query'] != ''){
@@ -2165,7 +2172,7 @@ class User extends Model
         }
 
 
-        $query .= ' ORDER BY id DESC ';
+        $query .= ' ORDER BY users.id DESC ';
 
         $filter_query = $query . 'LIMIT '.$start.','.$limit.'';
 

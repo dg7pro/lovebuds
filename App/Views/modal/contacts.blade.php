@@ -28,13 +28,13 @@
                             </div>--}}
                             <div class="form-group">
                                 {{--<label for="contactMobile">Mobile no.</label>--}}
-                                <input type="text" id="contactMobile" class="form-control"  aria-describedby="mobileHelp" placeholder="Mobile no. (10 digits)" value="{{$authUser->mobile}}" required>
-                                <small id="mobileHelp" class="form-text text-muted">Primary contact number</small>
+                                <input type="text" id="contactMobile" class="form-control"  aria-describedby="mobileHelp" placeholder="Mobile no. (10 digits)" value="{{$authUser->mobile}}" {{$authUser->mv?'disabled':''}} required>
+                                <small id="mobileHelp" class="form-text text-muted">Mobile no: Primary contact number - {{$authUser->mv?'verified':''}}</small>
                             </div>
                             <div class="form-group">
                                 {{--<label for="contactWhatsapp">Whatsapp no.</label>--}}
                                 <input type="text" id="contactWhatsapp" class="form-control"  aria-describedby="whatsappHelp" placeholder="Enter whatsapp no." value="{{$authUser->whatsapp}}" required>
-                                <small id="whatsappHelp" class="form-text text-muted">For sending & receiving interest</small>
+                                <small id="whatsappHelp" class="form-text text-muted">Whatsapp no: For sending & receiving interest</small>
                             </div>
 
                             <div class="form-group">

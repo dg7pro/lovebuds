@@ -100,7 +100,7 @@ abstract class Controller
     public function requireAdmin(){
 
         if(!Auth::isAdmin()){
-            throw new \Exception('You are trying to access Administered area.', 403);
+            throw new \Exception('You are trying to access Administered area.', 401);
         }
     }
 }

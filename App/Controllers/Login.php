@@ -51,11 +51,12 @@ class Login extends Controller
 
             // If both email and mobile is not verified we can't continue
             if(!$user->ev && !$user->mv){
-                echo "Your account is not activated yet please verify your email or mobile to continue...";
-                exit();
-                // TODO: new page to be created
                 /*$this->redirect('/login/activate-account?email='.$user->email);
                 exit();*/
+
+                $_SESSION['un_active_user_id']=$user->id;
+                $this->redirect('/login/pending-verification');
+                exit();
             }
 
             if($user->is_block){
@@ -103,6 +104,17 @@ class Login extends Controller
 
         $email = $_GET['email'] ?? '';
         View::renderBlade('login/resend_activation_link',['email'=>$email]);
+    }
+
+    /**
+     * Shows pending verification page if
+     * both email and mobile is not verified
+     */
+    public function pendingVerificationAction(){
+
+        $un_active_user = User::findByID($_SESSION['un_active_user_id']);
+
+        View::renderBlade('login/pending_verification',['user'=>$un_active_user]);
     }
 
 }

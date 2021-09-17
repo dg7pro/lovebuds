@@ -26,7 +26,7 @@
                 <i class="fas fa-times-circle text-red" hidden></i>
             </div>
             <div class="form-group">
-                <input type="checkbox" id="remember-me" value="remember_me" name="remember_me">
+                <input type="checkbox" id="remember-me" value="remember_me" name="remember_me" checked>
                 <label for="remember-me">Remember me</label>
             </div>
 

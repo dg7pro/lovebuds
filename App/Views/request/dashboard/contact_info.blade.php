@@ -32,6 +32,7 @@
 
                     if(data.uok){
                         $('#mb-field').html(data.mb);
+                        $('#user-mobile-verification').attr('data-mobile', data.mb);
                         $('#wa-field').html(data.wa);
                         $('#ow-field').html(data.ow);
                         var message = data.msg;

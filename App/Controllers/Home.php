@@ -216,7 +216,7 @@ class Home extends Controller
 
     }
 
-    public function testSmsAction(){
+    /*public function testSmsAction(){
         $number=7565097233;
         $otp=3456;
         $re = Sms::sendOtp($number,$otp);
@@ -225,6 +225,6 @@ class Home extends Controller
         }else{
             echo "Sorry unable to send";
         }
-    }
+    }*/
 
 }

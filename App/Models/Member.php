@@ -50,7 +50,7 @@ class Member extends Model
        /* $mImages = ['purush1.jpg','purush2.jpg','purush3.jpg','purush4.jpg','purush5.jpg','purush6.jpg','purush7.jpg',
             'purush8.jpg','purush9.jpg','purush10.jpg'];*/
         $mImages =[];
-        for($i=1; $i<=15; $i++){
+        for($i=1; $i<=26; $i++){
             $img = 'purush'.$i.'.jpg';
             array_push($mImages,$img);
         }

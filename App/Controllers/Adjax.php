@@ -300,15 +300,19 @@ class Adjax extends Administered
         $total_data = User::liveSearchTypeCount($type);
 
 
+        // cv- contacts viewed; ac- address count
         $output = '<label>Total Records - '.$total_data.'</label>
             <table class="table table-striped table-bordered">
                 <tr>
                     <th>id</th>
+                    <th>cfor</th>  
                     <th>full name</th>                                  
                     <th>mobile</th>
                      <th>mv</th>
-                    <th>emaile</th> 
+                    <th>email</th> 
                     <th>ev</th> 
+                    <th>credits</th> 
+                    <th>ac</th>
                     <th>is_a</th>  
                     <th>is_b</th>  
                     <th>is_v</th>  
@@ -322,11 +326,14 @@ class Adjax extends Administered
             foreach($results as $row){
                 $output .= '<tr>
                 <td>'.$row->id.'</td>
+                <td>'.$row->cfor.'</td>
                 <td>'.$row->first_name.' '.$row->last_name.'</td>                                
                 <td>'.$row->mobile.'</td>
                 <td>'.$row->mv.'</td>
                 <td>'.$row->email.'</td>
                 <td>'.$row->ev.'</td>
+                <td>'.$row->credits.'</td>
+                <td>'.$row->ac.'</td>
                 <td>'.$row->is_active.'</td>
                 <td>'.$row->is_block.'</td>
                 <td>'.$row->is_verified.'</td>

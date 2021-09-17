@@ -55,7 +55,7 @@ class Notification extends Model
      */
     public function fetchAll(User $user): array
     {
-        $sql = "SELECT * FROM notifications where receiver=? AND status=? ORDER BY created_at";
+        $sql = "SELECT * FROM notifications where receiver=? AND status=? ORDER BY id DESC LIMIT 10";
         $pdo = Model::getDB();
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$user->id,0]);
