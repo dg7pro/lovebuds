@@ -21,7 +21,7 @@ class Search extends Controller
         $this->requireLogin();
         $s_num = User::countShortlisted($_SESSION['user_id']);
         $r_num = User::countRecentVisitor($_SESSION['user_id']);
-        View::renderBlade('search.profiles2',['s_num' => $s_num,'r_num'=>$r_num]);
+        View::renderBlade('search.profiles3',['s_num' => $s_num,'r_num'=>$r_num]);
 
     }
 

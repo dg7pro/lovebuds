@@ -2,6 +2,49 @@
 // Profiles Section
 // ========================
 
+.button_bar{
+    display: grid;
+    place-items: center;
+    //min-height: 20vh;
+    padding: 2em 1em 0em;
+    //background-color: aliceblue;
+    background-color: #fff;
+    margin-top: 58px;
+    margin-bottom: 1em;
+    //margin-top: 6rem;
+    //margin-left: 5%;
+    //margin-right: 5%;
+}
+
+.button_row{
+    display: flex;
+    flex-direction: row;
+}
+
+.shape-button{
+    width: 60px;
+    height: 60px;
+    background: $color-blue;
+    color: #ffffff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    text-decoration: none;
+    border: none;
+    margin: 10px;
+    transition: background 0.2s;
+}
+
+.circle-button{
+    border-radius: 50%;
+}
+
+.shape-button:hover{
+    text-decoration: none;
+    background: #099ce6;
+    color: #ffffff;
+}
 
 .profiles-buttons{
     margin-top: 6rem;

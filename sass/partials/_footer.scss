@@ -28,7 +28,73 @@
     a{
         margin: 0 0.75rem;
         text-decoration: none;
-        color: #fff;
+        color: #f6e0c3;
     }
-  
+
 }
+
+.bottom_nav{
+  //z-index: 5;
+}
+
+// Bottom Navbar
+.bnav {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 55px;
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+  background-color: #fff6d6;
+  display: flex;
+  overflow-x: auto;
+  z-index: 5;
+}
+
+.bnav__link{
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 1;
+  min-width: 50px;
+  overflow: hidden;
+  white-space: nowrap;
+  font-family: sans-serif;
+  font-size: 13px;
+  //color: #444444;
+  color: #939292;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color 0.1s ease-in-out;
+
+  &:hover{
+    // background-color: #eeeeee;
+    text-decoration: none;
+    //color: #fd480f;
+    color: #444444;
+  }
+
+  &--active{
+    //color: #009578;
+    //color: #fd480f;
+    color: #939292;
+  }
+
+}
+
+.bnav__icon{
+  font-size: 20px;
+}
+
+@media only screen and (max-width:576px){
+  .bnav__text{
+      display: none;
+  }
+
+}
+
+
+
+
+

@@ -4,6 +4,8 @@
 namespace App\Controllers;
 
 
+use App\Flash;
+use App\Mail;
 use App\Models\Aadhar;
 use App\Models\Image;
 use App\Models\Notification;
@@ -175,5 +177,144 @@ class Admin extends Administered
         //var_dump($cards);
         View::renderBlade('admin.verify-aadhaar',['cards'=>$cards]);
     }
+
+    /**
+     * Show admin bulk message page
+     */
+    public function bulkMessageAction(){
+
+        $np = User::getNonPhotoUsers();// no. of non photo users
+        $npc = count($np); // non photo user count
+        View::renderBlade('admin.bulk_message',['npc'=>$npc]); // non photo user count
+
+    }
+
+
+    /**
+     * For testing purpose
+     * It's rough function
+     * @return void
+     */
+    public function sendEmailMsgAction(){
+
+        //View::renderBlade('admin.bulk_message');
+
+        $nonPhotoUsers = User::getNonPhotoUsers();
+
+        $recL = static::getEmailList($nonPhotoUsers);              // recipientList
+        $profiles = static::getAssociativeArrayResult($nonPhotoUsers);      // recipientVariable
+
+//        $recL = array('sg4739598@gmail.com','ps5505915@gmail.com');
+//        $recV =  '{"sg4739598@gmail.com": {"first":"Suman", "id":1}, "ps5505915@gmail.com": {"first":"Pratiksha", "id": 2}}';
+
+        //var_dump($profiles);
+        //echo json_encode($nonPhotoUsers);
+        $recV = json_encode($profiles);
+
+        $result = Mail::sendBulk($recL,$recV);            // Tested
+        var_dump($result);
+
+//        var_dump($recL);
+//        var_dump($recV);
+
+    }
+
+    /**
+     * Send Bulk photo upload reminder emails
+     */
+    public function sendPhotoUploadReminderAction(){
+
+        $nonPhotoUsers = User::getNonPhotoUsers();
+
+        $recL = static::getEmailList($nonPhotoUsers);              // recipientList
+        $profiles = static::getAssociativeArrayResult($nonPhotoUsers);      // recipientVariable
+
+        $recV = json_encode($profiles);
+
+        $text = View::getTemplate('mailgun/photo_upload_reminder.txt');
+        $html = View::getTemplate('mailgun/photo_upload_reminder.html');
+
+        $result = Mail::sendBulkEmail($recL,$recV,$text,$html);            // Tested
+
+        if($result){
+            Flash::addMessage('Message queued to be send','success');
+            $this->redirect('/admin/bulkMessage');
+        }
+
+        //var_dump($result);
+
+    }
+
+    /**
+     * Send Bulk user inactive notice emails
+     */
+    public function sendUserInactivityNoticeAction(){
+
+        // TODO
+
+    }
+
+    /**
+     * Kept for future reference
+     * @param $profiles
+     * @return array
+     */
+    private static function getAssociativeArrayResult($profiles): array
+    {
+
+        $newProfilesInfo=array();
+        $newProfileKey=array();
+
+        foreach($profiles as $profileKey => $profileValue){
+
+            if(!in_array($profileValue["email"],$newProfileKey)){
+                $e=$profileValue['email'];
+                $newProfilesInfo[$e]["pid"] = $profileValue["pid"];
+                $newProfilesInfo[$e]["first_name"] = $profileValue["first_name"];
+                $newProfilesInfo[$e]["last_name"] = $profileValue["last_name"];
+
+            }
+            $newProfileKey[]  = $profileValue["email"];
+        }
+
+        return $newProfilesInfo;
+
+    }
+
+    /**
+     * Kept for future reference
+     * @param $profiles
+     * @return array
+     */
+    private static function getEmailList($profiles): array
+    {
+        $newProfileKey=array();
+        foreach($profiles as $profileKey => $profileValue){
+            $newProfileKey[] = $profileValue["email"];
+        }
+        return $newProfileKey;
+    }
+
+    /**
+     * Groups Management Page
+     */
+    public function groupsManagerAction(){
+
+        //$groups = GM::fetchAll();
+        //var_dump($groups);
+        View::renderBlade('admin.list_group');
+    }
+
+    /**
+     * Order Details Page
+     */
+    public function orderDetailsAction(){
+
+        //$orders = Order::fetchAll();
+        //var_dump($groups);
+        //View::renderBlade('admin.list_group',['orders'=>$orders]);
+        View::renderBlade('admin.payment_orders');
+    }
+
 
 }

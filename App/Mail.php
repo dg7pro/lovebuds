@@ -4,6 +4,7 @@ namespace App;
 
 
 use Mailgun\Mailgun;
+use Mailgun\Model\Message\SendResponse;
 
 /**
  * Mail
@@ -32,6 +33,53 @@ class Mail
             'subject' => $subject,
             'text'    => $text,
             'html'    => $html]);
+    }
+
+    public static function sendBulk($recipientL,$recipientV){
+
+        # Instantiate the client.
+        $mgClient = Mailgun::create($_ENV['MAILGUN_API_KEY'], 'https://api.mailgun.net/v3/mg.mailgun.org');
+        $domain = $_ENV['MAILGUN_DOMAIN'];
+
+        $params =  array(
+            'from'    => 'JuMatrimony <admin@jumatrimony.com>',
+            'to'      => $recipientL,
+            'subject' => 'Hey %recipient.first_name%',
+            'text'    => 'If you wish to unsubscribe, please visit JuMatrimony.com This is just a test',
+            'recipient-variables' => $recipientV
+        );
+
+        return $mgClient->messages()->send($domain, $params);
+        //return $result;
+    }
+
+
+    /**
+     * @param $recipientL
+     * @param $recipientV
+     * @param $subject
+     * @param $text
+     * @param $html
+     * @return SendResponse
+     */
+    public static function sendBulkEmail($recipientL, $recipientV, $text, $html): SendResponse
+    {
+
+        # Instantiate the client.
+        $mgClient = Mailgun::create($_ENV['MAILGUN_API_KEY'], 'https://api.mailgun.net/v3/mg.mailgun.org');
+        $domain = $_ENV['MAILGUN_DOMAIN'];
+
+        $params =  array(
+            'from'    => 'JuMatrimony <admin@jumatrimony.com>',
+            'to'      => $recipientL,
+            'subject' => 'Hey %recipient.first_name%',
+            'text'  => $text,
+            'html' => $html,
+            'recipient-variables' => $recipientV
+        );
+
+        return $mgClient->messages()->send($domain, $params);
+
     }
 
 }

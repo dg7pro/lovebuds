@@ -330,7 +330,7 @@ class User extends Model
 
 
     /* **************************************
-      * Section - 3
+      * Section 3
       * Find User Functions
       * ***************************************
       * */
@@ -659,6 +659,35 @@ class User extends Model
 
             ";
     }
+
+    public static function getNonPhotoUsers()
+    {
+
+        $sql="SELECT email, pid, first_name, last_name, mobile FROM users WHERE is_active=1 AND photo=0";
+        $pdo = Model::getDB();
+        $stmt=$pdo->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    }
+
+    /**
+     * User is new if registered within 24 hrs
+     * @return bool
+     */
+    public function isNew(): bool
+    {
+
+        $tor = $this->created_at;
+        $now =  date("Y-m-d H:i:s");
+
+        $secDiff = strtotime($now)-strtotime($tor);
+        if($secDiff < 86400){
+            return true;
+        }
+        return false;
+    }
+
 
     /* **************************************
      * Section 4
@@ -1590,13 +1619,13 @@ class User extends Model
      * @param $userId
      * @return bool
      */
-    public static function updateUserPaidStatus($userId){
-
-        $sql = "UPDATE users SET is_paid=1 WHERE id=?";
-        $pdo=Model::getDB();
-        $stmt = $pdo->prepare($sql);
-        return $stmt->execute([$userId]);
-
+    public function becomePaid(): bool
+    {
+        $credits = $this->credits + 500;
+        $sql = "UPDATE users SET is_paid=?, credits=? WHERE id=?";
+        $db=Model::getDB();
+        $stmt = $db->prepare($sql);
+        return $stmt->execute([1,$credits,$this->id]);
     }
 
 

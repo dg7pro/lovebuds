@@ -227,4 +227,16 @@ class Home extends Controller
         }
     }*/
 
+    public function sendPhotoUploadReminderAction(){
+        $mobile=9335683398;
+        $name = 'Dhananjay';
+        $result = Sms::sendPhotoUploadReminderSms($mobile,$name);
+        if($result){
+            echo 'Message send';
+        }else{
+            echo 'Unable to send message';
+        }
+    }
+
+
 }

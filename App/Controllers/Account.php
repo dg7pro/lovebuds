@@ -222,6 +222,9 @@ class Account extends Authenticated
                 $notification = new Notification();
                 $notification->informAboutSuccessfulProfileCreation($user);
 
+                if(!$user->is_paid && $user->isNew()){
+                    $this->redirect('/payment/insta-offer-page');
+                }
                 $this->redirect('/account/dashboard');
             }else{
                 $arr = json_encode($_POST);
@@ -324,6 +327,23 @@ class Account extends Authenticated
             throw new Exception('Page is no more available for you.', 404);
         }
 
+    }
+
+    public function notificationsAction(){
+
+        View::renderBlade('account/notification');
+    }
+
+    public function settingsAction(){
+
+        $user = Auth::getUser();
+
+        View::renderBlade('account/settings',[
+            'allCastes'=>UserVariables::getCastes($user->religion_id),
+            'heights'=>UserVariables::fetch('heights'),
+            'age_rows'=>UserVariables::getAgeRows(),
+            'authUser'=>$user
+        ]);
     }
 
 }

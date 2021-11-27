@@ -1,0 +1,34 @@
+
+.offer-img{
+  width: 100%;
+}
+
+.offer-title{
+  justify-content: space-between;
+  margin-top: 25px;
+}
+
+// super script
+.offer-ss{
+  font-size: 10px;
+  position: relative;
+  bottom: 5px
+}
+
+.offer-body{
+  background-color: #f7f1f1;
+}
+
+.offer-footer {
+  background-color: #00BCD4;
+  color: white;
+
+  &:hover{
+    cursor: pointer;
+    background-color: #0097A7
+  }
+}
+
+.order {
+  margin-top: 15px
+}

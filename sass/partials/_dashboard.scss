@@ -2,6 +2,61 @@
 // User Dashboard
 // ========================
 
+.dash-btns{
+    display: grid;
+    //place-items: center;
+    justify-content: left;
+    //background-color: lemonchiffon;
+}
+
+.dash-btn-row{
+    display: flex;
+    flex-direction: row;
+}
+
+.dash-btn{
+    width: 65px;
+    height: 65px;
+    //background: #f8d5d5;
+    background: $color-orange;
+    color: #ffffff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    text-decoration: none;
+    border: 7px solid $color-lime;
+    margin: 10px 10px 10px 0;
+    transition: background 0.2s;
+    border-radius: 50%;
+}
+
+.dash-btn:hover{
+    text-decoration: none;
+    border: 7px solid $color-yellow;
+    color: #ffffff;
+}
+
+.blank-btn{
+    width: 100%;
+    max-width: 360px;
+    border: 1px solid black;
+    border-radius: 3px;
+    padding: 5px 0;
+    background-color: #fff;
+    text-align: center;
+    color: #312828;
+    font-weight: 600;
+    font-family: Baloo, serif;
+    margin-bottom: 1.5em;
+    
+
+}
+
+.btn-blank{
+    background-color: #fff;
+}
+
 .dashboard{
     max-width: 1100px;
     overflow: hidden;

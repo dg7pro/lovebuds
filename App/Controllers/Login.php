@@ -6,6 +6,7 @@ namespace App\Controllers;
 use App\Auth;
 use App\Csrf;
 use App\Flash;
+use App\Models\Setting;
 use App\Models\User;
 use Core\Controller;
 use Core\View;
@@ -27,6 +28,7 @@ class Login extends Controller
         $this->requireGuest();
 
         //Flash::addMessage('Enter your account credentials to login...', Flash::WARNING);
+        Flash::addMessage('Please login to continue...', Flash::WARNING);
 
         View::renderBlade('login/index');
 
@@ -73,6 +75,14 @@ class Login extends Controller
             }
             Flash::addMessage('Login Successful', Flash::SUCCESS);
 
+            if(!$user->is_paid && $user->isNew()){
+                $this->redirect('/payment/insta-offer-page');
+            }
+
+            if(!$user->is_paid && $this->isOfferOngoing()){
+                $this->redirect('/payment/offer-page');
+            }
+
             $this->redirect(Auth::getReturnToPage());
 
         }
@@ -115,6 +125,11 @@ class Login extends Controller
         $un_active_user = User::findByID($_SESSION['un_active_user_id']);
 
         View::renderBlade('login/pending_verification',['user'=>$un_active_user]);
+    }
+
+    protected function isOfferOngoing(){
+        $setting = new Setting();
+        return $setting->is_ongoing_current_offer();
     }
 
 }

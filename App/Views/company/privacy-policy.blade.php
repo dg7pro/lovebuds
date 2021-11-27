@@ -119,9 +119,9 @@
             signature to:</p>
         <p class="mb-2">Mr. Kabir Jaiswal (Grievance Officer)<br>
             www.jumatrimony.com<br>
-            JU Matrimony Service<br>
-            Email:jumatrimony@gmail.com<br>
-            Ph: 8887610230
+            Ju Matrimony Service<br>
+            Email: jumatrimony@gmail.com<br>
+            Ph: 9335683398
         </p>
 
 

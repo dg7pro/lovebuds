@@ -27,21 +27,37 @@
             </div>
             <div class="admin-box"><h5 class="admin-title">Site Settings</h5>
                 <p class="admin-text">Complete List and Management of different Courses or Groups</p>
-                <a href="/admin/site-settings" class="btn btn-pink">Admin Settings </a></div>
+                <a href="{{'/admin/site-settings'}}" class="btn btn-pink">Admin Settings </a></div>
             <div class="admin-box">
                 <h5 class="admin-title">Users Types</h5>
                 <p class="admin-text">Complete List and Management of different Courses or Groups</p>
-                <a href="/admin/list-user-types" class="btn btn-orange">Users/Members </a>
+                <a href="{{'/admin/list-user-types'}}" class="btn btn-orange">Users/Members </a>
             </div>
             <div class="admin-box">
                 <h5 class="admin-title">Cleaner</h5>
                 <p class="admin-text">Clean the database by deleting useless notifications & images</p>
-                <a href="/admin/site-cleaner" class="btn btn-blue">Clean Database </a>
+                <a href="{{'/admin/site-cleaner'}}" class="btn btn-blue">Clean Database </a>
             </div>
             <div class="admin-box">
                 <h5 class="admin-title">User Verification</h5>
                 <p class="admin-text">Match user name and age with details given on aadhaar card </p>
                 <a href="{{'/admin/verify-aadhaar'}}" class="btn btn-green">Verify Users </a>
+            </div>
+            <div class="admin-box">
+                <h5 class="admin-title">Message App</h5>
+                <p class="admin-text">Send bulk email and messages to the users</p>
+                <a href="{{'/admin/bulk-message'}}" class="btn btn-yellow">Email Users </a>
+            </div>
+
+            <div class="admin-box"><h5 class="admin-title">Group Settings</h5>
+                <p class="admin-text">Complete List and Management of different Groups</p>
+                <a href="{{'/admin/groupsManager'}}" class="btn btn-pink">Group Settings </a>
+            </div>
+
+            <div class="admin-box">
+                <h5 class="admin-title">Order Details</h5>
+                <p class="admin-text">View list of orders and payments details</p>
+                <a href="{{'/admin/order-details'}}" class="btn btn-blue">View Orders </a>
             </div>
         </div>
 

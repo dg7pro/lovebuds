@@ -56,6 +56,10 @@ $router->add('profile/{pid:([A-Z]{2}[0-9]{5})+}',['controller' =>'Profile','acti
 $router->add('password/reset/{token:[\da-f]+}', ['controller' => 'Password', 'action' => 'reset']);
 $router->add('register/activate/{token:[\da-f]+}', ['controller' => 'Register', 'action' => 'activate']);
 
+//$router->add('group/{slug:([A-Z]{2}[0-9]{5})+}',['controller' =>'Group','action'=>'page']);
+$router->add('group/page/{slug:[a-zA-Z0-9-\.]+}',['controller' =>'Group','action'=>'page']);
+$router->add('group/bride/{slug:[a-zA-Z0-9-\.]+}',['controller' =>'Group','action'=>'bride']);
+$router->add('group/groom/{slug:[a-zA-Z0-9-\.]+}',['controller' =>'Group','action'=>'groom']);
 $router->dispatch($_SERVER['QUERY_STRING']);
 
 // Match the requested route

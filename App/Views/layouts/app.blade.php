@@ -22,6 +22,9 @@
     <!-- custom css file -->
     <link rel="stylesheet" href="/css/jquery-confirm.min.css">
 
+    <!-- material icons css file -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
     <!-- custom css file -->
     <link rel="stylesheet" href="/css/main.css">
 
@@ -71,6 +74,23 @@
 
 <!-- bootstrap js file -->
 <script src="/js/bootstrap.min.js"></script>
+
+<script>
+    // Get the container element
+    var btnContainer = document.getElementById("bottom_navbar");
+
+    // Get all buttons with class="btn" inside the container
+    var btns = btnContainer.getElementsByClassName("bnav__link");
+
+    // Loop through the buttons and add the active class to the current/clicked button
+    for (var i = 0; i < btns.length; i++) {
+        btns[i].addEventListener("click", function() {
+            var current = document.getElementsByClassName("bnav__link--active");
+            current[0].className = current[0].className.replace(" bnav__link--active", "");
+            this.className += " bnav__link--active";
+        });
+    }
+</script>
 
 @yield('js')
 

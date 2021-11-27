@@ -7,6 +7,8 @@ namespace App\Controllers;
 use App\Models\Aadhar;
 use App\Models\Image;
 use App\Models\Notification;
+use App\Models\Order;
+use App\Models\Group as GM;
 use App\Models\User;
 
 /**
@@ -712,5 +714,379 @@ class Adjax extends Administered
         }
 
     }
+
+    /* ==================================================================
+     * Payment Order Section: Ajax 1 Functions Bundle
+     * Used in payment_orders view
+     * ====================================================================
+     * */
+    public function searchOrder(){
+
+        $limit = 10;
+        $page = 1;
+
+        if($_POST['page'] > 1){
+            $start = (($_POST['page']-1) * $limit);
+            $page = $_POST['page'];
+        }else{
+            $start = 0;
+        }
+
+        $results = Order::liveSearch($start,$limit);
+        $total_data = Order::liveSearchCount();
+
+        $output = '<label>Total Records - '.$total_data.'</label>
+            <table class="table table-striped table-bordered">
+                <tr>
+                    <th>id</th>
+                    <th>order no</th>
+                    <th>amount</th>                   
+                    <th>status</th>
+                    <th>message</th>    
+                    <th>user</th>                 
+                    <th>dated</th>                    
+                </tr>';
+
+        if($total_data > 0){
+
+            foreach($results as $row){
+                $output .= '<tr>
+                <td>'.$row->id.'</td>
+                <td>'.$row->order_id.'</td>
+                <td>'.$row->txn_amount.'</td>                
+                <td>'.$row->status.'</td>
+                <td>'.$row->resp_msg.'</td>
+                <td>'.$row->user_id.'</td>
+                <td>'.$row->created_at.'</td>
+                </tr>';
+            }
+
+        }
+        else{
+
+            $output .= '<tr><td colspan="4">No data found</td></tr>';
+
+        }
+
+        $output .= '</table></br>
+            <div align="center">
+                <ul class="pagination">
+        ';
+
+        $total_links = ceil($total_data/$limit);
+        $previous_link = '';
+        $next_link = '';
+        $page_link ='';
+
+        if($total_links > 4){
+            if($page<5){
+                for($count=1; $count<=5; $count++){
+
+                    $page_array[]=$count;
+                }
+                $page_array[]='...';
+                $page_array[]=$total_links;
+            }else{
+                $end_limit = $total_links - 5 ;
+                if($page > $end_limit){
+
+                    $page_array[] = 1;
+                    $page_array[] = '...';
+
+                    for($count=$end_limit; $count<=$total_links; $count++){
+                        $page_array[]=$count;
+                    }
+                }else{
+                    $page_array[]=1;
+                    $page_array[]='...';
+                    for($count = $page-1; $count<=$page+1; $count++){
+                        $page_array[]=$count;
+                    }
+                    $page_array[]=1;
+                    $page_array[]=$total_links;
+                }
+            }
+        }
+        else{
+            for($count=1; $count <= $total_links; $count++){
+                $page_array[] = $count;
+            }
+        }
+        // checked
+
+        for($count = 0; $count < count($page_array); $count++)
+        {
+            if($page == $page_array[$count])
+            {
+                $page_link .= '<li class="page-item active">
+                      <a class="page-link" href="#">'.$page_array[$count].' <span class="sr-only">(current)</span></a>
+                    </li>
+                    ';
+
+                $previous_id = $page_array[$count] - 1;
+                if($previous_id > 0)
+                {
+                    $previous_link = '<li class="page-item"><a class="page-link" href="javascript:void(0)" data-page_number="'.$previous_id.'">Previous</a></li>';
+                }
+                else
+                {
+                    $previous_link = '<li class="page-item disabled">
+                        <a class="page-link" href="#">Previous</a>
+                      </li>
+                      ';
+                }
+                $next_id = $page_array[$count] + 1;
+                if($next_id >= $total_links)
+                {
+                    $next_link = '<li class="page-item disabled">
+                        <a class="page-link" href="#">Next</a>
+                      </li>';
+                }
+                else
+                {
+                    $next_link = '<li class="page-item"><a class="page-link" href="javascript:void(0)" data-page_number="'.$next_id.'">Next</a></li>';
+                }
+            }
+            else
+            {
+                if($page_array[$count] == '...')
+                {
+                    $page_link .= '
+                      <li class="page-item disabled">
+                          <a class="page-link" href="#">...</a>
+                      </li>
+                      ';
+                }
+                else
+                {
+                    $page_link .= '<li class="page-item"><a class="page-link" href="javascript:void(0)" 
+                    data-page_number="'.$page_array[$count].'">'.$page_array[$count].'</a></li>';
+                }
+            }
+        }
+
+        $output .= $previous_link . $page_link . $next_link;
+        $output .= '</ul></div>';
+
+        echo $output;
+
+    }
+    /* *** */
+
+    /* ==================================================================
+     * Group Section: Ajax 4 Functions Bundle
+     * Used in list_group view
+     * ====================================================================
+     * */
+    /**
+     * Search group dynamically
+     */
+    public function searchGroup(){
+
+        $limit = 5;
+        $page = 1;
+
+        if($_POST['page'] > 1){
+            $start = (($_POST['page']-1) * $limit);
+            $page = $_POST['page'];
+        }else{
+            $start = 0;
+        }
+
+        $results = GM::liveSearch($start,$limit);
+        $total_data = GM::liveSearchCount();
+
+        $output = '<label>Total Records - '.$total_data.'</label>
+            
+            <table class="table table-striped table-bordered">
+                <tr>
+                    <th>id</th>
+                    <th>slug</th>
+                    <th>title</th>                   
+                    <th>desc.</th>                   
+                    <th>status</th>                                                   
+                    <th>edit</th></tr>';
+
+        if($total_data > 0){
+
+            foreach($results as $row){
+                $output .= '<tr>
+                <td>'.$row->id.'</td>
+                <td>'.$row->slug.'</td>
+                <td>'.$row->title.'</td>                
+                <td>'.$row->description.'</td>
+                <td>'.$row->status.'</td>               
+                <td><button onclick="getGroupInfo('.$row->id.')" type="button" class="mb-1 btn btn-sm btn-info">Edit</button></td>
+                </tr>';
+            }
+
+        }
+        else{
+
+            $output .= '<tr><td colspan="7">No data found</td></tr>';
+
+        }
+
+        $output .= '</table></br>
+            <div align="center">
+                <ul class="pagination">
+        ';
+
+        $total_links = ceil($total_data/$limit);
+        $previous_link = '';
+        $next_link = '';
+        $page_link ='';
+        if(!$total_data){
+            $page_array[]=1;
+        }
+
+        if($total_links > 4){
+            if($page<5){
+                for($count=1; $count<=5; $count++){
+
+                    $page_array[]=$count;
+                }
+                $page_array[]='...';
+                $page_array[]=$total_links;
+            }else{
+                $end_limit = $total_links - 5 ;
+                if($page > $end_limit){
+
+                    $page_array[] = 1;
+                    $page_array[] = '...';
+
+                    for($count=$end_limit; $count<=$total_links; $count++){
+                        $page_array[]=$count;
+                    }
+                }else{
+                    $page_array[]=1;
+                    $page_array[]='...';
+                    for($count = $page-1; $count<=$page+1; $count++){
+                        $page_array[]=$count;
+                    }
+                    $page_array[]=1;
+                    $page_array[]=$total_links;
+                }
+            }
+        }
+        else{
+            for($count=1; $count <= $total_links; $count++){
+                $page_array[] = $count;
+            }
+        }
+        // checked
+
+        for($count = 0; $count < count($page_array); $count++)
+        {
+            if($page == $page_array[$count])
+            {
+                $page_link .= '<li class="page-item active">
+                      <a class="page-link" href="#">'.$page_array[$count].' <span class="sr-only">(current)</span></a>
+                    </li>
+                    ';
+
+                $previous_id = $page_array[$count] - 1;
+                if($previous_id > 0)
+                {
+                    $previous_link = '<li class="page-item"><a class="page-link" href="javascript:void(0)" data-page_number="'.$previous_id.'">Previous</a></li>';
+                }
+                else
+                {
+                    $previous_link = '<li class="page-item disabled">
+                        <a class="page-link" href="#">Previous</a>
+                      </li>
+                      ';
+                }
+                $next_id = $page_array[$count] + 1;
+                if($next_id >= $total_links)
+                {
+                    $next_link = '<li class="page-item disabled">
+                        <a class="page-link" href="#">Next</a>
+                      </li>';
+                }
+                else
+                {
+                    $next_link = '<li class="page-item"><a class="page-link" href="javascript:void(0)" data-page_number="'.$next_id.'">Next</a></li>';
+                }
+            }
+            else
+            {
+                if($page_array[$count] == '...')
+                {
+                    $page_link .= '
+                      <li class="page-item disabled">
+                          <a class="page-link" href="#">...</a>
+                      </li>
+                      ';
+                }
+                else
+                {
+                    $page_link .= '<li class="page-item"><a class="page-link" href="javascript:void(0)" 
+                    data-page_number="'.$page_array[$count].'">'.$page_array[$count].'</a></li>';
+                }
+            }
+        }
+
+        $output .= $previous_link . $page_link . $next_link;
+        $output .= '</ul></div>';
+
+        echo $output;
+    }
+
+    /**
+     * Add new group
+     */
+    public function insertNewGroupRecord(){
+
+        if(isset($_POST['slug']) && $_POST['slug']!=''){
+
+            $re = GM::insert($_POST);
+            if(!$re){
+                echo 'Something went Wrong';
+            }
+            echo 'New Group Created';
+
+        }
+    }
+
+    /**
+     *  Fetch group
+     */
+    public function fetchSingleGroupRecord(){
+
+        if(isset($_POST['groupId']) && isset($_POST['groupId'])!=''){
+
+            $group_id = $_POST['groupId'];
+            $groupInfo = GM::fetch($group_id);
+            $num = count($groupInfo);
+            if($num>0){
+                $response = $groupInfo;
+            }else{
+                $response['status']=200;
+                $response['message']="No data found!";
+            }
+            echo json_encode($response);
+
+        }
+    }
+
+    /**
+     * Update group
+     */
+    public function updateSingleGroupRecord(){
+
+        if(isset($_POST['id'])){
+
+            $re = GM::update($_POST);
+            if(!$re){
+                echo 'Something went Wrong';
+            }
+            echo 'Basic Info Updated';
+
+        }
+    }
+
+
+
 
 }

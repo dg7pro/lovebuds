@@ -1,0 +1,4 @@
+Hi %recipient.first_name%
+
+Your profile looks vacant without photo. Please upload your photo to get more no. of responses.
+

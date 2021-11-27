@@ -21,16 +21,57 @@
     <section class="main">
         <h1 class="large text-heading">Dashboard</h1>
         <p class="lead">
-            <i class="fas fa-user"></i>
-            Welcome <a href="{{'/profile/'.$authUser->pid}}">{{ucfirst($authUser->first_name).' '.ucfirst($authUser->last_name)}}</a>
-            <a href="{{'/profile/'.$authUser->pid}}" class="goto-your-profile" target="_blank" id="your-profile" data-toggle="tooltip" data-placement="top"
+            <i class="fas fa-user text-coco"></i>
+            Welcome <a href="{{'/profile/'.$authUser->pid}}">{{ucfirst($authUser->first_name)}}</a>
+           {{-- <a href="{{'/profile/'.$authUser->pid}}" class="goto-your-profile" target="_blank" id="your-profile" data-toggle="tooltip" data-placement="top"
                title="Goto your profile">
                 <i class="fa fa-external-link-alt" style="font-size: 18px; color: gray;" aria-hidden="true"></i>
-            </a>
+            </a>--}}
         </p>
 
         @include('layouts.partials.alert')
-        <div class="dash-buttons">
+        <div class="dash-btns mb-4">
+            <div class="dash-btn-row">
+                <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <a class="dash-btn" id="pills-home-tab" data-toggle="pill" href="#pills-home"
+                           role="tab" aria-controls="pills-home" aria-selected="true">
+                            {{--<ion-icon name="person-add-sharp" size="large"></ion-icon>--}}
+                            <!-- <i class="material-icons bnav__icon">dashboard</i> -->
+                            <i class="fa fa-user fa-2x" aria-hidden="true"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a class="dash-btn" id="pills-profile-tab" data-toggle="pill" href="#pills-profile"
+                           role="tab" aria-controls="pills-profile" aria-selected="false">
+                            {{--<ion-icon name="list-sharp" size="large"></ion-icon>--}}
+                            <i class="fa fa-camera fa-2x" aria-hidden="true"></i>
+                        </a>
+                    </li>
+
+                       {{-- <a class="dash-btn my_notification" id="pills-contact-tab" data-toggle="pill" href="#pills-contact"
+                           role="tab" aria-controls="pills-contact" aria-selected="false">
+                            --}}{{--<ion-icon name="eye-sharp" size="large"></ion-icon>--}}{{--
+                            <i class="fa fa-bell fa-2x" aria-hidden="true"></i>
+                        </a>--}}
+
+                    <li class="nav-item" role="presentation">
+                        <a class="dash-btn" id="pills-contact-tab" data-toggle="pill" href="#pills-share"
+                           role="tab" aria-controls="pills-contact" aria-selected="false">
+                            {{--<ion-icon name="list-sharp" size="large"></ion-icon>--}}
+                            <i class="fa fa-share fa-2x" aria-hidden="true"></i>
+                        </a>
+                    </li>
+
+                       {{-- <a class="dash-btn" id="pills-contact-tab" data-toggle="pill" href="#pills-partner-preference"
+                           role="tab" aria-controls="pills-contact" aria-selected="false">
+                            <ion-icon name="eye-sharp" size="large"></ion-icon>
+                        </a>--}}
+                </ul>
+
+            </div>
+        </div>
+        {{--<div class="dash-buttons">
             <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
                 <li class="nav-item" role="presentation">
                     <a class="btn btn-pink nav-item" id="pills-home-tab" data-toggle="pill" href="#pills-home"
@@ -70,18 +111,25 @@
 
                 </li>
             </ul>
-        </div>
+        </div>--}}
 
         <div class="tab-content" id="pills-tabContent">
 
             <!-- My Profile tab -->
             <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
 
+                <div>
+                    <a href="{{'/account/edit-profile'}}" class="blank-btn" type="button">Edit Profile</a>
+                   {{-- <button type="button" class="btn btn-outline-secondary">Light</button>--}}
+{{--                    <button type="button" class="btn-blank">Success</button>--}}
+                </div>
+
                 <table class="ju-table">
                     <thead>
                     <tr>
                         <th colspan="2">Basic Info
-                            <a href="{{'/account/edit-profile#basic-info-card'}}" class="btn btn-blue btn-sm" role="button">Edit</a>
+                            {{--<a href="{{'/account/edit-profile#basic-info-card'}}" class="btn btn-blue btn-sm" role="button">Edit</a>--}}
+                            <a href="{{'/account/edit-profile#basic-info-card'}}"><i class="fas fa-pencil-alt text-secondary" aria-hidden="true"></i></a>
                         </th>
                     </tr>
                     </thead>
@@ -123,7 +171,8 @@
                     <tr>
                         <th colspan="2">Education & Career
                             {{--<button class="btn btn-yellow btn-sm">Edit</button>--}}
-                            <a href="{{'/account/edit-profile#edu-career-card'}}" class="btn btn-light btn-sm" role="button">Edit</a>
+                            {{--<a href="{{'/account/edit-profile#edu-career-card'}}" class="btn btn-light btn-sm" role="button">Edit</a>--}}
+                            <a href="{{'/account/edit-profile#edu-career-card'}}"><i class="fas fa-pencil-alt text-secondary" aria-hidden="true"></i></a>
                         </th>
                     </tr>
                     </thead>
@@ -151,7 +200,8 @@
                     <tr>
                         <th colspan="2">Family Details
                             {{--<button class="btn btn-yellow btn-sm">Edit</button>--}}
-                            <a href="{{'/account/edit-profile#family_details'}}" class="btn btn-yellow btn-sm" role="button">Edit</a>
+                            {{--<a href="{{'/account/edit-profile#family_details'}}" class="btn btn-yellow btn-sm" role="button">Edit</a>--}}
+                            <a href="{{'/account/edit-profile#family_details'}}"><i class="fas fa-pencil-alt text-secondary" aria-hidden="true"></i></a>
                         </th>
                     </tr>
                     </thead>
@@ -274,7 +324,7 @@
                         </td>
                     </tr>
 
-                    <tr>
+                    {{--<tr>
                         <td>Your Profile:</td>
                         <td class="hide-sm">
                             <a href="{{'/profile/'.$authUser->pid}}" class="goto-your-profile" target="_blank" id="goto-your-profile" data-toggle="tooltip" data-placement="top"
@@ -282,7 +332,7 @@
                                 <i class="fa fa-external-link-alt" style="font-size: 16px; color: gray;" aria-hidden="true"></i>
                             </a>
                         </td>
-                    </tr>
+                    </tr>--}}
 
                     </tbody>
                 </table>
@@ -646,7 +696,6 @@
 @include('request.dashboard.facebook')
 @include('request.dashboard.contact_info')
 @include('request.dashboard.partner_preference')
-@include('request.dashboard.notification')
 
 <script src="/js/select2.min.js"></script>
 <script>
@@ -654,5 +703,8 @@
         $('.js-example-basic-multiple').select2();
     });
 </script>
+
+<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 
 @endsection
