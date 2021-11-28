@@ -184,10 +184,10 @@
                                 <h6>Sudha Gupta</h6>
                                 {{--<small> Senior Developer @ Google</small>--}}
                                 <small> 29 yrs 5'2" Doctor Noida UP</small>
-                                <p>Very nice website, just register and start searching your love. <br>
-                                    Start searching & shortlist whenever you find nice profile then deal one by one
-                                    <br> It is much better than sharing your photo & bio on facebook or whatsapp <br>
-                                    This matchmaking service is free & so every single must create their profile here.</p>
+                                <p>Very nice website, just register and start searching your partner. <br>
+                                    Shortlist whenever you find nice profile then deal one by one
+                                    <br> It's much secure than sharing your profile on fb or whatsapp <br>
+                                    This website is free & so every single individual must signup here.</p>
                                 {{--<p>Nulla vitae elit libero, a pharetra augue mollis interdum. <br>
                                     Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ab in porro
                                     <br>laboriosam quibusdam illum. Aut expedita ad magnam ullam suscipit,

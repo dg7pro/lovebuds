@@ -48,7 +48,7 @@
         <!-- My Profile -->
         <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
 
-            <h4 class="text-center text-secondary">-- New Profiles --</h4>
+            <h4 class="text-center text-secondary"> New Profiles </h4>
 
             <section class="profiles" id="new-profiles">
                 <span id="ring-loader-1" class="text-center loading"><img src="/img/ring.gif" alt=""></span>
@@ -61,7 +61,7 @@
         <!-- My Album -->
         <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
 
-            <h4 class="text-center text-secondary">-- Shortlisted Profiles --</h4>
+            <h4 class="text-center text-secondary"> Shortlisted Profiles </h4>
 
             <section class="profiles" id="shortlisted-profiles">
                 <span id="ring-loader-2" class="text-center loading"><img src="/img/ring.gif" alt=""></span>
@@ -77,7 +77,7 @@
 
         <!-- Notifications -->
         <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
-            <h4 class="text-center text-secondary">-- Recent profile visitors-- </h4>
+            <h4 class="text-center text-secondary"> Profile Visitors </h4>
 
             <section class="profiles" id="recent-profile-visitor">
                 <span id="ring-loader-3" class="text-center loading"><img src="/img/ring.gif" alt=""></span>

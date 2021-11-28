@@ -5,11 +5,11 @@
 
     </div>
     <div class="company_info">
-        <div><a href="{{'/company/about-us'}}">About</a> | </div>
-        <div><a href="{{'/company/tnc'}}">T & C</a> | </div>
-        <div><a href="{{'/company/privacy-policy'}}">Privacy</a> | </div>
-        <div><a href="{{'/company/disclaimer'}}">Disclaimer</a> | </div>
-        <div><a href="{{'/payment/pricing-plans'}}">Pricing</a>  </div>
+        <div><a href="{{'/company/about-us'}}">About</a>|</div>
+        <div><a href="{{'/company/tnc'}}">TnC</a>|</div>
+        <div><a href="{{'/company/privacy-policy'}}">Privacy</a>|</div>
+        <div><a href="{{'/company/disclaimer'}}">Disclaimer</a>|</div>
+        <div><a href="{{'/payment/pricing-plans'}}">Plans</a></div>
     </div>
 </section>
 <!-- footer section ends -->

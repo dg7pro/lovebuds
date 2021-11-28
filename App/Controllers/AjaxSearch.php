@@ -34,8 +34,8 @@ class AjaxSearch extends Controller
                 $output .= '<div id="gallery'.$profile['id'].'" class="gallery" itemscope itemtype="http://schema.org/ImageGallery">';
                 foreach($profile['pics'] as $pic){
                     $output .= '<figure itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject">                                                
-                                        <a href="/uploads/pics/'.$pic['fn'].'" data-id="'.$profile['id'].'" class="ju-album2" data-caption="xyz" data-width="600" data-height="800" itemprop="contentUrl">                                                   
-                                            <img src="/uploads/tmb/tn_'.$pic['fn'].'" alt="dfdf" width="135px" class="profile-image"'.($pic['pp']!=1?'hidden':'').'>
+                                        <a href="/uploads/pics/'.$pic['fn'].'" data-id="'.$profile['id'].'" class="ju-album2" data-caption="'.$profile['first_name'].' '.$profile['last_name'].'" data-width="600" data-height="800" itemprop="contentUrl">                                                   
+                                            <img src="/uploads/tmb/tn_'.$pic['fn'].'" alt="thumbnail" width="135px" class="profile-image"'.($pic['pp']!=1?'hidden':'').'>
                                         </a>
                                     </figure>';
                 }

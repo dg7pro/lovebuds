@@ -28,7 +28,7 @@ class Login extends Controller
         $this->requireGuest();
 
         //Flash::addMessage('Enter your account credentials to login...', Flash::WARNING);
-        Flash::addMessage('Please login to continue...', Flash::WARNING);
+        //Flash::addMessage('Please login to continue...', Flash::WARNING);
 
         View::renderBlade('login/index');
 

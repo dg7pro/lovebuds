@@ -11,6 +11,9 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ml-auto text-right">
                     @if($authUser)
+                        <li class="nav-item blink">
+                            <a class="nav-link" href="{{'/home/index'}}">HOME</a>
+                        </li>
                         @if($authUser->is_admin)
                             <li class="nav-item blink">
                                 <a class="nav-link" href="{{'/admin/index'}}">ADMIN</a>

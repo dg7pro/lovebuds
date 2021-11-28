@@ -10,8 +10,7 @@
     <!-- login section -->
     <section class="main">
 
-
-            <div class="card mx-auto col-md-5 mt-3 p-0"> <img class='mx-auto offer-img' src="{{'/img/'.$offer->image}}" />
+        <div class="card mx-auto col-md-5 mt-3 p-0"> <img class='mx-auto offer-img' src="{{'/img/'.$offer->image}}" />
                 <div class="card-title offer-title d-flex px-4">
                     {{--<p class="item text-muted">December<label class="offer-ss">21</label> Offer</p>--}}
                     <p class="item text-muted">{{$offer->offer_name}}</p>
@@ -105,6 +104,11 @@
                 </div>
             </div>
 
+        <div class="mx-auto text-center">
+            {{--<p class="may-2"><a href="#" class="skip-offer">I will pay afterwards, Skip</a></p>--}}
+            <p class="may-2"><a href="#" class="skip-offer">Skip, I will pay Later</a></p>
+        </div>
+
 
     </section>
     <!-- login ends -->
@@ -117,6 +121,48 @@
 
             document.getElementById("jum_order_form").submit();
         }
+
+
+        /* for ajax request */
+        $(document).ready(function(){
+            $(document).on('click','.skip-offer',function() {
+
+                //Confirm before hiding
+                $.confirm({
+                    title: 'Rethink!',
+                    content: 'You will never get such an low price after 24 hrs from Signup.',
+                    icon: 'fa fa-info-circle fa-danger',
+                    animation: 'scale',
+                    closeAnimation: 'scale',
+                    opacity: 0.5,
+                    theme: 'modern',
+                    buttons: {
+                        'confirm': {
+                            text: 'ORDER NOW',
+                            btnClass: 'btn-green',
+                            action: function(){
+                                submitOrderForm();
+                            }
+                        },
+                       /* cancel: function(){
+                            //$.alert('Canceled!');
+                            window.location.href = "/account/dashboard";
+                        },*/
+                        somethingElse: {
+                            text: 'Skip',
+                            //btnClass: 'btn-blue',
+                            keys: ['enter', 'shift'],
+                            action: function(){
+                                //$.alert('Going to your Dashboard?');
+                                window.location.href = "/account/dashboard";
+                            }
+                        }
+
+                    }
+                });
+
+            });
+        });
     </script>
 
 

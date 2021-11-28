@@ -37,7 +37,7 @@
                                 <figure itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject">
                                     <!-- Link to the big image, not mandatory, but usefull when there is no JS -->
                                     <a href="{{'/uploads/pics/'.$image->filename}}" data-id="{{$profile->id}}" class="ju-album"
-                                       data-caption="Sea side, south shore<br><em class='text-muted'>© Dominik Schröder</em>"
+                                       data-caption="{{ucfirst($profile->first_name).' '.ucfirst($profile->last_name)}}<br><em class='text-muted'>@ ProfileId: {{$profile->pid}}</em>"
                                        data-width="600" data-height="800" itemprop="contentUrl">
                                         <!-- Thumbnail -->
                                         <img class="up-image" src="{{'/uploads/tmb/tn_'.$image->filename}}" alt="user image 2" {{$image->pp!=1?'hidden':''}}>
