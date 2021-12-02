@@ -13,7 +13,7 @@
         <div class="row">
 
             <div class="col-md-6 offset-md-3">
-                @include('layouts.partials.flash')
+                @include('layouts.partials.alert')
             </div>
         </div>
         <div class="row">

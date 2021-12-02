@@ -130,7 +130,7 @@ class Payment extends Controller
     }
 
     /**
-     *
+     * Response send by Paytm
      */
     public function responsePaymentAction(){
 
@@ -158,23 +158,29 @@ class Payment extends Controller
                 $user = User::findByID($currentOrder->user_id);
                 $user->becomePaid();
 
-                $color = 'success';
+                //var_dump($_POST);
+
                 $amount = $_POST['TXNAMOUNT'];
                 $orderId = $_POST['ORDERID'];
-                $message = 'Transaction vide order id: '. $orderId .' is successful';
+                $reason = $_POST['RESPMSG'];
+
+                View::renderBlade('payment/_success',['amount'=>$amount,'order'=>$orderId,'reason'=>$reason]);
             }
             else {
 
                 //echo "Transaction Failed";
                 Order::updateOrderStatus($_POST);
 
-                $color = 'danger';
+                //var_dump($_POST);
+
                 $amount = $_POST['TXNAMOUNT'];
                 $orderId = $_POST['ORDERID'];
-                $message = 'Transaction vide order id: '. $orderId .' failed';
+                $reason = $_POST['RESPMSG'];
+
+                View::renderBlade('payment/_failure',['amount'=>$amount,'order'=>$orderId,'reason'=>$reason]);
 
             }
-            View::renderBlade('payment/status',['message'=>$message,'color'=>$color,'amount'=>$amount,'orderId'=>$orderId]);
+            //View::renderBlade('payment/status',['message'=>$message,'color'=>$color,'amount'=>$amount,'orderId'=>$orderId]);
 
 
         }
@@ -187,8 +193,9 @@ class Payment extends Controller
 
     public function pricingPlansAction(){
 
+        $isOffer = static::isOfferOngoing();
         //$this->requireLogin();
-        View::renderBlade('payment/pricing-plan');
+        View::renderBlade('payment/pricing-plan',['isOffer'=>$isOffer]);
 
 
     }
@@ -196,6 +203,17 @@ class Payment extends Controller
     protected function isOfferOngoing(){
         $setting = new Setting();
         return $setting->is_ongoing_current_offer();
+    }
+
+    public function statusAction(){
+
+        $amount = 200;
+        $orderId = 'ORDS98130789815';
+        $dueTo = 'Your payment has been declined by your bank. Please try again or use a different method to complete the payment.';
+        //$message = 'Transaction vide order id: '. 'ORDS98130789815'.'<br>' .' failed';
+        View::renderBlade('payment/_success',['amount'=>$amount,'order'=>$orderId,'reason'=>$dueTo]);
+
+
     }
 
 }

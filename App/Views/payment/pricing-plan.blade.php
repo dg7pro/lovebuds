@@ -191,7 +191,7 @@
                         </div>
                         <div class="pricingTable-signup">
                             @if($authUser)
-                                <a href="{{'/payment/offer-page'}}">Order</a>
+                                <a href="{{'/account/dashboard'}}">Order</a>
                             @else
                                 <a href="{{'/register/index'}}">sign up</a>
                             @endif
@@ -216,11 +216,69 @@
                             </ul>
                         </div>
                         <div class="pricingTable-signup">
-                            @if($authUser)
-                                <a href="{{'/payment/offer-page'}}">Order</a>
+
+                            @if(!$authUser)
+                                <a href="{{'/register/index'}}">Sign up</a>
                             @else
-                                <a href="{{'/register/index'}}">sign up</a>
+                                @if($authUser->is_paid)
+                                    <a href="{{'/account/dashboard'}}">Dashboard</a>
+                                @else
+                                    @if($isOffer)
+                                        <a href="{{'/payment/offer-page'}}">Order</a>
+                                    @else
+                                        <form action="{{'/payment/redirect-payment'}}" method="POST" id="premium_order_form">
+
+                                            <input type="text" id="ORDER_ID" maxlength="20" size="20"
+                                                   name="ORDER_ID" autocomplete="off"
+                                                   value="{{"ORDS" . mt_rand() . $authUser->id}}" hidden>
+
+                                            <input type="text" id="CUST_ID" maxlength="20" size="20"
+                                                   name="CUST_ID" autocomplete="off"
+                                                   value="{{$authUser->pid}}" hidden>
+
+                                            <input type="text" id="INDUSTRY_TYPE_ID" maxlength="20" size="20"
+                                                   name="INDUSTRY_TYPE_ID" autocomplete="off"
+                                                   value="Retail" hidden>
+
+                                            <input type="text" id="CHANNEL_ID" maxlength="20" size="20"
+                                                   name="CHANNEL_ID" autocomplete="off"
+                                                   value="WEB" hidden>
+
+                                            <!-- Course/Group related -->
+                                            <input type="text" id="OFFER_ID"
+                                                   name="OFFER_ID" autocomplete="off"
+                                                   value="{{0}}" hidden >
+
+                                            <input type="text" id="OFFER_CODE"
+                                                   name="OFFER_CODE" autocomplete="off"
+                                                   value="{{'NA'}}" hidden >
+
+                                            <!-- Course/Group related -->
+                                            <input type="text" id="BASE_PRICE"
+                                                   name="BASE_PRICE" autocomplete="off"
+                                                   value="{{2500}}" hidden >
+
+                                            <input type="text" id="DISCOUNT"
+                                                   name="DISCOUNT" autocomplete="off"
+                                                   value="{{0}}" hidden >
+
+                                            <input type="text" id="PAYABLE_AMOUNT"
+                                                   name="PAYABLE_AMOUNT" autocomplete="off"
+                                                   value="{{2500}}" hidden >
+
+                                            <input type="text" id="TXN_AMOUNT"
+                                                   name="TXN_AMOUNT" autocomplete="off"
+                                                   value="{{2500}}" hidden >
+
+                                            {{--<button type="submit" class="btn btn-lg btn-block btn-dark">Purchase</button>--}}
+
+                                        </form>
+                                        {{--<a href="{{'/payment/offer-page'}}">Order</a>--}}
+                                        <a href="javascript:void(0)" onclick="premiumOrderForm()">Order</a>
+                                    @endif
+                                @endif
                             @endif
+
                         </div>
                     </div>
                 </div>
@@ -262,10 +320,63 @@
                             </ul>
                         </div>
                         <div class="pricingTable-signup">
-                            @if($authUser)
-                                <a href="{{'/payment/offer-page'}}">Order</a>
+                            @if(!$authUser)
+                                <a href="{{'/register/index'}}">Sign up</a>
                             @else
-                                <a href="{{'/register/index'}}">sign up</a>
+                                @if($authUser->is_paid)
+                                    <a href="{{'/account/dashboard'}}">Dashboard</a>
+                                @else
+                                    <form action="{{'/payment/redirect-payment'}}" method="POST" id="executive_order_form">
+
+                                        <input type="text" id="ORDER_ID" maxlength="20" size="20"
+                                               name="ORDER_ID" autocomplete="off"
+                                               value="{{"ORDS" . mt_rand() . $authUser->id}}" hidden>
+
+                                        <input type="text" id="CUST_ID" maxlength="20" size="20"
+                                               name="CUST_ID" autocomplete="off"
+                                               value="{{$authUser->pid}}" hidden>
+
+                                        <input type="text" id="INDUSTRY_TYPE_ID" maxlength="20" size="20"
+                                               name="INDUSTRY_TYPE_ID" autocomplete="off"
+                                               value="Retail" hidden>
+
+                                        <input type="text" id="CHANNEL_ID" maxlength="20" size="20"
+                                               name="CHANNEL_ID" autocomplete="off"
+                                               value="WEB" hidden>
+
+                                        <!-- Course/Group related -->
+                                        <input type="text" id="OFFER_ID"
+                                               name="OFFER_ID" autocomplete="off"
+                                               value="{{0}}" hidden >
+
+                                        <input type="text" id="OFFER_CODE"
+                                               name="OFFER_CODE" autocomplete="off"
+                                               value="{{'NA'}}" hidden >
+
+                                        <!-- Course/Group related -->
+                                        <input type="text" id="BASE_PRICE"
+                                               name="BASE_PRICE" autocomplete="off"
+                                               value="{{9000}}" hidden >
+
+                                        <input type="text" id="DISCOUNT"
+                                               name="DISCOUNT" autocomplete="off"
+                                               value="{{0}}" hidden >
+
+                                        <input type="text" id="PAYABLE_AMOUNT"
+                                               name="PAYABLE_AMOUNT" autocomplete="off"
+                                               value="{{9000}}" hidden >
+
+                                        <input type="text" id="TXN_AMOUNT"
+                                               name="TXN_AMOUNT" autocomplete="off"
+                                               value="{{9000}}" hidden >
+
+                                        {{--<button type="submit" class="btn btn-lg btn-block btn-dark">Purchase</button>--}}
+
+                                    </form>
+                                    {{--<a href="{{'/payment/offer-page'}}">Order</a>--}}
+                                    <a href="javascript:void(0)" onclick="executiveOrderForm()">Order</a>
+                                    {{--<a href="{{'/payment/offer-page'}}">Order</a>--}}
+                                @endif
                             @endif
                         </div>
                     </div>
@@ -280,6 +391,17 @@
 
 @section('js')
 
+    <script>
+        function premiumOrderForm(){
+
+            document.getElementById("premium_order_form").submit();
+        }
+
+        function executiveOrderForm(){
+
+            document.getElementById("executive_order_form").submit();
+        }
+    </script>
 
 
 
