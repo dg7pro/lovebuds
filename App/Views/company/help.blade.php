@@ -1,15 +1,155 @@
 @extends('layouts.app')
 
 @section('page_css')
-    <link rel="stylesheet" href="/css/select2.min.css">
     <style>
-        .select2-container, .select2-selection--multiple{
-            width: 100%!important;
-            min-height: 70px!important;
+
+        .contain {
+            background-color: #eee;
+            max-width: 1170px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 1em;
         }
 
-        .select2-container--default, .select2-selection--multiple{
-            border-radius: 0!important;
+        div.form {
+            background-color: #eee;
+        }
+        .contact-wrapper {
+            margin: auto 0;
+        }
+
+        .submit-btn {
+            float: left;
+        }
+        .reset-btn {
+            float: right;
+        }
+
+        .form-headline:after {
+            content: "";
+            display: block;
+            width: 10%;
+            padding-top: 10px;
+            border-bottom: 3px solid #175ca2;
+        }
+
+        .highlight-text {
+            color: #175ca2;
+        }
+
+        .hightlight-contact-info {
+            font-weight: 600;
+            font-size: 18px;
+            line-height: 1.5;
+        }
+
+        .highlight-text-grey {
+            font-weight: 500;
+        }
+
+        .email-info {
+            margin-top: 20px;
+        }
+
+        ::-webkit-input-placeholder { /* Chrome */
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .required-input {
+            color: black;
+        }
+        @media (min-width: 600px) {
+            .contain {
+                padding: 0;
+            }
+        }
+
+        h3,
+        ul {
+            margin: 0;
+        }
+
+        h3 {
+            margin-bottom: 1rem;
+        }
+
+        .form-input:focus,
+        textarea:focus{
+            outline: 1.5px solid #175ca2;
+        }
+
+        .form-input,
+        textarea {
+            width: 100%;
+            border: 1px solid #bdbdbd;
+            border-radius: 5px;
+        }
+
+        .wrapper > * {
+            padding: 1em;
+        }
+        @media (min-width: 700px) {
+            .wrapper {
+                display: grid;
+                grid-template-columns: 2fr 1fr;
+            }
+            .wrapper > * {
+                padding: 2em 2em;
+            }
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .contacts {
+            color: #212d31;
+        }
+
+        .form {
+            background: #fff;
+        }
+
+        form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-gap: 20px;
+        }
+        form label {
+            display: block;
+        }
+        form p {
+            margin: 0;
+        }
+
+        .full-width {
+            grid-column: 1 / 3;
+        }
+
+        button,
+        .submit-btn,
+        .form-input,
+        textarea {
+            padding: 1em;
+        }
+
+        button, .submit-btn {
+            background: transparent;
+            border: 1px solid #175ca2;
+            color: #175ca2;
+            border-radius: 15px;
+            padding: 5px 20px;
+            text-transform: uppercase;
+        }
+        button:hover, .submit-btn:hover,
+        button:focus , .submit-btn:focus{
+            background: #175ca2;
+            outline: 0;
+            color: #eee;
+        }
+        .error {
+            color: #175ca2;
         }
 
     </style>
@@ -29,17 +169,24 @@
                 <li class="nav-item" role="presentation">
                     <a class="btn btn-pink nav-item" id="pills-home-tab" data-toggle="pill" href="#hindi-read"
                        role="tab" aria-controls="pills-home" aria-selected="true">
-                        <i class="fas fa-user-circle text-white"></i>
+                        {{--<i class="fas fa-user-circle text-white"></i>--}}
                         Hindi
                     </a>
                 </li>
                 <li class="nav-item" role="presentation">
                     <a class="btn btn-yellow  nav-item" id="pills-profile-tab" data-toggle="pill" href="#english-read"
                        role="tab" aria-controls="pills-profile" aria-selected="false">
-                        <i class="fas fa-camera-retro text-white"></i>
+                        {{--<i class="fas fa-camera-retro text-white"></i>--}}
                         English
                     </a>
                 </li>
+                <li class="nav-item" role="presentation">
+                    <a class="btn btn-blue  nav-item" id="pills-profile-tab" data-toggle="pill" href="#contact-us"
+                       role="tab" aria-controls="pills-profile" aria-selected="false">
+                        Contact
+                    </a>
+                </li>
+
 
             </ul>
         </div>
@@ -222,8 +369,85 @@
 
             </div>
 
+            {{--English--}}
+            <div class="tab-pane fade" id="contact-us" role="tabpanel" aria-labelledby="pills-profile-tab">
+
+                {{--<div class="my-3">
+
+                    <h4 class="mt-5 text-blue">Just Unite Foundation </h4>
+
+                    <div class="text-secondary">
+                        <i class="fa fa-globe" aria-hidden="true"></i>
+                        <b>Visit us: www.JuMatrimony.com</b>
+                    </div>
+                    <div class="text-secondary">
+                        <i class="fa fa-envelope" aria-hidden="true"></i>
+                        <b>Email: JuMatrimony@gmail.com</b>
+                    </div>
+                    <div class="text-secondary">
+                        <i class="fa fa-phone" aria-hidden="true"></i>
+                        <b>Contact: +91 9335683398</b>
+                    </div>
+                    <div class="text-secondary">
+                        <i class="fab fa-whatsapp fa-bold" aria-hidden="true"></i>
+                        <b>Whatsapp: +91 9335683398</b>
+                    </div>
 
 
+
+
+                </div>
+--}}
+
+                <div class="contain">
+
+                    <div class="wrapper">
+
+                        <div class="form">
+                            {{--<h4>GET IN TOUCH</h4>--}}
+                            <h3 class="form-headline">Send us a message</h3>
+                            <form id="submit-form" action="">
+                                <p>
+                                    <input id="name" class="form-input" type="text" placeholder="Your Name*">
+                                    <small class="name-error"></small>
+                                </p>
+                                <p>
+                                    <input id="email" class="form-input" type="email" placeholder="Your Email*">
+                                    <small class="name-error"></small>
+                                </p>
+                                <p class="full-width">
+                                    <input id="subject" class="form-input" type="text" placeholder="Company Name*" required>
+                                    <small></small>
+                                </p>
+                                <p class="full-width">
+                                    <textarea  minlength="20" id="message" cols="30" rows="7" placeholder="Your Message*" required></textarea>
+                                    <small></small>
+                                </p>
+                                <p class="full-width">
+                                    <input type="checkbox" id="checkbox" name="checkbox" checked> Yes, I would like to receive communications by call / email about Company's services.
+                                </p>
+                                <p class="full-width">
+                                    <input type="submit" class="submit-btn" value="Submit" onclick="checkValidations()">
+                                    {{--<button class="reset-btn" onclick="reset()">Reset</button>--}}
+                                </p>
+                            </form>
+                        </div>
+
+                        <div class="contacts contact-wrapper">
+
+                            <ul>
+                                <li>Please feel free to contact us for any type query or support. </li>
+                                <span class="hightlight-contact-info">
+                                  <li class="email-info"><i class="fa fa-envelope" aria-hidden="true"></i> contact@jumatrimony.com</li>
+                                  <li><i class="fa fa-phone" aria-hidden="true"></i> <span class="highlight-text">+91 93356 83398</span></li>
+                                  <li><i class="fab fa-whatsapp" aria-hidden="true"></i> <span class="highlight-text">+91 93356 83398</span></li>
+                                </span>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
 
         </div>
     </section>
@@ -268,7 +492,7 @@
 
 
     <!--Start of Tawk.to Script-->
-    <script type="text/javascript">
+    {{--<script type="text/javascript">
         var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
         (function(){
             var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
@@ -278,7 +502,59 @@
             s1.setAttribute('crossorigin','*');
             s0.parentNode.insertBefore(s1,s0);
         })();
-    </script>
+    </script>--}}
     <!--End of Tawk.to Script-->
+
+    <script>
+        const nameEl = document.querySelector("#name");
+        const emailEl = document.querySelector("#email");
+        const subjectEl = document.querySelector("#subject");
+        const messageEl = document.querySelector("#message");
+
+        const form = document.querySelector("#submit-form");
+
+        function checkValidations() {
+            let letters = /^[a-zA-Z\s]*$/;
+            const name = nameEl.value.trim();
+            const email = emailEl.value.trim();
+            const subject = subjectEl.value.trim();
+            const message = messageEl.value.trim();
+            if (name === "") {
+                document.querySelector(".name-error").classList.add("error");
+                document.querySelector(".name-error").innerText =
+                    "Please fill out this field!";
+            } else {
+                if (!letters.test(name)) {
+                    document.querySelector(".name-error").classList.add("error");
+                    document.querySelector(".name-error").innerText =
+                        "Please enter only characters!";
+                } else {
+
+                }
+            }
+            if (email === "") {
+                document.querySelector(".name-error").classList.add("error");
+                document.querySelector(".name-error").innerText =
+                    "Please fill out this field!";
+            } else {
+                if (!letters.test(name)) {
+                    document.querySelector(".name-error").classList.add("error");
+                    document.querySelector(".name-error").innerText =
+                        "Please enter only characters!";
+                } else {
+
+                }
+            }
+        }
+
+       /* function reset() {
+            nameEl = "";
+            emailEl = "";
+            subjectEl = "";
+            messageEl = "";
+            document.querySelector(".name-error").innerText = "";
+        }*/
+
+    </script>
 
 @endsection

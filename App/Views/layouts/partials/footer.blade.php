@@ -1,14 +1,15 @@
 <!-- footer section start -->
 <section class="footer mb-5">
     <div class="copyright_info">
-        <div>Join & Unite 2021 © All Rights Reserved</div>
+        {{--<div>Join & Unite 2021 © All Rights Reserved</div>--}}
+        <div>Just Unite Foundation 2021 © All Rights Reserved</div>
 
     </div>
     <div class="company_info">
         <div><a href="{{'/company/about-us'}}">About</a>|</div>
         <div><a href="{{'/company/tnc'}}">TnC</a>|</div>
         <div><a href="{{'/company/privacy-policy'}}">Privacy</a>|</div>
-        <div><a href="{{'/company/disclaimer'}}">Disclaimer</a>|</div>
+        <div><a href="{{'/company/refund-policy'}}">Refund</a>|</div>
         <div><a href="{{'/payment/pricing-plans'}}">Plans</a></div>
     </div>
 </section>

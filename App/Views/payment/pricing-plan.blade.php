@@ -220,9 +220,9 @@
                             @if(!$authUser)
                                 <a href="{{'/register/index'}}">Sign up</a>
                             @else
-                                @if($authUser->is_paid)
+                                {{--@if($authUser->is_paid)
                                     <a href="{{'/account/dashboard'}}">Dashboard</a>
-                                @else
+                                @else--}}
                                     @if($isOffer)
                                         <a href="{{'/payment/offer-page'}}">Order</a>
                                     @else
@@ -276,7 +276,7 @@
                                         {{--<a href="{{'/payment/offer-page'}}">Order</a>--}}
                                         <a href="javascript:void(0)" onclick="premiumOrderForm()">Order</a>
                                     @endif
-                                @endif
+                                {{--@endif--}}
                             @endif
 
                         </div>
@@ -323,9 +323,9 @@
                             @if(!$authUser)
                                 <a href="{{'/register/index'}}">Sign up</a>
                             @else
-                                @if($authUser->is_paid)
+                               {{-- @if($authUser->is_paid)
                                     <a href="{{'/account/dashboard'}}">Dashboard</a>
-                                @else
+                                @else--}}
                                     <form action="{{'/payment/redirect-payment'}}" method="POST" id="executive_order_form">
 
                                         <input type="text" id="ORDER_ID" maxlength="20" size="20"
@@ -376,7 +376,7 @@
                                     {{--<a href="{{'/payment/offer-page'}}">Order</a>--}}
                                     <a href="javascript:void(0)" onclick="executiveOrderForm()">Order</a>
                                     {{--<a href="{{'/payment/offer-page'}}">Order</a>--}}
-                                @endif
+                                {{--@endif--}}
                             @endif
                         </div>
                     </div>
