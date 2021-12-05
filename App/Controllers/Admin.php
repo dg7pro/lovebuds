@@ -9,6 +9,7 @@ use App\Mail;
 use App\Models\Aadhar;
 use App\Models\Image;
 use App\Models\Notification;
+use App\Models\Setting;
 use App\Models\User;
 use App\Models\UserVariables;
 use Core\View;
@@ -150,7 +151,9 @@ class Admin extends Administered
      */
     public function siteSettingsAction(){
 
-        View::renderBlade('admin.site-settings');
+        $settings = Setting::getAll();
+        //var_dump($settings);;
+        View::renderBlade('admin.site-settings',['settings'=>$settings]);
     }
 
     /**
@@ -314,6 +317,17 @@ class Admin extends Administered
         //var_dump($groups);
         //View::renderBlade('admin.list_group',['orders'=>$orders]);
         View::renderBlade('admin.payment_orders');
+    }
+
+    /**
+     * Offers Details Page
+     */
+    public function offersManagerAction(){
+
+        //$orders = Order::fetchAll();
+        //var_dump($groups);
+        //View::renderBlade('admin.list_group',['orders'=>$orders]);
+        View::renderBlade('admin.offers_manager');
     }
 
 

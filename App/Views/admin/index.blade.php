@@ -59,6 +59,12 @@
                 <p class="admin-text">View list of orders and payments details</p>
                 <a href="{{'/admin/order-details'}}" class="btn btn-blue">View Orders </a>
             </div>
+
+            <div class="admin-box">
+                <h5 class="admin-title">Offers Management</h5>
+                <p class="admin-text">View add and edit Offers for the users to portal</p>
+                <a href="{{'/admin/offers-manager'}}" class="btn btn-orange">Offers Manager </a>
+            </div>
         </div>
 
 
