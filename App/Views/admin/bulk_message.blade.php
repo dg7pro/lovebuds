@@ -33,12 +33,21 @@
                     <th>Action</th>
                 </tr>
                 <tr>
-                    <td>Msg to all Inactive Users</td>
-                    <td></td>
+                    <td>Send Complete your profile Reminder</td>
+                    <td>{{$iuc}}</td>
                     <td>
                         {{--<i class="fa fa-trash-alt text-red" aria-hidden="true"> </i>--}}
                         <i class="fas fa-paper-plane text-success" aria-hidden="true"> </i>
-                        <a href="" class="text-primary"> Send Bulk Message</a>
+                        <a href="{{'/admin/complete-your-profile-reminder'}}" class="text-primary"> Send Bulk Message</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Send New matches Reminder</td>
+                    <td>{{$auc}}</td>
+                    <td>
+                        {{--<i class="fa fa-trash-alt text-red" aria-hidden="true"> </i>--}}
+                        <i class="fas fa-paper-plane text-success" aria-hidden="true"> </i>
+                        <a href="{{'/admin/new-matches-reminder'}}" class="text-primary"> Send Bulk Message</a>
                     </td>
                 </tr>
                 <tr>
@@ -49,14 +58,14 @@
                         <a href="{{'/admin/send-photo-upload-reminder'}}" class="text-primary"> Send Bulk Message</a>
                     </td>
                 </tr>
-                <tr>
+                {{--<tr>
                     <td>Send User Inactivity Notice</td>
-                    <td>{{$npc}}</td>
+                    <td></td>
                     <td>
                         <i class="fas fa-paper-plane text-success" aria-hidden="true"> </i>
                         <a href="{{'/admin/send-user-inactivity-notice'}}" class="text-primary"> Send Bulk Message</a>
                     </td>
-                </tr>
+                </tr>--}}
             </table>
         </div>
 

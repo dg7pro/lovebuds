@@ -188,7 +188,14 @@ class Admin extends Administered
 
         $np = User::getNonPhotoUsers();// no. of non photo users
         $npc = count($np); // non photo user count
-        View::renderBlade('admin.bulk_message',['npc'=>$npc]); // non photo user count
+
+        $au = User::getAllActiveUsers();
+        $auc = count($au);
+
+        $iu = User::getAllInactiveUsers(); // inactive users
+        $iuc = count($iu);                  // inactive users count
+
+        View::renderBlade('admin.bulk_message',['npc'=>$npc,'auc'=>$auc,'iuc'=>$iuc]); // non photo user count
 
     }
 
@@ -249,6 +256,54 @@ class Admin extends Administered
     }
 
     /**
+     * Send Complete your profiles Bulk Reminder Emails
+     */
+    public function completeYourProfileReminderAction(){
+
+        $allInactiveUsers = User::getAllInactiveUsers();
+
+        $recL = static::getEmailList($allInactiveUsers);              // recipientList
+        $profiles = static::getAssociativeArrayResult($allInactiveUsers);      // recipientVariable
+
+        $recV = json_encode($profiles);
+
+        $text = View::getTemplate('mailgun/complete_profile_reminder.txt');
+        $html = View::getTemplate('mailgun/complete_profile_reminder.html');
+
+        $result = Mail::sendBulkEmail($recL,$recV,$text,$html);            // Tested
+
+        if($result){
+            Flash::addMessage('Message queued to be send','success');
+            $this->redirect('/admin/bulkMessage');
+        }
+
+    }
+
+    /**
+     * Send New Matches reminder emails
+     */
+    public function newMatchesReminderAction(){
+
+        $allActiveUsers = User::getAllActiveUsers();
+
+        $recL = static::getEmailList($allActiveUsers);              // recipientList
+        $profiles = static::getAssociativeArrayResult($allActiveUsers);      // recipientVariable
+
+        $recV = json_encode($profiles);
+
+        $text = View::getTemplate('mailgun/new_matches_reminder.txt');
+        $html = View::getTemplate('mailgun/new_matches_reminder.html');
+
+        $result = Mail::sendBulkEmail($recL,$recV,$text,$html);            // Tested
+
+        if($result){
+            Flash::addMessage('Message queued to be send','success');
+            $this->redirect('/admin/bulkMessage');
+        }
+
+    }
+
+    /**
      * Send Bulk user inactive notice emails
      */
     public function sendUserInactivityNoticeAction(){
@@ -273,6 +328,7 @@ class Admin extends Administered
             if(!in_array($profileValue["email"],$newProfileKey)){
                 $e=$profileValue['email'];
                 $newProfilesInfo[$e]["pid"] = $profileValue["pid"];
+                $newProfilesInfo[$e]["mail"] = $profileValue["email"];
                 $newProfilesInfo[$e]["first_name"] = $profileValue["first_name"];
                 $newProfilesInfo[$e]["last_name"] = $profileValue["last_name"];
 

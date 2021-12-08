@@ -1,0 +1,4 @@
+Hi %recipient.first_name%
+
+New matches are waiting for you. Please visit regularly to find someone special
+

@@ -660,6 +660,10 @@ class User extends Model
             ";
     }
 
+    /**
+     * Get all non photo Users
+     * @return array|false
+     */
     public static function getNonPhotoUsers()
     {
 
@@ -669,6 +673,32 @@ class User extends Model
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+    }
+
+    /**
+     * Get all Active Users
+     * @return array|false
+     */
+    public static function getAllActiveUsers()
+    {
+        $sql="SELECT email, pid, first_name, last_name, mobile FROM users WHERE is_active=1";
+        $pdo = Model::getDB();
+        $stmt=$pdo->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Get all Inactive Users
+     * @return array|false
+     */
+    public static function getAllInactiveUsers()
+    {
+        $sql="SELECT email, pid, first_name, last_name, mobile FROM users WHERE is_active=0";
+        $pdo = Model::getDB();
+        $stmt=$pdo->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     /**

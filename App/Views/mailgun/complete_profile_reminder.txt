@@ -1,0 +1,5 @@
+Hi %recipient.first_name%
+
+Lot's of people are also searching their lifePartner like you. Please complete your profile.
+You used following email to create your account: %recipient.mail%
+
