@@ -34,6 +34,25 @@ class Setting extends Model
     }
 
     /**
+     * Based on this parameter, insta offers are given
+     * If set to 0 insta offer closes
+     * & vice versa
+     *
+     * @return mixed
+     */
+    public function is_ongoing_insta_offer(){
+
+        $param = 'ongoing_insta_offer';
+        $sql = "SELECT value FROM settings WHERE parameter =?";
+
+        $pdo=Model::getDB();
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$param]);
+
+        return  $stmt->fetch(PDO::FETCH_COLUMN);
+    }
+
+    /**
      * Based on this parameter, offers are given
      * If set to 0 all offer closes
      * & vice versa

@@ -75,7 +75,7 @@ class Login extends Controller
             }
             Flash::addMessage('Login Successful', Flash::SUCCESS);
 
-            if(!$user->is_paid && $user->isNew()){
+            if(!$user->is_paid && $user->isNew() && $this->isInstaOfferOngoing()){
                 $this->redirect('/payment/insta-offer-page');
             }
 
@@ -130,6 +130,11 @@ class Login extends Controller
     protected function isOfferOngoing(){
         $setting = new Setting();
         return $setting->is_ongoing_current_offer();
+    }
+
+    protected function isInstaOfferOngoing(){
+        $setting = new Setting();
+        return $setting->is_ongoing_insta_offer();
     }
 
 }

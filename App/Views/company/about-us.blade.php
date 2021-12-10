@@ -21,8 +21,8 @@
             that we are growing gradually.
         </p>
         <p class="mb-3">We believe that Shaadi is not just finding your soulmate; it is union of two families, and our
-            service is to make this process of finding your life partner easy. Now Shaadi is no more difficult,
-            it’s easy as our slogan is <b>“Shaadi is Easy”</b>
+            service is to make this process of finding your life partner easy. Now Shaadi is no more difficult.
+            {{--it’s easy as our slogan is <b>“Shaadi is Easy”</b>--}}
         </p>
         <p class="mb-2">
             We hope & wish - that you not only enjoy the process of finding your soulmate but also get a most suitable

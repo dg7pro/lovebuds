@@ -3,3 +3,6 @@ Hi %recipient.first_name%
 Lot's of people are also searching their lifePartner like you. Please complete your profile.
 You used following email to create your account: %recipient.mail%
 
+Team JuMatrimony
+For support whatsapp us: +91 9335683398
+or Email us: contact@jumatrimony.com
