@@ -583,7 +583,7 @@
         $('.goto-your-profile').tooltip();
     });
 
-    $(document).ready(function(){
+    /*$(document).ready(function(){
         $('a[data-toggle="pill"]').on('show.bs.tab', function(e) {
             localStorage.setItem('activeTab', $(e.target).attr('href'));
         });
@@ -591,7 +591,7 @@
         if(activeTab){
             $('#pills-tab a[href="' + activeTab + '"]').tab('show');
         }
-    });
+    });*/
 
     function confirmNumber(){
 
@@ -697,12 +697,12 @@
 @include('request.dashboard.contact_info')
 @include('request.dashboard.partner_preference')
 
-<script src="/js/select2.min.js"></script>
+{{--<script src="/js/select2.min.js"></script>
 <script>
     $(document).ready(function() {
         $('.js-example-basic-multiple').select2();
     });
-</script>
+</script>--}}
 
 <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
 <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>

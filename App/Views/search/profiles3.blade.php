@@ -109,6 +109,41 @@
             console.log('contact clicked');
             console.log(id);
             //alert("The data-id of clicked item is: " + id);
+            $.ajax({
+
+                url: "/AjaxActivity/show-contact",
+                method: 'post',
+                data: {
+                    other_id:id
+                },
+                dataType:"json",
+                success: function (data, status) {
+                    console.log(data);
+                    console.log(status);
+                    setTimeout(function(){
+                        toastr.success(data.msg);
+                    }, 1000);
+                    if(data.cc){
+                        $('#addr-'+id).html(data.addr);
+                    }
+
+                    //$('#hide-profile').addClass('disabled');
+                }
+            });
+
+            var cbtn = document.getElementById("contact-btn-"+id);
+            console.log(cbtn);
+            var addr = document.getElementById("ups-ab-overlay-"+id);
+            addr.style.width= 0;
+            addr.style.left= 100;
+            cbtn.setAttribute('disabled','disabled');
+
+        }
+
+        /*function viewContactAdd(id){
+            console.log('contact clicked');
+            console.log(id);
+            //alert("The data-id of clicked item is: " + id);
             $.confirm({
                 title: 'View Contact details ',
                 content: 'The number of contacts viewed by you is counted and recorded to fight <strong>spam</strong>',
@@ -158,7 +193,7 @@
                 }
             });
 
-        }
+        }*/
 
         function sendWhatsappInterest(id){
             console.log('send whatsapp clicked');
