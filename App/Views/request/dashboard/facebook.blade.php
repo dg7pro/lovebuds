@@ -11,7 +11,7 @@
 </script>
 <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
 <script>
-   /* document.getElementById('shareBtn').onclick = function() {
+    document.getElementById('shareBtn').onclick = function() {
         FB.ui({
             display: 'popup',
             method: 'share',
@@ -35,13 +35,13 @@
                 console.log('no no');
             }
         });
-    }*/
+    }
 
    /*
    * Test Function
    * Dummy replicates the actual sharing on facebook
    * */
-   document.getElementById('shareBtn').onclick = function() {
+   /*document.getElementById('shareBtn').onclick = function() {
 
        var fb = true;
        $.ajax({
@@ -55,5 +55,5 @@
                console.log(status);
            }
        });
-   }
+   }*/
 </script>
