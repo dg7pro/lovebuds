@@ -572,6 +572,36 @@ class Adjax extends Administered
 
     }
 
+    public function hideUserAction(){
+
+        if(isset($_POST['id'])){
+
+            $result = User::actOfHidingUser($_POST['id']);
+            if($result){
+                $msg = "User profile is not visible to others";
+            }
+
+        }
+        $json_data = ['msg'=>$msg];
+        echo json_encode($json_data);
+
+    }
+
+    public function visibleUserAction(){
+
+        if(isset($_POST['id'])){
+
+            $result = User::actOfVisibleUser($_POST['id']);
+            if($result){
+                $msg = "User profile is visible to others";
+            }
+
+        }
+        $json_data = ['msg'=>$msg];
+        echo json_encode($json_data);
+
+    }
+
     /*
      * ============================================
      * Update Section

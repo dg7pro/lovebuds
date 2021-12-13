@@ -1039,6 +1039,34 @@ class User extends Model
 
     }
 
+    public static function actOfHidingUser($uid): bool
+    {
+
+        $sql = 'UPDATE users SET is_visible = 0 WHERE id = :uid';
+
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+
+        $stmt->bindValue(':uid', $uid, PDO::PARAM_INT);
+
+        return $stmt->execute();
+
+    }
+
+    public static function actOfVisibleUser($uid): bool
+    {
+
+        $sql = 'UPDATE users SET is_visible = 1 WHERE id = :uid';
+
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+
+        $stmt->bindValue(':uid', $uid, PDO::PARAM_INT);
+
+        return $stmt->execute();
+
+    }
+
     /**
      * Activate the user account with the specified activation token
      *
@@ -1113,7 +1141,8 @@ class User extends Model
 
         $sql= self::minorDotSql();
         $sql.="WHERE move_profile.num IS NULL
-            AND users.is_active = 1            
+            AND users.is_active = 1
+            AND users.is_visible = 1            
             AND users.gender != :cg
             AND users.religion_id = :rel
             
@@ -1142,9 +1171,12 @@ class User extends Model
             $sql .= " ORDER BY users.id DESC";
             $sql .= " LIMIT 10";
 
+            //var_dump($sql);
+
             $pdo = Model::getDB();
             $stmt=$pdo->prepare($sql);
             $stmt->bindParam(':cg',$cg,PDO::PARAM_INT);
+            $stmt->bindParam(':rel',$rel,PDO::PARAM_INT);
 
             $stmt->bindParam(':min_ht',$min_ht,PDO::PARAM_INT);
             $stmt->bindParam(':max_ht',$max_ht,PDO::PARAM_INT);
@@ -1175,7 +1207,7 @@ class User extends Model
     {
         $sql = "SELECT * FROM users LEFT JOIN move_profile ON move_profile.receiver = users.id            
             
-            WHERE move_profile.sender= :id AND move_profile.num = 2 AND users.is_active=1";
+            WHERE move_profile.sender= :id AND move_profile.num = 2 AND users.is_active=1 AND users.is_visible=1";
 
         $pdo = Model::getDB();
         $stmt=$pdo->prepare($sql);
@@ -1193,7 +1225,7 @@ class User extends Model
     {
         $sql = "SELECT * FROM users LEFT JOIN visit_profile ON visit_profile.sender = users.id            
             
-            WHERE visit_profile.receiver= :id AND users.is_active=1";
+            WHERE visit_profile.receiver= :id AND users.is_active=1 AND users.is_visible=1";
 
         $pdo = Model::getDB();
         $stmt=$pdo->prepare($sql);
@@ -1299,7 +1331,7 @@ class User extends Model
         LEFT JOIN smokes ON smokes.id = u.smoke_id
         LEFT JOIN drinks ON drinks.id = u.drink_id
         LEFT JOIN challenged ON challenged.id = u.challenged_id
-        WHERE u.is_active=1
+        WHERE u.is_active=1 AND u.is_visible=1
         ";
 
         //$sql .= "WHERE move_profile.sender= :id AND move_profile.num = 2 AND u.is_active=1";
@@ -1380,7 +1412,7 @@ class User extends Model
         LEFT JOIN smokes ON smokes.id = u.smoke_id
         LEFT JOIN drinks ON drinks.id = u.drink_id
         LEFT JOIN challenged ON challenged.id = u.challenged_id
-        WHERE u.is_active=1
+        WHERE u.is_active=1 AND u.is_visible=1
         ";
 
         $pdo = Model::getDB();

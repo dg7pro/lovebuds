@@ -31,6 +31,8 @@
             <button type="button" id="btn_unblock" class="btn btn-sm btn-yellow" onclick="unblockMember({{$user->id}})" {{!$user->is_block?'disabled':''}}>Unblock</button>
             <button type="button" id="btn_cblock" class="btn btn-sm btn-yellow" onclick="cBlockMember({{$user->id}})" {{$user->c_block?'disabled':''}}>cBlocked</button>
             <button type="button" id="btn_cunblock" class="btn btn-sm btn-yellow" onclick="cUnblockMember({{$user->id}})" {{!$user->c_block?'disabled':''}}>cUnblock</button>
+            <button type="button" id="btn_hide" class="btn btn-sm btn-pink" onclick="hideMember({{$user->id}})" {{!$user->is_visible?'disabled':''}}>Hide</button>
+            <button type="button" id="btn_visible" class="btn btn-sm btn-green" onclick="visibleMember({{$user->id}})" {{$user->is_visible?'disabled':''}}>Visible</button>
         </div>
         <div class="row justify-content-center mb-5" id="basic-info-card">
             <div class="col-xl-12">
@@ -827,6 +829,44 @@
             $.ajax({
                 type:'POST',
                 url:'/adjax/c-unblock-user',
+                data:{
+                    id:id
+                },
+                dataType: "json",
+                success:function(data,status){
+                    console.log(data);
+                    console.log(status);
+                    //$('#ds_update').html(data.opt);
+                }
+            });
+        }
+
+        function hideMember(id){
+
+            console.log('hiding member');
+            console.log(id);
+            $.ajax({
+                type:'POST',
+                url:'/adjax/hide-user',
+                data:{
+                    id:id
+                },
+                dataType: "json",
+                success:function(data,status){
+                    console.log(data);
+                    console.log(status);
+                    //$('#ds_update').html(data.opt);
+                }
+            });
+        }
+
+        function visibleMember(id){
+
+            console.log('visible member');
+            console.log(id);
+            $.ajax({
+                type:'POST',
+                url:'/adjax/visible-user',
                 data:{
                     id:id
                 },
