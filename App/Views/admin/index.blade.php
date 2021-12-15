@@ -65,6 +65,12 @@
                 <p class="admin-text">View add and edit Offers for the users to portal</p>
                 <a href="{{'/admin/offers-manager'}}" class="btn btn-orange">Offers Manager </a>
             </div>
+
+            <div class="admin-box">
+                <h5 class="admin-title">Whatsapp Users</h5>
+                <p class="admin-text">Whatsapp users on different occasions & events</p>
+                <a href="{{'/admin/whatsapp-users'}}" class="btn btn-yellow">Whatsapp Users </a>
+            </div>
         </div>
 
 

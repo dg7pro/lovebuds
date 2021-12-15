@@ -47,6 +47,15 @@ class Admin extends Administered
 
     }
 
+    /**
+     * List Users to send whatsapp
+     */
+    public function whatsappUsersAction(){
+
+        View::renderBlade('admin.whatsapp_users');
+
+    }
+
     public function editUserAction(){
 
 //        $id = $this->route_params['id'];

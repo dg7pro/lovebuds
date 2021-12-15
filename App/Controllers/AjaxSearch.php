@@ -55,7 +55,7 @@ class AjaxSearch extends Controller
                                 </p>
                                 <div>';
             if($_SESSION['user_id']){
-                $output .= '<a href="https://wa.me/91'.$profile['mobile'].'?text=Hi I am interested, here is my profile: http://www.jumatrimony.com/profile/'.$pid.'" target="_blank" id="interest-btn-'.$profile['id'].'" class="btn btn-pink" role="button" onclick="sendWhatsappInterest('.$profile['id'].'); return true;">
+                $output .= '<a href="https://wa.me/91'.$profile['mobile'].'?text=Hi I am interested, here is my profile: https://www.jumatrimony.com/profile/'.$pid.'" target="_blank" id="interest-btn-'.$profile['id'].'" class="btn btn-pink" role="button" onclick="sendWhatsappInterest('.$profile['id'].'); return true;">
                                 <i class="fab fa-whatsapp text-dark"> </i> Interest</a>';
             }else{
                 $output .= '<button type="button" class="btn btn-orange" data-toggle="modal" data-target="#exampleModal">
@@ -70,7 +70,7 @@ class AjaxSearch extends Controller
             $output .= '</div></div>';
 
             $output .= '<div class="profile-handler">
-                                <a title="Share on whatsapp" class="share" href="https://wa.me/?text=This profile seems to be the perfect match - http://www.jumatrimony.com/profile/'.$profile['pid'].'" target="_blank"><i class="fas fa-share san"></i></a>
+                                <a title="Share on whatsapp" class="share" href="https://wa.me/?text=This profile seems to be the perfect match - https://www.jumatrimony.com/profile/'.$profile['pid'].'" target="_blank"><i class="fas fa-share san"></i></a>
                                 <a title="Shortlist and Like" data-id="'.$profile['id'].'" class="shortlist" href="javascript:void(0)"><i class="fas fa-heart san"></i></a>
                                 <a title="Downlist and Hide" data-id="'.$profile['id'].'" class="downlist" href="javascript:void(0)"><i class="fas fa-arrow-circle-down san"></i></a>
                             </div>';
