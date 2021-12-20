@@ -71,6 +71,13 @@
                 <p class="admin-text">Whatsapp users on different occasions & events</p>
                 <a href="{{'/admin/whatsapp-users'}}" class="btn btn-yellow">Whatsapp Users </a>
             </div>
+
+            <div class="admin-box">
+                <h5 class="admin-title">Whatsapp Clients</h5>
+                <p class="admin-text">Whatsapp new unregistered probable clients</p>
+                <a href="{{'/admin/input-add-number'}}" class="btn btn-pink">Add</a>
+                <a href="{{'/admin/whatsapp-clients'}}" class="btn btn-pink">Send Msg </a>
+            </div>
         </div>
 
 

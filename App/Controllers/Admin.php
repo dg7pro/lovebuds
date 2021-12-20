@@ -4,11 +4,13 @@
 namespace App\Controllers;
 
 
+use App\Auth;
 use App\Flash;
 use App\Mail;
 use App\Models\Aadhar;
 use App\Models\Image;
 use App\Models\Notification;
+use App\Models\Person;
 use App\Models\Setting;
 use App\Models\User;
 use App\Models\UserVariables;
@@ -55,6 +57,38 @@ class Admin extends Administered
         View::renderBlade('admin.whatsapp_users');
 
     }
+
+    public function inputAddNumberAction(){
+
+        View::renderBlade('admin.input_add_number',['i'=>1]);
+    }
+
+    public function savePersonAction(){
+
+        $pairs = $_POST['contact'];
+        $con= new Person();
+        if($con->save(Auth::getUser(),$pairs)){
+
+            Flash::addMessage('Thanks! Contacts has been saved','success');
+            foreach($con->errors as $error){
+                Flash::addMessage($error,'danger');
+            }
+            $this->redirect('/admin/inputAddNumber');
+        }else{
+            foreach($con->errors as $error){
+                Flash::addMessage($error,'danger');
+            }
+            $this->redirect('/admin/inputAddNumber');
+
+        }
+    }
+
+    public function whatsappClientsAction(){
+
+        View::renderBlade('admin.whatsapp_clients');
+
+    }
+
 
     public function editUserAction(){
 

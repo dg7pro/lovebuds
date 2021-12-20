@@ -85,6 +85,11 @@ class Home extends Controller
         ]);
     }
 
+    public function whatsappAddAction(){
+
+        View::renderBlade('home/whatsapp_add');
+    }
+
     public function secureAction(){
 
         /*$e = 'geeksforgeeks@gmail.com ';
