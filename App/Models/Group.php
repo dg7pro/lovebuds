@@ -111,7 +111,78 @@ class Group extends Model
 
     }
 
-    /*public static function fetchAll(){
+    public static function getNewProfiles($groupId){
+
+        $sql = "SELECT 
+                    users.id,
+                    users.pid,
+                    users.email,
+                    users.first_name,
+                    users.last_name,
+                    users.gender,
+                    users.dob,
+                    users.mobile,
+                    users.whatsapp,
+                    users.height_id,
+                    users.manglik_id,
+                    users.state,
+                    users.district,
+       
+                    group_user.group_id as gid,
+                    images.user_id as iuid,
+                    images.filename,
+                    images.pp,
+                    images.linked,
+                    images.approved,  
+       
+                    heights.ft as ht, 
+                    religions.name as religion,
+                    communities.name as lang,
+                    countries.name as country,
+                    incomes.level as income,
+                    maritals.status as mstatus,
+                    mangliks.status as manglik,
+                    castes.text as caste,
+            
+                    users.horoscope, 
+                    educations.name as edu,
+                    occupations.name as occ,
+                    diets.type as diet,
+                    smokes.status as smoke,
+                    drinks.status as drink,
+                    challenged.status as challeng
+
+                    From users
+                    LEFT JOIN group_user ON group_user.user_id = users.id
+                    LEFT JOIN images ON images.user_id = users.id
+                        
+                    LEFT JOIN heights ON heights.id = users.height_id
+                    LEFT JOIN religions ON religions.id = users.religion_id
+                    LEFT JOIN communities ON communities.id = users.community_id
+                    LEFT JOIN countries ON countries.id = users.country_id
+                    LEFT JOIN incomes ON incomes.id = users.income_id
+                    LEFT JOIN maritals ON maritals.id = users.marital_id
+                    LEFT JOIN mangliks ON mangliks.id = users.manglik_id
+                    LEFT JOIN castes ON castes.value = users.caste_id    
+                    
+                    LEFT JOIN educations ON educations.id = users.education_id
+                    LEFT JOIN occupations ON occupations.id = users.occupation_id            
+                    LEFT JOIN diets ON diets.id = users.diet_id
+                    LEFT JOIN smokes ON smokes.id = users.smoke_id
+                    LEFT JOIN drinks ON drinks.id = users.drink_id
+                    LEFT JOIN challenged ON challenged.id = users.challenged_id
+        
+                    WHERE group_user.group_id=?";
+
+        $pdo = static::getDB();
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$groupId]);
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    }
+
+    public static function fetchAll(){
 
         $sql = "SELECT * from groups ORDER BY id";
 
@@ -120,7 +191,7 @@ class Group extends Model
         $stmt->execute();
 
         return $stmt->fetchAll(PDO::FETCH_OBJ);
-    }*/
+    }
 
     public static function liveSearch($start, $limit){
 

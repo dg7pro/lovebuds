@@ -488,11 +488,12 @@ Whatsapp: 9335683398";
                     <th>credits</th> 
                     <th>ac</th>
                     <th>is_a</th>  
+                    <th>edit</th>
+                    <th>group</th>                   
+                    <th>image</th>   
                     <th>is_b</th>  
                     <th>is_v</th>  
-                    <th>is_p</th>                                                   
-                    <th>edit</th>
-                    <th>image</th>   
+                    <th>is_p</th> 
                 </tr>';
 
         if($total_data > 0){
@@ -509,11 +510,12 @@ Whatsapp: 9335683398";
                 <td>'.$row->credits.'</td>
                 <td>'.$row->ac.'</td>
                 <td>'.$row->is_active.'</td>
+                <td><a href="/admin/edit-user?id='.$row->id.'" type="button" class="mb-1 btn btn-sm btn-green">edit</a></td>
+                <td><a href="/admin/add-user-to-group?id='.$row->id.'" type="button" class="mb-1 btn btn-sm btn-green">+</a></td>
+                <td><a href="/admin/edit-user-album?id='.$row->id.'" type="button" class="mb-1 btn btn-sm btn-pink">view</a></td>
                 <td>'.$row->is_block.'</td>
                 <td>'.$row->is_verified.'</td>
-                <td>'.$row->is_paid.'</td>
-                <td><a href="/admin/edit-user?id='.$row->id.'" type="button" class="mb-1 btn btn-sm btn-green">edit</a></td>
-                <td><a href="/admin/edit-user-album?id='.$row->id.'" type="button" class="mb-1 btn btn-sm btn-pink">view</a></td>
+                <td>'.$row->is_paid.'</td>                
                 </tr>';
             }
 
@@ -1299,8 +1301,8 @@ Whatsapp: 9335683398";
 
             foreach($results as $row){
                 $output .= '<tr>
-                <td>'.$row->id.'</td>
-                <td>'.$row->slug.'</td>
+                <td>'.$row->id.'</td>                
+                <td><a href="/group/page/'.$row->slug.'" target="blank">'.$row->slug.'</a></td>
                 <td>'.$row->title.'</td>                
                 <td>'.$row->description.'</td>
                 <td>'.$row->status.'</td>               

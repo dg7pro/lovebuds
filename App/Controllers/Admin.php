@@ -8,6 +8,8 @@ use App\Auth;
 use App\Flash;
 use App\Mail;
 use App\Models\Aadhar;
+use App\Models\Group as GM;
+use App\Models\GroupUser;
 use App\Models\Image;
 use App\Models\Notification;
 use App\Models\Person;
@@ -87,6 +89,30 @@ class Admin extends Administered
 
         View::renderBlade('admin.whatsapp_clients');
 
+    }
+
+    public function addUserToGroup(){
+        $id = $_GET['id'];
+        $user = User::findByID($id);
+
+        $association = GroupUser::getCurrent($id);
+        //$association = [];
+        $f=[];
+
+        foreach($association as $c){
+            $f[]=$c['group_id'];
+        }
+
+        var_dump($f);
+
+//        var_dump($current_ass);
+//        exit();
+
+        $groups = GM::fetchAll();
+        //var_dump($groups);
+
+
+        View::renderBlade('admin.add_user_to_group', ['user'=>$user, 'groups'=>$groups, 'f'=>$f]);
     }
 
 

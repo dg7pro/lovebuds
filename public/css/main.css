@@ -949,6 +949,11 @@ table.li-table tr:nth-child(even) {
   border: 5px solid #ffab73;
 }
 
+.profile-sqr-image {
+  border-radius:2%;
+  border: 2px solid #d1d1d3;
+}
+
 .blur-image {
   -webkit-filter: blur(8px);
   /* Safari 6.0 - 9.0 */

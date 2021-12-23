@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Csrf;
 use App\Flash;
 use App\Models\Group as GM;
+use App\Models\GroupUser;
 use App\Models\Image;
 use App\Models\User;
 use Core\Controller;
@@ -42,10 +43,61 @@ class Group extends Controller
         }
 
         $grp = $gr->id;
-        $profiles = GM::getProfiles($grp);
+        $profiles = GM::getNewProfiles($grp);
+        $newProfiles = self::getAssociativeArrayResult($profiles);
+
+        $num = count($newProfiles);
         //var_dump($profiles);
 
-        View::renderBlade('group.list_profiles',['profiles'=>$profiles]);
+        View::renderBlade('group.list_profiles',['profiles'=>$newProfiles,'num'=>$num]);
+
+    }
+
+    /**
+     * @param $profiles
+     * @return array
+     */
+    public static function getAssociativeArrayResult($profiles): array
+    {
+        $newProfilesInfo=array();
+        $newProfileKey=array();
+        $newKey = 0;
+
+        foreach($profiles as $profileKey => $profileValue){
+
+            if(!in_array($profileValue["id"],$newProfileKey)){
+                ++$newKey;
+                $newProfilesInfo[$newKey]["id"] = $profileValue["id"];
+                $newProfilesInfo[$newKey]["pid"] = $profileValue["pid"];
+                $newProfilesInfo[$newKey]["email"] = $profileValue["email"];
+                $newProfilesInfo[$newKey]["first_name"] = $profileValue["first_name"];
+                $newProfilesInfo[$newKey]["last_name"] = $profileValue["last_name"];
+                $newProfilesInfo[$newKey]["mobile"] = $profileValue["mobile"];
+                $newProfilesInfo[$newKey]["whatsapp"] = $profileValue["whatsapp"];
+                $newProfilesInfo[$newKey]["gender"] = $profileValue["gender"];
+                $newProfilesInfo[$newKey]["dob"] = $profileValue["dob"];
+                $newProfilesInfo[$newKey]["edu"] = $profileValue["edu"];
+                $newProfilesInfo[$newKey]["occ"] = $profileValue["occ"];
+                $newProfilesInfo[$newKey]["ht"] = $profileValue["ht"];
+                $newProfilesInfo[$newKey]["manglik"] = $profileValue["manglik"];
+                $newProfilesInfo[$newKey]["religion"] = $profileValue["religion"];
+                $newProfilesInfo[$newKey]["caste"] = $profileValue["caste"];
+                $newProfilesInfo[$newKey]["lang"] = $profileValue["lang"];
+                $newProfilesInfo[$newKey]["mstatus"] = $profileValue["mstatus"];
+                $newProfilesInfo[$newKey]["income"] = $profileValue["income"];
+                $newProfilesInfo[$newKey]["country"] = $profileValue["country"];
+                $newProfilesInfo[$newKey]["state"] = $profileValue["state"];
+                $newProfilesInfo[$newKey]["district"] = $profileValue["district"];
+                $newProfilesInfo[$newKey]["group"] = $profileValue["gid"];
+
+            }
+            if($profileValue['filename']!=null && $profileValue['approved']==1 && $profileValue['linked']!=0){
+                $newProfilesInfo[$newKey]['pics'][$profileKey]["fn"] = $profileValue["filename"];
+                $newProfilesInfo[$newKey]['pics'][$profileKey]["pp"] = $profileValue["pp"];
+            }
+            $newProfileKey[]  = $profileValue["id"];
+        }
+        return $newProfilesInfo;
 
     }
 
@@ -100,6 +152,26 @@ class Group extends Controller
 
     public function successAction(){
          echo 'success';
+    }
+
+    public function addUserAction(){
+
+        $user_id = $_POST['user_id'];
+        $gu = new GroupUser();
+        if($gu->save($_POST)){
+            Flash::addMessage('User added to selected groups','success');
+            $this->redirect('/admin/add-user-to-group?id='.$user_id);
+        }else{
+            Flash::addMessage('Something went wrong could not add to groups','success');
+            $this->redirect('/admin/add-user-to-group?id='.$user_id);
+        }
+        /*if(!empty($_POST['check_list'])) {
+            foreach($_POST['check_list'] as $check) {
+                echo $check; //echoes the value set in the HTML form for each checked checkbox.
+                //so, if I were to check 1, 3, and 5 it would echo value 1, value 3, value 5.
+                //in your case, it would echo whatever $row['Report ID'] is equivalent to.
+            }
+        }*/
     }
 
 }
