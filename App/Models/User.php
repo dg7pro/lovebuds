@@ -72,15 +72,15 @@ class User extends Model
             $myinterests = json_encode($this->myinterests);
             $mycastes = json_encode($this->mycastes);
             $langs = json_encode($this->langs);
-            $credits = 25;
+            $credits = ($this->referral=='')?25:0;
             $this->otp = $this->generateOtp(4);
 
             $token = new Token();
             $hashed_token = $token->getHash();             // Saved in users table
             $this->activation_token = $token->getValue();  // To be send in email
 
-            $sql = 'INSERT INTO users (mobile, email, password_hash, for_id, gender, pid, avatar, activation_hash, myhobbies, myinterests, mycastes, langs, credits, otp)
-                    VALUES (:mobile, :email, :password_hash, :cFor, :gender, :pid, :avatar, :activation_hash, :hobbies, :interests, :castes, :langs, :credits, :otp)';
+            $sql = 'INSERT INTO users (mobile, email, password_hash, for_id, gender, pid, avatar, activation_hash, myhobbies, myinterests, mycastes, langs, credits, otp, referral)
+                    VALUES (:mobile, :email, :password_hash, :cFor, :gender, :pid, :avatar, :activation_hash, :hobbies, :interests, :castes, :langs, :credits, :otp, :referral)';
 
             $db = static::getDB();
             $stmt = $db->prepare($sql);
@@ -99,6 +99,7 @@ class User extends Model
             $stmt->bindValue(':langs',$langs,PDO::PARAM_STR);
             $stmt->bindValue(':credits',$credits,PDO::PARAM_INT);
             $stmt->bindValue(':otp', $this->otp,PDO::PARAM_INT);
+            $stmt->bindValue(':referral', $this->referral,PDO::PARAM_STR);
 
             $result = $stmt->execute();
 
@@ -701,6 +702,15 @@ class User extends Model
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public static function getProMembers(){
+
+        $sql="SELECT email, pid, first_name, last_name, mobile FROM users WHERE is_pro=1";
+        $pdo = Model::getDB();
+        $stmt=$pdo->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     /**
      * User is new if registered within 24 hrs
      * @return bool
@@ -1057,6 +1067,34 @@ class User extends Model
     {
 
         $sql = 'UPDATE users SET is_visible = 1 WHERE id = :uid';
+
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+
+        $stmt->bindValue(':uid', $uid, PDO::PARAM_INT);
+
+        return $stmt->execute();
+
+    }
+
+    public static function actOfMakingProUser($uid): bool
+    {
+
+        $sql = 'UPDATE users SET is_pro = 1 WHERE id = :uid';
+
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+
+        $stmt->bindValue(':uid', $uid, PDO::PARAM_INT);
+
+        return $stmt->execute();
+
+    }
+
+    public static function actOfRevokingProUser($uid): bool
+    {
+
+        $sql = 'UPDATE users SET is_pro = 0 WHERE id = :uid';
 
         $db = static::getDB();
         $stmt = $db->prepare($sql);
@@ -2157,7 +2195,8 @@ class User extends Model
 
     public function makeFirstImageAvatar($fileName): bool
     {
-        $credits = $this->credits + 25;
+        //$credits = $this->credits + 25;
+        $credits = ($this->referral=='')?25:0;
         $db = Model::getDB();
         $sqlP = "UPDATE users SET avatar=?,photo=?,credits=? WHERE id=?";
         $stmt = $db->prepare($sqlP);

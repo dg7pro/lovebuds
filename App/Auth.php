@@ -162,6 +162,15 @@ class Auth extends Controller
     }
 
     /**
+     * Check if current user is pro-member
+     * @return bool
+     */
+    public static function isPro(): bool
+    {
+        return self::isLoggedIn() && self::getUser()->is_pro;
+    }
+
+    /**
      * Check is current user is Guest
      * @return bool
      */

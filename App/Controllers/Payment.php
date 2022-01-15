@@ -6,9 +6,9 @@ use App\Auth;
 use App\Flash;
 use App\Models\Offer;
 use App\Models\Order;
+use App\Models\Reference;
 use App\Models\Setting;
 use App\Models\User;
-use App\Models\UserGroup;
 use App\Paytm;
 use Core\Controller;
 use Core\View;
@@ -149,6 +149,10 @@ class Payment extends Controller
 
             if ($_POST["STATUS"] == "TXN_SUCCESS") {
 
+                $amount = $_POST['TXNAMOUNT'];
+                $orderId = $_POST['ORDERID'];
+                $reason = $_POST['RESPMSG'];
+
                 //echo "Transaction Success";
 
                 Order::updateOrderStatus($_POST);
@@ -156,13 +160,13 @@ class Payment extends Controller
                 $currentOrder = Order::findByOrderId($_POST['ORDERID']);
 
                 $user = User::findByID($currentOrder->user_id);
-                $user->becomePaid();
+                //$user->becomePaid();
+                if($user->becomePaid()){
+                    $ref = new Reference();
+                    $ref->setCommission($user->referral,$amount);
+                }
 
                 //var_dump($_POST);
-
-                $amount = $_POST['TXNAMOUNT'];
-                $orderId = $_POST['ORDERID'];
-                $reason = $_POST['RESPMSG'];
 
                 View::renderBlade('payment/_success',['amount'=>$amount,'order'=>$orderId,'reason'=>$reason]);
             }

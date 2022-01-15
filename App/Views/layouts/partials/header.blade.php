@@ -19,6 +19,11 @@
                                 <a class="nav-link" href="{{'/admin/index'}}">ADMIN</a>
                             </li>
                         @endif
+                        @if($authUser->is_pro)
+                            <li class="nav-item blink">
+                                <a class="nav-link" href="{{'/pro/index'}}">PRO</a>
+                            </li>
+                        @endif
                         <li class="nav-item blink">
                             <a class="nav-link" href="{{'/search/index'}}">SEARCH</a>
                         </li>

@@ -31,8 +31,10 @@
             <button type="button" id="btn_unblock" class="btn btn-sm btn-yellow" onclick="unblockMember({{$user->id}})" {{!$user->is_block?'disabled':''}}>Unblock</button>
             <button type="button" id="btn_cblock" class="btn btn-sm btn-yellow" onclick="cBlockMember({{$user->id}})" {{$user->c_block?'disabled':''}}>cBlocked</button>
             <button type="button" id="btn_cunblock" class="btn btn-sm btn-yellow" onclick="cUnblockMember({{$user->id}})" {{!$user->c_block?'disabled':''}}>cUnblock</button>
-            <button type="button" id="btn_hide" class="btn btn-sm btn-pink" onclick="hideMember({{$user->id}})" {{!$user->is_visible?'disabled':''}}>Hide</button>
-            <button type="button" id="btn_visible" class="btn btn-sm btn-green" onclick="visibleMember({{$user->id}})" {{$user->is_visible?'disabled':''}}>Visible</button>
+            <button type="button" id="btn_hide" class="btn btn-sm btn-green" onclick="hideMember({{$user->id}})" {{!$user->is_visible?'disabled':''}}>Hide</button>
+            <button type="button" id="btn_visible" class="btn btn-sm btn-green" onclick="visibleMember({{$user->id}})" {{$user->is_visible?'disabled':''}}>Unhide</button>
+            <button type="button" id="make_pro" class="btn btn-sm btn-pink" onclick="makeProMember({{$user->id}})" {{$user->is_pro?'disabled':''}}>MakePro</button>
+            <button type="button" id="revoke_pro" class="btn btn-sm btn-pink" onclick="revokeProMember({{$user->id}})" {{!$user->is_pro?'disabled':''}}>RevokePro</button>
         </div>
         <div class="row justify-content-center mb-5" id="basic-info-card">
             <div class="col-xl-12">
@@ -878,6 +880,45 @@
                 }
             });
         }
+
+        function makeProMember(id){
+
+            console.log('make pro member');
+            console.log(id);
+            $.ajax({
+                type:'POST',
+                url:'/adjax/make-pro-member',
+                data:{
+                    id:id
+                },
+                dataType: "json",
+                success:function(data,status){
+                    console.log(data);
+                    console.log(status);
+                    //$('#ds_update').html(data.opt);
+                }
+            });
+        }
+
+        function revokeProMember(id){
+
+            console.log('revoke pro membership');
+            console.log(id);
+            $.ajax({
+                type:'POST',
+                url:'/adjax/revoke-pro-member',
+                data:{
+                    id:id
+                },
+                dataType: "json",
+                success:function(data,status){
+                    console.log(data);
+                    console.log(status);
+                    //$('#ds_update').html(data.opt);
+                }
+            });
+        }
+
     </script>
 
     <script>

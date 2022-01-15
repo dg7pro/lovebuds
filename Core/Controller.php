@@ -103,4 +103,11 @@ abstract class Controller
             throw new \Exception('You are trying to access Administered area.', 401);
         }
     }
+
+    public function requirePro(){
+
+        if(!Auth::isPro()){
+            throw new \Exception('You are trying to access Administered area.', 401);
+        }
+    }
 }

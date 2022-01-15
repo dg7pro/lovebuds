@@ -78,6 +78,12 @@
                 <a href="{{'/admin/input-add-number'}}" class="btn btn-pink">Add</a>
                 <a href="{{'/admin/whatsapp-clients'}}" class="btn btn-pink">Send Msg </a>
             </div>
+
+            <div class="admin-box">
+                <h5 class="admin-title">Pro Membership</h5>
+                <p class="admin-text">Manage, view and handle Pro members</p>
+                <a href="{{'/admin/pro-users'}}" class="btn btn-blue">Pro Users</a>
+            </div>
         </div>
 
 

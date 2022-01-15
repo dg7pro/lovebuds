@@ -7,6 +7,7 @@ use App\Auth;
 use App\Csrf;
 use App\Flash;
 use App\Models\Notification;
+use App\Models\Reference;
 use App\Models\User;
 use App\Models\UserVariables;
 use App\Sms;
@@ -48,6 +49,15 @@ class Register extends Controller
 
             // Send email
             //$user->sendActivationEmail();
+
+            if(isset($_COOKIE['ju_reference_code'])){
+                $referer = new Reference();
+                $flag=$referer->setSignup($_COOKIE['ju_reference_code'],$user->id);
+
+                if($flag){
+                    setcookie("ju_reference_code", "", time() - 3600, "/");
+                }
+            }
 
             // Notify user
             $notification = new Notification();

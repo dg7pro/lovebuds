@@ -22,6 +22,7 @@
 
             <div>
                 <input type="hidden" name="token" value="{{$_SESSION['csrf_token']}}" />
+                <input type="hidden" name="referral" value="{{$_COOKIE['ju_reference_code'] ?? ''}}" />
             </div>
             <div class="form-group inputWithIcon">
                 <select id="cFor" name="cFor" required>

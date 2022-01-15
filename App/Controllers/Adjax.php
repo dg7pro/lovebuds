@@ -11,9 +11,10 @@ use App\Models\Offer;
 use App\Models\Order;
 use App\Models\Group as GM;
 use App\Models\Person;
+use App\Models\Reference;
 use App\Models\Setting;
 use App\Models\User;
-use function PHPUnit\Framework\isTrue;
+use App\Models\Users;
 
 /**
  * Class Adjax
@@ -959,6 +960,36 @@ Whatsapp: 9335683398";
 
     }
 
+    public function makeProMemberAction(){
+
+        if(isset($_POST['id'])){
+
+            $result = User::actOfMakingProUser($_POST['id']);
+            if($result){
+                $msg = "User profile is visible to others";
+            }
+
+        }
+        $json_data = ['msg'=>$msg];
+        echo json_encode($json_data);
+
+    }
+
+    public function revokeProMemberAction(){
+
+        if(isset($_POST['id'])){
+
+            $result = User::actOfRevokingProUser($_POST['id']);
+            if($result){
+                $msg = "User profile is not visible to others";
+            }
+
+        }
+        $json_data = ['msg'=>$msg];
+        echo json_encode($json_data);
+
+    }
+
     /*
      * ============================================
      * Update Section
@@ -1772,6 +1803,321 @@ Whatsapp: 9335683398";
 
     }
 
+    /* ==================================================================
+    * Admin Pro members Section: Ajax 2 Functions Bundle
+    * Used in
+    * ====================================================================
+    * */
 
+    /**
+     * Ajax Call
+     * Shows all pro users to the admin
+     */
+    public function proUsersAction(){
+
+        $limit = 10;
+        $page = 1;
+        $type = $_POST['ut'];
+
+        if($_POST['page'] > 1){
+            $start = (($_POST['page']-1) * $limit);
+            $page = $_POST['page'];
+        }else{
+            $start = 0;
+        }
+
+        $_users = new Users();
+        $results = $_users->proUsers($start,$limit,$type);
+        $total_data = $_users->proUsersCount($type);
+
+        // cv- contacts viewed; ac- address count
+        $output = '<label>Total Records - '.$total_data.'</label>
+            <table class="table table-striped table-bordered">
+                <tr>
+                    <th>Id</th>                     
+                    <th>Name (ProfileId)</th>
+                    <th>Pro Dashboard</th>             
+                </tr>';
+
+        if($total_data > 0){
+
+            foreach($results as $row){
+                $output .= '<tr>
+                <td>'.$row->id.'</td>
+                <td>'.$row->first_name.' <a href="/profile/'.$row->pid.'" target="blank">'.$row->pid.'</a></td>
+                <td><a href="/admin/pro-stats?pro_id='.$row->id.'" target="blank">View</a></td>                             
+                </tr>';
+            }
+
+        }
+        else{
+
+            $output .= '<tr><td colspan="12">No data found</td></tr>';
+
+        }
+
+        $output .= '</table></br>
+            <div align="center">
+                <ul class="pagination">
+        ';
+
+        $total_links = ceil($total_data/$limit);
+        $previous_link = '';
+        $next_link = '';
+        $page_link ='';
+        if(!$total_data){
+            $page_array[]=1;
+        }
+
+        if($total_links > 4){
+            if($page<5){
+                for($count=1; $count<=5; $count++){
+
+                    $page_array[]=$count;
+                }
+                $page_array[]='...';
+                $page_array[]=$total_links;
+            }else{
+                $end_limit = $total_links - 5 ;
+                if($page > $end_limit){
+
+                    $page_array[] = 1;
+                    $page_array[] = '...';
+
+                    for($count=$end_limit; $count<=$total_links; $count++){
+                        $page_array[]=$count;
+                    }
+                }else{
+                    $page_array[]=1;
+                    $page_array[]='...';
+                    for($count = $page-1; $count<=$page+1; $count++){
+                        $page_array[]=$count;
+                    }
+                    $page_array[]='...';
+                    $page_array[]=$total_links;
+                }
+            }
+        }
+        else{
+            for($count=1; $count <= $total_links; $count++){
+                $page_array[] = $count;
+            }
+        }
+        // checked
+
+        for($count = 0; $count < count($page_array); $count++)
+        {
+            if($page == $page_array[$count])
+            {
+                $page_link .= '<li class="page-item active">
+                      <a class="page-link" href="#">'.$page_array[$count].' <span class="sr-only">(current)</span></a>
+                    </li>
+                    ';
+
+                $previous_id = $page_array[$count] - 1;
+                if($previous_id > 0)
+                {
+                    $previous_link = '<li class="page-item"><a class="page-link" href="javascript:void(0)" data-page_number="'.$previous_id.'">Previous</a></li>';
+                }
+                else
+                {
+                    $previous_link = '<li class="page-item disabled">
+                        <a class="page-link" href="#">Previous</a>
+                      </li>
+                      ';
+                }
+                $next_id = $page_array[$count] + 1;
+                if($next_id >= $total_links)
+                {
+                    $next_link = '<li class="page-item disabled">
+                        <a class="page-link" href="#">Next</a>
+                      </li>';
+                }
+                else
+                {
+                    $next_link = '<li class="page-item"><a class="page-link" href="javascript:void(0)" data-page_number="'.$next_id.'">Next</a></li>';
+                }
+            }
+            else
+            {
+                if($page_array[$count] == '...')
+                {
+                    $page_link .= '
+                      <li class="page-item disabled">
+                          <a class="page-link" href="#">...</a>
+                      </li>
+                      ';
+                }
+                else
+                {
+                    $page_link .= '<li class="page-item"><a class="page-link" href="javascript:void(0)" 
+                    data-page_number="'.$page_array[$count].'">'.$page_array[$count].'</a></li>';
+                }
+            }
+        }
+
+        $output .= $previous_link . $page_link . $next_link;
+        $output .= '</ul></div>';
+
+        echo $output;
+    }
+
+
+    public function proStatsAction(){
+
+        $limit = 10;
+        $page = 1;
+        $type = $_POST['category'];
+
+        $uid = $_POST['uid'];
+
+
+        if($_POST['page'] > 1){
+            $start = (($_POST['page']-1) * $limit);
+            $page = $_POST['page'];
+        }else{
+            $start = 0;
+        }
+
+        $ref = new Reference();
+        $results = $ref->myFootprints($start,$limit,$type,$uid);
+        $total_data = $ref->myFootprintsCount($type,$uid);
+
+        $output = '<label>Total Records - '.$total_data.'</label>
+            <table class="table table-striped table-bordered">
+                <tr>
+                    <th>Code</th>
+                    <th>Signup</th>  
+                    <th>Name (ProfileId)</th>           
+                    <th>Paid</th>
+                    <th>Amount</th>
+                    <th>Earning</th>                   
+                </tr>';
+
+        if($total_data > 0){
+
+            foreach($results as $row){
+                $output .= '<tr>
+                <td>'.$row->user_code.'</td>
+                <td>'.($row->signup=='yes'?'<i class="fa fa-check-circle text-success" aria-hidden="true"></i>':'<i class="fa fa-times-circle text-danger" aria-hidden="true"></i>').'</td>
+                <td>'.$row->fname.' <a href="/profile/'.$row->pid.'" target="blank">'.$row->pid.'</a></td>             
+                <td>'.($row->signup=='yes'? ($row->pay?'<i class="fa fa-check-circle text-success" aria-hidden="true"></i>':'<i class="fa fa-minus-circle text-secondary" aria-hidden="true"></i>') :'').'</td>                                
+                <td>'.$row->amount_paid.'</td>
+                <td>'.$row->earning.'</td>               
+                </tr>';
+            }
+
+        }
+        else{
+
+            $output .= '<tr><td colspan="12">No data found</td></tr>';
+
+        }
+
+        $output .= '</table></br>
+            <div align="center">
+                <ul class="pagination">
+        ';
+
+        $total_links = ceil($total_data/$limit);
+        $previous_link = '';
+        $next_link = '';
+        $page_link ='';
+        if(!$total_data){
+            $page_array[]=1;
+        }
+
+        if($total_links > 4){
+            if($page<5){
+                for($count=1; $count<=5; $count++){
+
+                    $page_array[]=$count;
+                }
+                $page_array[]='...';
+                $page_array[]=$total_links;
+            }else{
+                $end_limit = $total_links - 5 ;
+                if($page > $end_limit){
+
+                    $page_array[] = 1;
+                    $page_array[] = '...';
+
+                    for($count=$end_limit; $count<=$total_links; $count++){
+                        $page_array[]=$count;
+                    }
+                }else{
+                    $page_array[]=1;
+                    $page_array[]='...';
+                    for($count = $page-1; $count<=$page+1; $count++){
+                        $page_array[]=$count;
+                    }
+                    $page_array[]='...';
+                    $page_array[]=$total_links;
+                }
+            }
+        }
+        else{
+            for($count=1; $count <= $total_links; $count++){
+                $page_array[] = $count;
+            }
+        }
+        // checked
+
+        for($count = 0; $count < count($page_array); $count++)
+        {
+            if($page == $page_array[$count])
+            {
+                $page_link .= '<li class="page-item active">
+                      <a class="page-link" href="#">'.$page_array[$count].' <span class="sr-only">(current)</span></a>
+                    </li>
+                    ';
+
+                $previous_id = $page_array[$count] - 1;
+                if($previous_id > 0)
+                {
+                    $previous_link = '<li class="page-item"><a class="page-link" href="javascript:void(0)" data-page_number="'.$previous_id.'">Previous</a></li>';
+                }
+                else
+                {
+                    $previous_link = '<li class="page-item disabled">
+                        <a class="page-link" href="#">Previous</a>
+                      </li>
+                      ';
+                }
+                $next_id = $page_array[$count] + 1;
+                if($next_id >= $total_links)
+                {
+                    $next_link = '<li class="page-item disabled">
+                        <a class="page-link" href="#">Next</a>
+                      </li>';
+                }
+                else
+                {
+                    $next_link = '<li class="page-item"><a class="page-link" href="javascript:void(0)" data-page_number="'.$next_id.'">Next</a></li>';
+                }
+            }
+            else
+            {
+                if($page_array[$count] == '...')
+                {
+                    $page_link .= '
+                      <li class="page-item disabled">
+                          <a class="page-link" href="#">...</a>
+                      </li>
+                      ';
+                }
+                else
+                {
+                    $page_link .= '<li class="page-item"><a class="page-link" href="javascript:void(0)" 
+                    data-page_number="'.$page_array[$count].'">'.$page_array[$count].'</a></li>';
+                }
+            }
+        }
+
+        $output .= $previous_link . $page_link . $next_link;
+        $output .= '</ul></div>';
+
+        echo $output;
+    }
 
 }

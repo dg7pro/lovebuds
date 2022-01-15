@@ -13,6 +13,7 @@ use App\Models\GroupUser;
 use App\Models\Image;
 use App\Models\Notification;
 use App\Models\Person;
+use App\Models\Reference;
 use App\Models\Setting;
 use App\Models\User;
 use App\Models\UserVariables;
@@ -455,5 +456,42 @@ class Admin extends Administered
         View::renderBlade('admin.offers_manager');
     }
 
+    /**
+     * Display pro users list to admin
+     * @return void
+     */
+    public function proUsersAction(){
+
+        $pro_members = User::getProMembers();
+        $pro_count = count($pro_members);
+        View::renderBlade('admin.pro_users',['pct'=>$pro_count]);
+    }
+
+    /**
+     * Display Statistics of particular
+     * pro-members
+     * @return void
+     */
+    public function proStatsAction(){
+
+        $tap=0;
+        $ear=0;
+        $uid = $_GET['pro_id'];
+        $ref = new Reference();
+        $footprint = $ref->getFootprint($uid);
+        $signup = $ref->getSignup($uid);
+        $paid_members = $ref->getPaidMembers($uid);
+
+        $paid = count($paid_members);
+
+        foreach($paid_members as $mem){
+            $tap+=$mem['amount_paid']; // total amount paid by users
+            $ear+=$mem['earning'];  // total earnings or commission of pro member
+        }
+
+        View::renderBlade('admin.pro_stats',
+            ['footprint'=>$footprint,'signup'=>$signup,'paid'=>$paid,'tap'=>$tap,'ear'=>$ear,'uid'=>$uid]);
+
+    }
 
 }

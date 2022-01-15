@@ -9,6 +9,7 @@ use App\Lib\Helpers;
 use App\Models\Image;
 use App\Models\Member;
 use App\Models\Notification;
+use App\Models\Reference;
 use App\Models\Setting;
 use App\Models\User;
 use App\Models\UserVariables;
@@ -109,17 +110,42 @@ class Home extends Controller
 
     public function testAction(){
 
+        //setcookie("ju_reference_code", "", time() - 3600, "/");
         //$cUser = User::findByID(1);
         //var_dump($cUser->langs);
         //echo $cUser->langs == "[]"? json_encode($cUser->langs):'false';
 
 
-        $results = User::testSql2();
-        Helpers::dnd($results);
+        /*$results = User::testSql2();
+        Helpers::dnd($results);*/
         /*$notice = new Notification();
         $nos = $notice->fetchAll(Auth::getUser());
         var_dump($nos);*/
+        $cookie_name = "ju_reference_code";
 
+       /* if(isset($_COOKIE[$cookie_name])){
+            setcookie("ju_reference_code", "", time() - 1);
+        }*/
+        if(!isset($_COOKIE[$cookie_name])) {
+            echo "Cookie named '" . $cookie_name . "' is not set!";
+        } else {
+            echo "Cookie '" . $cookie_name . "' is set!<br>";
+            echo "Value is: " . $_COOKIE[$cookie_name];
+        }
+
+    }
+
+    public function removeReferenceAction(){
+        setcookie("ju_reference_code", "", time() - 3600, "/");
+    }
+
+    public function testNewAction(){
+        $cookie_value = uniqid();
+
+        for($i=1;$i<=10;$i++){
+            echo $cookie_value;
+            echo "<br>";
+        }
     }
 
     public function fbImgAction(){
@@ -176,6 +202,28 @@ class Home extends Controller
         $newImage->persistUserImage2($user);
 
 
+    }
+
+    public function testReferer(){
+
+        /*$flag= false;
+        if(isset($_COOKIE['ju_reference_code'])){
+            $referer = new Reference();
+            $flag = $referer->setSignup($_COOKIE['ju_reference_code'],99);
+        }
+        echo $flag;*/
+
+        /*$referer = new Reference();
+        $x = $referer->getPaid();
+        var_dump($x);*/
+
+        $user = User::findByID(120);
+        //var_dump($user);
+        //$user->becomePaid();
+        if($user->becomePaid()){
+            $ref = new Reference();
+            $ref->setCommission($user->referral,710);
+        }
     }
 
     public function testTextlocalAction(){
