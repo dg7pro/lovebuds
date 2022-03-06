@@ -33,7 +33,7 @@
                     <th>Action</th>
                 </tr>
                 <tr>
-                    <td>Send Complete your profile Reminder</td>
+                    <td><a href="{{'/admin/inactive-users-list'}}"> Send Complete your profile Reminder</a></td>
                     <td>{{$iuc}}</td>
                     <td>
                         {{--<i class="fa fa-trash-alt text-red" aria-hidden="true"> </i>--}}
@@ -42,7 +42,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>Send New matches Reminder</td>
+                    <td><a href="{{'/admin/active-users-list'}}">Send New matches Reminder</a></td>
                     <td>{{$auc}}</td>
                     <td>
                         {{--<i class="fa fa-trash-alt text-red" aria-hidden="true"> </i>--}}
@@ -51,7 +51,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>Send upload photo reminder</td>
+                    <td><a href="{{'/admin/non-photo-users-list'}}">Send upload photo reminder</a></td>
                     <td>{{$npc}}</td>
                     <td>
                         <i class="fas fa-paper-plane text-success" aria-hidden="true"> </i>

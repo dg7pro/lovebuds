@@ -299,6 +299,44 @@ class Admin extends Administered
 
     }
 
+    /* *****************************************
+    *  upload your Photo Reminder Emails
+    *  Next 4 functions
+    * ******************************************/
+
+
+    /**
+     * @return void
+     */
+    public function nonPhotoUsersListAction(){
+
+        $nonPhotoUsers = User::getNonPhotoUsers();
+        View::renderBlade('admin.non_photo_users',['nonPhotoUsers'=>$nonPhotoUsers]);
+
+    }
+
+    /**
+     * @return void
+     */
+    public function sendPhotoUploadMessageAction(){
+
+        //var_dump($_POST);
+        //echo"<br>";
+        $new_arr=array();
+
+        $nonPhotoUsers = User::getNonPhotoUsers();
+
+        foreach($nonPhotoUsers as $x){
+            if(in_array($x['id'],$_POST['email_list'])){
+                $new_arr[]=$x;
+            }
+        }
+
+        $this->sendPhotoUploadEmail($new_arr);
+
+    }
+
+
     /**
      * Send Bulk photo upload reminder emails
      */
@@ -306,8 +344,16 @@ class Admin extends Administered
 
         $nonPhotoUsers = User::getNonPhotoUsers();
 
-        $recL = static::getEmailList($nonPhotoUsers);              // recipientList
-        $profiles = static::getAssociativeArrayResult($nonPhotoUsers);      // recipientVariable
+        $this->sendPhotoUploadEmail($nonPhotoUsers);
+
+        //var_dump($result);
+
+    }
+
+    private function sendPhotoUploadEmail($usersList){
+
+        $recL = static::getEmailList($usersList);              // recipientList
+        $profiles = static::getAssociativeArrayResult($usersList);      // recipientVariable
 
         $recV = json_encode($profiles);
 
@@ -321,7 +367,41 @@ class Admin extends Administered
             $this->redirect('/admin/bulkMessage');
         }
 
-        //var_dump($result);
+    }
+
+    /* *****************************************
+     *  Complete your Profile Reminder Emails
+     *  Next 4 functions
+     * ******************************************/
+
+    /**
+     * @return void
+     */
+    public function inactiveUsersListAction(){
+
+        $inactiveUsers = User::getAllInactiveUsers();
+        View::renderBlade('admin.inactive_users',['inactiveUsers'=>$inactiveUsers]);
+
+    }
+
+    /**
+     * @return void
+     */
+    public function completeYourProfileMessageAction(){
+
+        //var_dump($_POST);
+        echo"<br>";
+        $new_arr=array();
+
+        $inactiveUsers = User::getAllInactiveUsers();
+
+        foreach($inactiveUsers as $x){
+            if(in_array($x['id'],$_POST['email_list'])){
+                $new_arr[]=$x;
+            }
+        }
+
+        $this->completeYourProfileEmail($new_arr);
 
     }
 
@@ -332,8 +412,18 @@ class Admin extends Administered
 
         $allInactiveUsers = User::getAllInactiveUsers();
 
-        $recL = static::getEmailList($allInactiveUsers);              // recipientList
-        $profiles = static::getAssociativeArrayResult($allInactiveUsers);      // recipientVariable
+        $this->completeYourProfileEmail($allInactiveUsers);
+
+    }
+
+    /**
+     * @param $usersList
+     * @return void
+     */
+    private function completeYourProfileEmail($usersList){
+
+        $recL = static::getEmailList($usersList);              // recipientList
+        $profiles = static::getAssociativeArrayResult($usersList);      // recipientVariable
 
         $recV = json_encode($profiles);
 
@@ -346,6 +436,38 @@ class Admin extends Administered
             Flash::addMessage('Message queued to be send','success');
             $this->redirect('/admin/bulkMessage');
         }
+    }
+
+    /* *****************************************
+     *  New matches waiting Reminder Emails
+     *  Next 4 functions
+     * ******************************************/
+
+    /**
+     * @return void
+     */
+    public function activeUsersListAction(){
+
+        $activeUsers = User::getAllActiveUsers();
+        View::renderBlade('admin.active_users',['activeUsers'=>$activeUsers]);
+
+    }
+
+    public function newMatchesMessageAction(){
+
+        //var_dump($_POST);
+        //echo"<br>";
+        $new_arr=array();
+
+        $activeUsers = User::getAllActiveUsers();
+
+        foreach($activeUsers as $x){
+            if(in_array($x['id'],$_POST['email_list'])){
+                $new_arr[]=$x;
+            }
+        }
+        //var_dump($new_arr);
+        $this->newMatchesEmail($new_arr);
 
     }
 
@@ -356,8 +478,14 @@ class Admin extends Administered
 
         $allActiveUsers = User::getAllActiveUsers();
 
-        $recL = static::getEmailList($allActiveUsers);              // recipientList
-        $profiles = static::getAssociativeArrayResult($allActiveUsers);      // recipientVariable
+        $this->newMatchesEmail($allActiveUsers);
+
+    }
+
+    private function newMatchesEmail($usersList){
+
+        $recL = static::getEmailList($usersList);              // recipientList
+        $profiles = static::getAssociativeArrayResult($usersList);      // recipientVariable
 
         $recV = json_encode($profiles);
 
@@ -370,6 +498,7 @@ class Admin extends Administered
             Flash::addMessage('Message queued to be send','success');
             $this->redirect('/admin/bulkMessage');
         }
+
 
     }
 

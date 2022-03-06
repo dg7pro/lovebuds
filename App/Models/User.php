@@ -668,7 +668,7 @@ class User extends Model
     public static function getNonPhotoUsers()
     {
 
-        $sql="SELECT email, pid, first_name, last_name, mobile FROM users WHERE is_active=1 AND photo=0";
+        $sql="SELECT id, email, pid, first_name, last_name, mobile FROM users WHERE is_active=1 AND photo=0";
         $pdo = Model::getDB();
         $stmt=$pdo->prepare($sql);
         $stmt->execute();
@@ -682,7 +682,7 @@ class User extends Model
      */
     public static function getAllActiveUsers()
     {
-        $sql="SELECT email, pid, first_name, last_name, mobile FROM users WHERE is_active=1";
+        $sql="SELECT id, email, pid, first_name, last_name, mobile FROM users WHERE is_active=1";
         $pdo = Model::getDB();
         $stmt=$pdo->prepare($sql);
         $stmt->execute();
@@ -695,7 +695,7 @@ class User extends Model
      */
     public static function getAllInactiveUsers()
     {
-        $sql="SELECT email, pid, first_name, last_name, mobile FROM users WHERE is_active=0";
+        $sql="SELECT id, email, pid, first_name, last_name, mobile FROM users WHERE is_active=0";
         $pdo = Model::getDB();
         $stmt=$pdo->prepare($sql);
         $stmt->execute();
