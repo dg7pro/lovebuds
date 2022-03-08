@@ -357,10 +357,12 @@ class Admin extends Administered
 
         $recV = json_encode($profiles);
 
+        $sub = 'upload your photo';
+
         $text = View::getTemplate('mailgun/photo_upload_reminder.txt');
         $html = View::getTemplate('mailgun/photo_upload_reminder.html');
 
-        $result = Mail::sendBulkEmail($recL,$recV,$text,$html);            // Tested
+        $result = Mail::sendBulkEmail($recL,$recV,$text,$html,$sub);            // Tested
 
         if($result){
             Flash::addMessage('Message queued to be send','success');
@@ -427,10 +429,12 @@ class Admin extends Administered
 
         $recV = json_encode($profiles);
 
+        $sub = 'complete your profile';
+
         $text = View::getTemplate('mailgun/complete_profile_reminder.txt');
         $html = View::getTemplate('mailgun/complete_profile_reminder.html');
 
-        $result = Mail::sendBulkEmail($recL,$recV,$text,$html);            // Tested
+        $result = Mail::sendBulkEmail($recL,$recV,$text,$html,$sub);            // Tested
 
         if($result){
             Flash::addMessage('Message queued to be send','success');
@@ -489,10 +493,12 @@ class Admin extends Administered
 
         $recV = json_encode($profiles);
 
+        $sub = 'new matches are waiting for you';
+
         $text = View::getTemplate('mailgun/new_matches_reminder.txt');
         $html = View::getTemplate('mailgun/new_matches_reminder.html');
 
-        $result = Mail::sendBulkEmail($recL,$recV,$text,$html);            // Tested
+        $result = Mail::sendBulkEmail($recL,$recV,$text,$html,$sub);            // Tested
 
         if($result){
             Flash::addMessage('Message queued to be send','success');

@@ -48,7 +48,7 @@ class Register extends Controller
         if($user->save()){
 
             // Send email
-            //$user->sendActivationEmail();
+            $user->sendActivationEmail();
 
             if(isset($_COOKIE['ju_reference_code'])){
                 $referer = new Reference();

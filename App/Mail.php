@@ -62,7 +62,7 @@ class Mail
      * @param $html
      * @return SendResponse
      */
-    public static function sendBulkEmail($recipientL, $recipientV, $text, $html): SendResponse
+    public static function sendBulkEmail($recipientL, $recipientV, $text, $html, $sub): SendResponse
     {
 
         # Instantiate the client.
@@ -72,7 +72,7 @@ class Mail
         $params =  array(
             'from'    => 'JuMatrimony <admin@jumatrimony.com>',
             'to'      => $recipientL,
-            'subject' => 'Hey %recipient.first_name%',
+            'subject' => 'Hey %recipient.first_name% '.$sub,
             'text'  => $text,
             'html' => $html,
             'recipient-variables' => $recipientV

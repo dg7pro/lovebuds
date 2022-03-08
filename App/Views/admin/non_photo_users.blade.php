@@ -26,7 +26,7 @@
 
         <div class="table-responsive mt-5" id="dynamic_content">
             <h5 class="text-primary">Send Bulk Email:</h5>
-            <form action="{{'/admin/new-matches-message'}}" method="post">
+            <form action="{{'/admin/send-photo-upload-message'}}" method="post">
                 <table class="table table-striped table-bordered">
                     <tr>
                         <th>Id</th>
