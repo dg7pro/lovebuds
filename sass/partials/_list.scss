@@ -2,12 +2,12 @@
 .pageset{
   display: grid;
   //min-height: 100vh;
-  margin: 3rem 0 7rem;
+  margin: 0.5rem 0 7rem;
 }
 
 .cardset{
-  margin-top: 3rem;
-  background-color: #fff5ef;
+  margin-top: 0.5rem;
+  //background-color: #fff5ef;
   display: grid;
   // grid-template-columns: 40% 30% 30%;
   //grid-template-columns: 1fr 1fr 1fr;
@@ -25,12 +25,13 @@
 }
 
 .cardset > div{
-  background: #eee;
+  //background: #eee;
+  background: #fff9b0;
   padding: 1em;
 }
 
 .cardset > div:nth-child(odd){
-  background: #ddd;
+  //background: #ddd;
   padding: 1em;
 }
 //

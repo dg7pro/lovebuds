@@ -51,7 +51,7 @@
 
             <div class="admin-box"><h5 class="admin-title">Group Settings</h5>
                 <p class="admin-text">Complete List and Management of different Groups</p>
-                <a href="{{'/admin/groupsManager'}}" class="btn btn-pink">Group Settings </a>
+                <a href="{{'/admin/groups-manager'}}" class="btn btn-pink">Group Settings </a>
             </div>
 
             <div class="admin-box">

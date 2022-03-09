@@ -14,13 +14,22 @@
             border-radius: 0!important;
         }
 
+        .main_group{
+            max-width: 1100px;
+            overflow: hidden;
+            padding: 0 2rem;
+            margin: 6rem auto auto;
+        }
+
     </style>
 @endsection
 
 @section('content')
 
-    <!-- userprofile (up) section starts -->
-    <!-- groups section starts -->
+    <section class="main_group">
+        <h3>{{$title}}</h3>
+    </section>
+
     <section class="pageset">
         <div class="container cardset">
 

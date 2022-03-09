@@ -949,11 +949,6 @@ table.li-table tr:nth-child(even) {
   border: 5px solid #ffab73;
 }
 
-.profile-sqr-image {
-  border-radius:2%;
-  border: 2px solid #d1d1d3;
-}
-
 .blur-image {
   -webkit-filter: blur(8px);
   /* Safari 6.0 - 9.0 */
@@ -1160,12 +1155,11 @@ table.li-table tr:nth-child(even) {
 
 .pageset {
   display: grid;
-  margin: 3rem 0 7rem;
+  margin: 0.5rem 0 7rem;
 }
 
 .cardset {
-  margin-top: 3rem;
-  background-color: #fff5ef;
+  margin-top: 0.5rem;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   grid-gap: 1em;
@@ -1173,12 +1167,11 @@ table.li-table tr:nth-child(even) {
 }
 
 .cardset > div {
-  background: #eee;
+  background: #fff9b0;
   padding: 1em;
 }
 
 .cardset > div:nth-child(odd) {
-  background: #ddd;
   padding: 1em;
 }
 

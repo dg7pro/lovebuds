@@ -30,17 +30,31 @@ class Group extends Controller
         View::renderBlade('group.create');
     }
 
-    public function groupTestAction(){
+    public function groupPageAction(){
 
         $this_group = $this->route_params['group'];
+        //echo $this_group;
 
-        echo $this_group;
+        $gr = GM::findBySlug($this_group);
+        if(!$gr){
+            throw new Exception('This group does not exist.', 404);
+        }
+
+        $grp = $gr->id;
+        $profiles = GM::getNewProfiles($grp);
+        $newProfiles = self::getAssociativeArrayResult($profiles);
+
+        $num = count($newProfiles);
+        //var_dump($profiles);
+
+        View::renderBlade('group.list_profiles',['profiles'=>$newProfiles,'num'=>$num,'title'=>$gr->title]);
+
     }
 
     /**
      * @throws Exception
      */
-    public function pageAction(){
+    /*public function pageAction(){
 
         $slug = $this->route_params['slug'];
 
@@ -58,7 +72,7 @@ class Group extends Controller
 
         View::renderBlade('group.list_profiles',['profiles'=>$newProfiles,'num'=>$num]);
 
-    }
+    }*/
 
     /**
      * @param $profiles

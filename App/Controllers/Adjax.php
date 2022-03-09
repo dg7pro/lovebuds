@@ -1333,7 +1333,7 @@ Whatsapp: 9335683398";
             foreach($results as $row){
                 $output .= '<tr>
                 <td>'.$row->id.'</td>                
-                <td><a href="/group/page/'.$row->slug.'" target="blank">'.$row->slug.'</a></td>
+                <td><a href="/'.$row->slug.'" target="blank">'.$row->slug.'</a></td>
                 <td>'.$row->title.'</td>                
                 <td>'.$row->description.'</td>
                 <td>'.$row->status.'</td>               
