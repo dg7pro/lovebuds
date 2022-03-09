@@ -33,7 +33,7 @@
             <input type="submit" name="login-submit" value="Log In" class="btn btn-orange">
             <a href="{{'/password/forgot'}}">Forgot Password ?</a>
         </form>
-        <p class="may-2">Don't have an account yet? <a href="{{'/register/index'}}">Sign Up</a></p>
+        <p class="may-2">Don't have an account yet? <a href="{{'/register'}}">Sign Up</a></p>
     </section>
     <!-- login ends -->
 

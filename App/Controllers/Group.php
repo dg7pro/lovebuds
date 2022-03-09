@@ -21,13 +21,20 @@ class Group extends Controller
      */
     public function indexAction()
     {
-        View::renderBlade('group/index');
+        View::renderBlade('group.index');
     }
 
     public function createAction()
     {
         $this->requireLogin();
-        View::renderBlade('group/create');
+        View::renderBlade('group.create');
+    }
+
+    public function groupTestAction(){
+
+        $this_group = $this->route_params['group'];
+
+        echo $this_group;
     }
 
     /**

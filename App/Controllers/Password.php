@@ -22,7 +22,7 @@ class Password extends \Core\Controller
      */
     public function forgotAction()
     {
-        View::renderBlade('password/forgot');
+        View::renderBlade('password.forgot');
     }
 
     /**
@@ -30,7 +30,7 @@ class Password extends \Core\Controller
      */
     public function successAction()
     {
-        View::renderBlade('password/reset-success');
+        View::renderBlade('password.reset-success');
     }
 
     /**
@@ -55,7 +55,7 @@ class Password extends \Core\Controller
 
         User::sendPasswordReset($_POST['email']);
 
-        View::renderBlade('password/reset-requested');
+        View::renderBlade('password.reset-requested');
     }
 
     /**
@@ -69,7 +69,7 @@ class Password extends \Core\Controller
 
         $user = $this->getUserOrExit($token);
 
-        View::renderBlade('password/reset', [
+        View::renderBlade('password.reset', [
             'token' => $token
         ]);
     }
@@ -95,7 +95,7 @@ class Password extends \Core\Controller
             foreach($user->errors as $error){
                 Flash::addMessage($error,'danger');
             }
-            View::renderBlade('password/reset', [
+            View::renderBlade('password.reset', [
                 'token' => $token
             ]);
 
@@ -120,7 +120,7 @@ class Password extends \Core\Controller
 
         } else {
 
-            View::renderBlade('password/token-expired');
+            View::renderBlade('password.token-expired');
             exit;
 
         }
@@ -134,7 +134,7 @@ class Password extends \Core\Controller
         $email = filter_var($arr['email'],FILTER_SANITIZE_EMAIL);
         if(!filter_var($email,FILTER_VALIDATE_EMAIL)){
             Flash::addMessage('Invalid Email. Please enter a valid email', Flash::DANGER);
-            View::renderBlade('password/forgot');
+            View::renderBlade('password.forgot');
         }
 
     }

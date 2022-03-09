@@ -19,6 +19,7 @@ class Pro extends Marketer
      */
     public function index(){
 
+        $this->requirePro();
         $tap=0;
         $ear=0;
         $auth_id = Auth::id();

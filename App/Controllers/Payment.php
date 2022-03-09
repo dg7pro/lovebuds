@@ -38,7 +38,7 @@ class Payment extends Controller
         }
 
         $first_offer = Offer::getFirst();
-        View::renderBlade('payment/offer_page',['offer'=>$first_offer]);
+        View::renderBlade('payment.offer_page',['offer'=>$first_offer]);
     }
 
 
@@ -59,7 +59,7 @@ class Payment extends Controller
 
         $current_offer = Offer::getCurrent();
 
-        View::renderBlade('payment/offer_page',['offer'=>$current_offer]);
+        View::renderBlade('payment.offer_page',['offer'=>$current_offer]);
 
     }
 
@@ -80,7 +80,7 @@ class Payment extends Controller
 
         //echo 'this page will show coupon';
 
-        View::renderBlade('payment/coupon_page');
+        View::renderBlade('payment.coupon_page');
 
     }
 
@@ -124,7 +124,7 @@ class Payment extends Controller
             //Here checksum string will return by getChecksumFromArray() function.
             $checkSum = Paytm::getChecksumFromArray($paramList, $_ENV['PAYTM_MERCHANT_KEY']);
 
-            View::renderBlade('payment/redirect-page', ['paramList' => $paramList, 'checkSum' => $checkSum, 'paytmTxnUrl' => $_ENV['PAYTM_TXN_URL'] ]);
+            View::renderBlade('payment.redirect-page', ['paramList' => $paramList, 'checkSum' => $checkSum, 'paytmTxnUrl' => $_ENV['PAYTM_TXN_URL'] ]);
 
         }
     }
@@ -168,7 +168,7 @@ class Payment extends Controller
 
                 //var_dump($_POST);
 
-                View::renderBlade('payment/_success',['amount'=>$amount,'order'=>$orderId,'reason'=>$reason]);
+                View::renderBlade('payment._success',['amount'=>$amount,'order'=>$orderId,'reason'=>$reason]);
             }
             else {
 
@@ -181,7 +181,7 @@ class Payment extends Controller
                 $orderId = $_POST['ORDERID'];
                 $reason = $_POST['RESPMSG'];
 
-                View::renderBlade('payment/_failure',['amount'=>$amount,'order'=>$orderId,'reason'=>$reason]);
+                View::renderBlade('payment._failure',['amount'=>$amount,'order'=>$orderId,'reason'=>$reason]);
 
             }
             //View::renderBlade('payment/status',['message'=>$message,'color'=>$color,'amount'=>$amount,'orderId'=>$orderId]);
@@ -199,7 +199,7 @@ class Payment extends Controller
 
         $isOffer = static::isOfferOngoing();
         //$this->requireLogin();
-        View::renderBlade('payment/pricing-plan',['isOffer'=>$isOffer]);
+        View::renderBlade('payment.pricing-plan',['isOffer'=>$isOffer]);
 
 
     }
@@ -215,7 +215,7 @@ class Payment extends Controller
         $orderId = 'ORDS98130789815';
         $dueTo = 'Your payment has been declined by your bank. Please try again or use a different method to complete the payment.';
         //$message = 'Transaction vide order id: '. 'ORDS98130789815'.'<br>' .' failed';
-        View::renderBlade('payment/_success',['amount'=>$amount,'order'=>$orderId,'reason'=>$dueTo]);
+        View::renderBlade('payment._success',['amount'=>$amount,'order'=>$orderId,'reason'=>$dueTo]);
 
 
     }

@@ -22,7 +22,7 @@
         <h1 class="large text-heading">Dashboard</h1>
         <p class="lead">
             <i class="fas fa-user text-coco"></i>
-            Welcome <a href="{{'/profile/'.$authUser->pid}}">{{ucfirst($authUser->first_name)}}</a>
+            Welcome <a href="{{'/my-profile'}}">{{ucfirst($authUser->first_name)}}</a>
            {{-- <a href="{{'/profile/'.$authUser->pid}}" class="goto-your-profile" target="_blank" id="your-profile" data-toggle="tooltip" data-placement="top"
                title="Goto your profile">
                 <i class="fa fa-external-link-alt" style="font-size: 18px; color: gray;" aria-hidden="true"></i>
@@ -137,7 +137,7 @@
                     <tr>
                         <td>Profile Id:</td>
                         <td class="hide-sm text-primary"><b>{{$authUser->pid}}</b>
-                            <a href="{{'/profile/'.$authUser->pid}}" class="goto-your-profile" target="_blank" id="your-profile-tip" data-toggle="tooltip" data-placement="top"
+                            <a href="{{'/my-profile'}}" class="goto-your-profile" target="_blank" id="your-profile-tip" data-toggle="tooltip" data-placement="top"
                                title="Goto your profile">
                                 <i class="fa fa-external-link-alt" style="font-size: 16px; color: gray;" aria-hidden="true"></i>
                             </a>

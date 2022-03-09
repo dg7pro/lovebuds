@@ -4,6 +4,7 @@
 namespace App\Controllers;
 
 
+use App\Auth;
 use App\Models\Image;
 use App\Models\Reference;
 use App\Models\User;
@@ -17,7 +18,30 @@ use Exception;
  */
 class Profile extends Controller
 {
+
     /**
+     * Show profile of self
+     * @throws Exception
+     */
+    public function indexAction(){
+
+        $this->requireLogin();
+
+        $user = Auth::getUser();
+
+        if(!$user){
+            throw new Exception('Profile does not exist with this profile id.', 404);
+        }
+
+        $images = Image::fetchProfileImages($user->id);
+
+        View::renderBlade('profile.show',
+            ['profile'=>$user,'images'=>$images]);
+
+    }
+
+    /**
+     * Show profile of others
      * @throws Exception
      */
     public function showAction(){

@@ -155,7 +155,7 @@ class Account extends Authenticated
 
         if (Auth::getUser()->is_active) {
 
-            $this->redirect('/account/dashboard');
+            $this->redirect('/dashboard');
         }
 
         $arr = isset($_GET['arr'])?json_decode($_GET['arr'],true):'';
@@ -225,7 +225,7 @@ class Account extends Authenticated
                 if(!$user->is_paid && $user->isNew()){
                     $this->redirect('/payment/insta-offer-page');
                 }
-                $this->redirect('/account/dashboard');
+                $this->redirect('/dashboard');
             }else{
                 $arr = json_encode($_POST);
 
@@ -255,12 +255,12 @@ class Account extends Authenticated
             foreach($con->errors as $error){
                 Flash::addMessage($error,'danger');
             }
-            $this->redirect('/account/dashboard');
+            $this->redirect('/dashboard');
         }else{
             foreach($con->errors as $error){
                 Flash::addMessage($error,'danger');
             }
-            $this->redirect('/account/dashboard');
+            $this->redirect('/dashboard');
 
         }
     }

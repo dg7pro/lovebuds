@@ -23,13 +23,13 @@
                 </p>
                 @if($authUser)
                     <div class="buttons">
-                        <a href="{{'/account/dashboard'}}" class="btn btn-pink">Dashboard</a>
-                        <a href="{{'/account/logout'}}" class="btn btn-orange">Logout</a>
+                        <a href="{{'/dashboard'}}" class="btn btn-pink">Dashboard</a>
+                        <a href="{{'/logout'}}" class="btn btn-orange">Logout</a>
                     </div>
                 @else
                     <div class="buttons">
-                        <a href="{{'/register/index'}}" class="btn btn-pink">Register</a>
-                        <a href="{{'/login/index'}}" class="btn btn-orange">Login</a>
+                        <a href="{{'/register'}}" class="btn btn-pink">Register</a>
+                        <a href="{{'/login'}}" class="btn btn-orange">Login</a>
                     </div>
                 @endif
             </div>

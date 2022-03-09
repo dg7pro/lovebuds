@@ -27,7 +27,7 @@ class Register extends Controller
 
         $fors = UserVariables::fetch('fors');
 
-        View::renderBlade('/register/index',['fors'=>$fors]);
+        View::renderBlade('register.index',['fors'=>$fors]);
 
     }
 
@@ -48,7 +48,7 @@ class Register extends Controller
         if($user->save()){
 
             // Send email
-            $user->sendActivationEmail();
+            //$user->sendActivationEmail();
 
             if(isset($_COOKIE['ju_reference_code'])){
                 $referer = new Reference();
@@ -80,7 +80,7 @@ class Register extends Controller
             foreach($user->errors as $error){
                 Flash::addMessage($error,'danger');
             }
-            $this->redirect('/register/index');
+            $this->redirect('/register');
 
         }
 
@@ -90,7 +90,7 @@ class Register extends Controller
      * Shows success page
      */
     public function successAction(){
-        View::renderBlade('register/success');
+        View::renderBlade('register.success');
     }
 
     /**
@@ -108,7 +108,7 @@ class Register extends Controller
 
         if($result){
             Flash::addMessage($message, 'success');
-            $this->redirect('/account/dashboard');
+            $this->redirect('/dashboard');
         }else{
             //echo "Could not verify you sorry!";
             throw new Exception('Something went wrong or server is too busy.', 500);
@@ -124,7 +124,7 @@ class Register extends Controller
      */
     public function activatedAction()
     {
-        View::renderBlade('register/activated');
+        View::renderBlade('register.activated');
     }
 
     public function verifyEmailAction(){
@@ -140,7 +140,7 @@ class Register extends Controller
             throw new Exception('Page is no more available for you. Your email is already verified', 404);
         }
         $user->sendVerificationEmail();
-        View::renderBlade('register/verify_email');
+        View::renderBlade('register.verify_email');
 
     }
 

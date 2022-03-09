@@ -19,7 +19,7 @@ class Quick extends Controller
     public function searchAction(){
 
         if(Auth::getUser()){
-            $this->redirect('/search/index');
+            $this->redirect('/search');
         }else{
             View::renderBlade('quick.new2');
         }

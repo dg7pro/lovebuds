@@ -47,9 +47,26 @@ $router = new Core\Router();
 
 // Add the routes
 $router->add('', ['controller' => 'Home', 'action' => 'index']);
-$router->add('login', ['controller' =>'Account','action'=>'login']);
-$router->add('admin', ['controller' =>'Admin','action'=>'dashboard']);
+
+$router->add('login', ['controller' =>'Login','action'=>'index']);
+$router->add('register', ['controller' =>'Register','action'=>'index']);
+$router->add('admin', ['controller' =>'Admin','action'=>'index']);
+$router->add('pro', ['controller' =>'Pro','action'=>'index']);
+$router->add('logout', ['controller' =>'Account','action'=>'logout']);
+
+$router->add('dashboard', ['controller' =>'Account','action'=>'dashboard']);
+$router->add('notifications', ['controller' =>'Account','action'=>'notifications']);
+$router->add('settings', ['controller' =>'Account','action'=>'settings']);
+
+$router->add('search', ['controller' =>'Search','action'=>'index']);
+$router->add('my-profile', ['controller' =>'Profile','action'=>'index']);
+$router->add('help', ['controller' =>'Company','action'=>'help']);
+
+$router->add('{group:[a-z]+(?:-[a-z]+)*}', ['controller' => 'Group', 'action' => 'group-test']);
+
 $router->add('{controller}/{action}');
+
+
 //$router->add('{controller}/{action}/{un:[a-zA-Z0-9-\.]+}');
 //$router->add('{controller}/{action}/{pid:([A-Z]{2}[0-9]{5})+}');
 $router->add('profile/{pid:([A-Z]{2}[0-9]{5})+}',['controller' =>'Profile','action'=>'show']);

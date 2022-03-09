@@ -176,7 +176,7 @@ class Admin extends Administered
         $user = User::findByID($id);
         $images = Image::getUserUploadedImages($user->id);
         $num = count($images);
-        View::renderBlade('admin/edit_user_album',['images'=>$images,'num'=>$num,'user'=>$user]);
+        View::renderBlade('admin.edit_user_album',['images'=>$images,'num'=>$num,'user'=>$user]);
     }
 
     /**
@@ -190,7 +190,7 @@ class Admin extends Administered
         //$user = User::findByID($id);
         $images = Image::getUserUploadedImages($id);
         $num = count($images);
-        View::renderBlade('admin/adjust_user_album',['images'=>$images,'num'=>$num]);
+        View::renderBlade('admin.adjust_user_album',['images'=>$images,'num'=>$num]);
     }
 
 
@@ -359,8 +359,8 @@ class Admin extends Administered
 
         $sub = 'upload your photo';
 
-        $text = View::getTemplate('mailgun/photo_upload_reminder.txt');
-        $html = View::getTemplate('mailgun/photo_upload_reminder.html');
+        $text = View::getTemplate('mailgun.photo_upload_reminder.txt');
+        $html = View::getTemplate('mailgun.photo_upload_reminder.html');
 
         $result = Mail::sendBulkEmail($recL,$recV,$text,$html,$sub);            // Tested
 
@@ -431,8 +431,8 @@ class Admin extends Administered
 
         $sub = 'complete your profile';
 
-        $text = View::getTemplate('mailgun/complete_profile_reminder.txt');
-        $html = View::getTemplate('mailgun/complete_profile_reminder.html');
+        $text = View::getTemplate('mailgun.complete_profile_reminder.txt');
+        $html = View::getTemplate('mailgun.complete_profile_reminder.html');
 
         $result = Mail::sendBulkEmail($recL,$recV,$text,$html,$sub);            // Tested
 
@@ -495,8 +495,8 @@ class Admin extends Administered
 
         $sub = 'new matches are waiting for you';
 
-        $text = View::getTemplate('mailgun/new_matches_reminder.txt');
-        $html = View::getTemplate('mailgun/new_matches_reminder.html');
+        $text = View::getTemplate('mailgun.new_matches_reminder.txt');
+        $html = View::getTemplate('mailgun.new_matches_reminder.html');
 
         $result = Mail::sendBulkEmail($recL,$recV,$text,$html,$sub);            // Tested
 

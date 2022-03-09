@@ -78,7 +78,7 @@
 
             <input type="submit" value="Register" class="btn btn-green">
         </form>
-        <p class="may-2">Already have an account? <a href="{{'/login/index'}}">Sign In</a></p>
+        <p class="may-2">Already have an account? <a href="{{'/login'}}">Sign In</a></p>
 
     </section>
     <!-- registration ends -->

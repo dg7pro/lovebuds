@@ -82,7 +82,7 @@ abstract class Controller
     public function requireGuest(){
 
         if(!Auth::isGuest()){
-            $this->redirect('/Account/dashboard');
+            $this->redirect('/dashboard');
         }
     }
 
@@ -93,7 +93,7 @@ abstract class Controller
             Flash::addMessage('Please login to access that page');
             //echo "Access Denied";
             Auth::rememberRequestedPage();
-            $this->redirect('/Login/index');
+            $this->redirect('/login');
         }
     }
 

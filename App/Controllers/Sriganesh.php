@@ -72,7 +72,7 @@ class Sriganesh extends Controller
         if($mobile=='' || $mv){
             throw new Exception('Page is no more available for you.', 404);
         }
-        View::renderBlade('sriganesh/verify_mobile', ['mobile'=>$mobile]);
+        View::renderBlade('sriganesh.verify_mobile', ['mobile'=>$mobile]);
 
     }
 
@@ -91,7 +91,7 @@ class Sriganesh extends Controller
 
                     if($user->verifyMobile()){
                         Flash::addMessage('Mobile verified successfully...', 'success');
-                        $this->redirect('/account/dashboard');
+                        $this->redirect('/dashboard');
                     }
                 }else{
                     Flash::addMessage('Otp not-matched please submit correct otp sg', 'danger');
@@ -104,7 +104,7 @@ class Sriganesh extends Controller
                     if($user->verifyMobile()){
                         Flash::addMessage('Mobile verified successfully. Please login to continue...', 'success');
                         Auth::logout();
-                        $this->redirect('/login/index');
+                        $this->redirect('/login');
                     }
                 }else{
                     Flash::addMessage('Otp Not-matched please submit correct otp sg', 'danger');

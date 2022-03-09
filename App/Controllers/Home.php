@@ -37,7 +37,7 @@ class Home extends Controller
     public function indexAction()
     {
 
-        View::renderBlade('home/index',[
+        View::renderBlade('home.index',[
             'languages'=>UserVariables::languages(),
             'religions'=>UserVariables::religions(),
             'age_rows'=>UserVariables::getAgeRows()
@@ -53,7 +53,7 @@ class Home extends Controller
 
     public function wrongAction(){
 
-        View::renderBlade('home/wrong');
+        View::renderBlade('home.wrong');
 
     }
 
@@ -79,7 +79,7 @@ class Home extends Controller
         $self1 = 918887610230;
         $self2 = 917565097233;
         $other = 919335333717;
-        View::renderBlade('home/whatsapp',[
+        View::renderBlade('home.whatsapp',[
             'self1'=>$self1,
             'self2'=>$self2,
             'other'=>$other
@@ -88,7 +88,7 @@ class Home extends Controller
 
     public function whatsappAddAction(){
 
-        View::renderBlade('home/whatsapp_add');
+        View::renderBlade('home.whatsapp_add');
     }
 
     public function secureAction(){

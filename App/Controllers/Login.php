@@ -30,7 +30,7 @@ class Login extends Controller
         //Flash::addMessage('Enter your account credentials to login...', Flash::WARNING);
         //Flash::addMessage('Please login to continue...', Flash::WARNING);
 
-        View::renderBlade('login/index');
+        View::renderBlade('login.index');
 
     }
 
@@ -89,7 +89,7 @@ class Login extends Controller
         else{
 
             Flash::addMessage('Invalid Credentials. Enter correct email & password', Flash::DANGER);
-            View::renderBlade('login/index',['uid'=>$_POST['uid'],'remember_me'=>$remember_me]);
+            View::renderBlade('login.index',['uid'=>$_POST['uid'],'remember_me'=>$remember_me]);
         }
     }
 
@@ -102,7 +102,7 @@ class Login extends Controller
         $email = filter_var($arr['uid'],FILTER_SANITIZE_EMAIL);
         if(!filter_var($email,FILTER_VALIDATE_EMAIL)){
             Flash::addMessage('Invalid Email. Please enter a valid email', Flash::DANGER);
-            View::renderBlade('login/index');
+            View::renderBlade('login.index');
         }
 
     }
@@ -113,7 +113,7 @@ class Login extends Controller
     public function activateAccountAction(){
 
         $email = $_GET['email'] ?? '';
-        View::renderBlade('login/resend_activation_link',['email'=>$email]);
+        View::renderBlade('login.resend_activation_link',['email'=>$email]);
     }
 
     /**
@@ -124,7 +124,7 @@ class Login extends Controller
 
         $un_active_user = User::findByID($_SESSION['un_active_user_id']);
 
-        View::renderBlade('login/pending_verification',['user'=>$un_active_user]);
+        View::renderBlade('login.pending_verification',['user'=>$un_active_user]);
     }
 
     protected function isOfferOngoing(){
