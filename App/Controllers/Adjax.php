@@ -1517,7 +1517,7 @@ Whatsapp: 9335683398";
      */
     public function searchOffer(){
 
-        $limit = 5;
+        $limit = 10;
         $page = 1;
 
         if($_POST['page'] > 1){
@@ -1745,6 +1745,9 @@ Whatsapp: 9335683398";
             }
             elseif($_POST['setId']==2){
                 $result = $this->toggleOffer($_POST['setId'],$_POST['setVa']);
+            }
+            elseif($_POST['setId']==3){
+                $result = $this->toggleInsta($_POST['setId'],$_POST['setVa']);
             }else{
                 $msg = "No function is called";
                 $result = json_encode($msg);
@@ -1802,6 +1805,26 @@ Whatsapp: 9335683398";
         return json_encode($msg);
 
     }
+
+    function toggleInsta($setId, $setVa){
+
+        // when you pass boolean through $_POST it will get converted to string
+        if($setVa==='true'){
+            Setting::enactInsta($setId);
+            $msg = "Insta offer enabled";
+            //$msg = $setVa;
+
+        }else{
+            Setting::revokeInsta($setId);
+            $msg= "Insta offer disabled";
+            //$msg = $setVa;
+        }
+
+        return json_encode($msg);
+
+    }
+
+
 
     /* ==================================================================
     * Admin Pro members Section: Ajax 2 Functions Bundle

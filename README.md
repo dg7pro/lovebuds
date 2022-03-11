@@ -28,4 +28,17 @@ for tracking new payment & commission when new member becomes paid.
 7. Update Pro member DB of total payment and commission earned  on payment order
 made by new user, shown on pro member dashboard.
 
+### Offer System
 
+There are 2 types of offer to induce and promote members to become paid member
+
+1. Instant offer: the offer is valid till 24 hr for new users from time of registration
+2. Occasional offer or Current offer: starts and ends on special festival and events
+
+Both the offers:
+1. can be switched off from admin Site Settings box
+2. can be switched on only from admin Offers Management
+
+But
+1. Instant offer by default never expires - so should not be set to expired from admin Offers Management
+2. So it can be on-off from admin Site Settings page

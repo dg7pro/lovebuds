@@ -117,6 +117,34 @@ class Setting extends Model
     }
 
     /**
+     * Revoke Offer
+     * @param $id
+     * @return bool
+     */
+    public static function revokeInsta($id): bool
+    {
+        $sql = "UPDATE settings SET value=? WHERE id=?";
+        $db=Model::getDB();
+        $stmt = $db->prepare($sql);
+        return $stmt->execute([0,$id]);
+    }
+
+    /**
+     * Enact Offer
+     * @param $id
+     * @return bool
+     */
+    public static function enactInsta($id): bool
+    {
+        $sql = "UPDATE settings SET value=? WHERE id=?";
+        $db=Model::getDB();
+        $stmt = $db->prepare($sql);
+        return $stmt->execute([1,$id]);
+
+    }
+
+
+    /**
      * Enable Partner Preference Search
      * @param $id
      * @return bool
