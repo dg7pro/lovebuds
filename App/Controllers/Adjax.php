@@ -292,14 +292,11 @@ class Adjax extends Administered
     public function searchClients(){
 
         $message =
-            "Thanks for Registering on JuMatrimony – the India’s only free matrimonial portal which is also safe secure and fastest growing.
-        
-What next?
-1. Upload your photo - as profiles with images get more number of responses
-2. Complete your Bio data – add other relevant information to your profile
-3. Share your profile easily with others – a link to your profile is given below
+            "Welcome to JuMatrimony – the India’s only free matrimonial portal.
             
-For any assistance or help please feel free to respond to this message 
+Finding suitable match - is problem of every home, so we crafted our matchmaking service in such a way that you get 100% response.
+ 
+So join today and start search from among – thousands of beautiful bride and grooms, also do not forget to forward this message to others who need it, with best wishes.
 
 Team
 JuMatrimony.com
@@ -337,7 +334,7 @@ Whatsapp: 9335683398";
                 <td>'.$row->name.'</td>
                 <td>'.$row->mobile.'</td>         
                 <td><a href="https://wa.me/91'.$row->mobile.'?text='.$ues.'" type="button" class="mb-1 btn btn-sm btn-green">wa1</a></td>
-                <td><a href="https://wa.me/91'.$row->mobile.'?text=Searching Jeevansathi, to find beautiful bride and grooms click: https://www.jumatrimony.com/home/whatsapp-add" type="button" class="mb-1 btn btn-sm btn-pink">wa2</a></td>
+                <td><a href="https://wa.me/91'.$row->mobile.'?text=Searching Jeevansathi, click on to continue: https://www.jumatrimony.com/promo" type="button" class="mb-1 btn btn-sm btn-pink">wa2</a></td>
                 </tr>';
             }
 

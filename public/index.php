@@ -61,6 +61,7 @@ $router->add('settings', ['controller' =>'Account','action'=>'settings']);
 $router->add('search', ['controller' =>'Search','action'=>'index']);
 $router->add('my-profile', ['controller' =>'Profile','action'=>'index']);
 $router->add('help', ['controller' =>'Company','action'=>'help']);
+$router->add('promo', ['controller' =>'Home','action'=>'whatsapp-add']);
 
 $router->add('{group:[a-z]+(?:-[a-z]+)*}', ['controller' => 'Group', 'action' => 'group-page']);
 
