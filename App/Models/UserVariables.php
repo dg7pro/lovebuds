@@ -51,7 +51,7 @@ class UserVariables extends Model
      */
     public static function getCastes($rid): array
     {
-        $sql="SELECT * FROM castes WHERE religion_id=?";
+        $sql="SELECT * FROM castes WHERE religion_id=? AND value < 539";
         $pdo = Model::getDB();
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$rid]);
