@@ -294,9 +294,9 @@ class Adjax extends Administered
         $message =
             "Welcome to JuMatrimony – the India’s only free matrimonial portal.
             
-Finding suitable match - is problem of every home, so we crafted our matchmaking service in such a way that you get 100% response.
+Finding suitable match - is problem of every home, so we crafted our match making service in such a way that you get 100% response.
  
-So join today and start search from among – thousands of beautiful bride and grooms, also do not forget to forward this message to others who need it, with best wishes.
+Just join today and start searching from among – thousands of beautiful bride and grooms, & also do not forget to forward this message to others who need it, with best wishes.
 
 Team
 JuMatrimony.com

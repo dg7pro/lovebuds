@@ -222,9 +222,10 @@ class Account extends Authenticated
                 $notification = new Notification();
                 $notification->informAboutSuccessfulProfileCreation($user);
 
-                if(!$user->is_paid && $user->isNew()){
+                // Redirects to insta offer page
+                /*if(!$user->is_paid && $user->isNew()){
                     $this->redirect('/payment/insta-offer-page');
-                }
+                }*/
                 $this->redirect('/dashboard');
             }else{
                 $arr = json_encode($_POST);

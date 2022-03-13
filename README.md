@@ -42,3 +42,10 @@ Both the offers:
 But
 1. Instant offer by default never expires - so should not be set to expired from admin Offers Management
 2. So it can be on-off from admin Site Settings page
+
+#### Insta Offer -- Imp
+New user goes to insta page by 2 ways--
+1. After creating profile in the Account/saveProfile action
+2. After every login if insta offer is going on and user is new & unpaid
+
+Insta offer is disabled for time being in Account/ save-profile action
